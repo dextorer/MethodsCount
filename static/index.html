@@ -1,0 +1,60 @@
+<script type="text/javascript">
+function request(verb, path, onsuccess, onfail) {
+   var xhr = new XMLHttpRequest();
+   xhr.open(verb, path, true);
+   xhr.onload = function (e) {
+      if (xhr.readyState === 4) {
+         if (xhr.status === 200) {
+            onsuccess(xhr.response)
+         } else {
+            onfail(xhr.statusText);
+         }
+      }
+   };
+   xhr.onerror = function (e) {
+      onfail(xhr.statusText);
+   };
+   xhr.send(null);
+}
+
+
+function submitLibraryRequest(libraryName) {
+   request(
+         "POST",  
+         "/api/request/" + libraryName, 
+         function(response) {
+            obj = JSON.parse(response);
+            console.log("Successfully enqeueud job for " + obj["lib_name"]);
+            poll(libraryName);
+         },
+         function(errorText) {
+            console.error(errorText);
+         }
+         );
+}
+
+
+function poll(libraryName) {
+   request("GET", "/api/stats/" + libraryName,
+         function(response) {
+            obj = JSON.parse(response);
+            if(obj["status"] == "done") {
+               console.log("Done");
+            }
+            else {
+               setTimeout(function() {
+                  poll(libraryName);
+               }, 4000);
+            }
+         },
+         function(errorText) {
+            console.error(errorText);
+         });
+}
+</script>
+
+Library name:
+<input name="libraryName"  id="libraryName" type="text" />
+<button type="button" onclick="submitLibraryRequest(document.getElementById('libraryName').value)" >Submit request</button>
+
+
