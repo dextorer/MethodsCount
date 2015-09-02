@@ -42,7 +42,7 @@ CREATE TABLE `dependencies` (
 
 LOCK TABLES `dependencies` WRITE;
 /*!40000 ALTER TABLE `dependencies` DISABLE KEYS */;
-INSERT INTO `dependencies` VALUES (39,40),(39,41),(39,42),(43,44),(43,45),(50,51);
+INSERT INTO `dependencies` VALUES (78,79),(78,80),(78,81),(82,83),(84,85),(86,87),(86,88),(86,89),(86,90),(92,93),(92,94);
 /*!40000 ALTER TABLE `dependencies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,8 +60,9 @@ CREATE TABLE `libraries` (
   `group_id` varchar(255) NOT NULL,
   `artifact_id` varchar(255) NOT NULL,
   `version` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +71,7 @@ CREATE TABLE `libraries` (
 
 LOCK TABLES `libraries` WRITE;
 /*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
-INSERT INTO `libraries` VALUES (39,'com.github.dextorer:sofa:1.0.0',817,'com.github.dextorer','sofa','1.0.0'),(40,'com.android.support:leanback-v17:22.2.0',5223,'com.android.support','leanback-v17','22.2.0'),(41,'com.android.support:recyclerview-v7:22.2.0',1984,'com.android.support','recyclerview-v7','22.2.0'),(42,'com.android.support:support-v4:22.2.0',7946,'com.android.support','support-v4','22.2.0'),(43,'com.wnafee:vector-compat:1.0.5',609,'com.wnafee','vector-compat','1.0.5'),(44,'com.android.support:appcompat-v7:22.1.0',5162,'com.android.support','appcompat-v7','22.1.0'),(45,'com.android.support:support-v4:22.1.0',7876,'com.android.support','support-v4','22.1.0'),(46,'com.makeramen:roundedimageview:2.2.0',224,'com.makeramen','roundedimageview','2.2.0'),(47,'com.makeramen:roundedimageview:2.1.2',224,'com.makeramen','roundedimageview','2.1.2'),(48,'com.makeramen:roundedimageview:2.1.1',224,'com.makeramen','roundedimageview','2.1.1'),(49,'com.squareup.picasso:picasso:2.5.2',849,'com.squareup.picasso','picasso','2.5.2'),(50,'com.squareup.retrofit:retrofit:1.9.0',766,'com.squareup.retrofit','retrofit','1.9.0'),(51,'gson:2.3.1',1231,'gson','2.3.1','');
+INSERT INTO `libraries` VALUES (78,'com.github.dextorer:sofa:1.0.0',817,'com.github.dextorer','sofa','1.0.0',103622),(79,'com.android.support:leanback-v17:22.2.0',5223,'com.android.support','leanback-v17','22.2.0',682686),(80,'com.android.support:recyclerview-v7:22.2.0',1984,'com.android.support','recyclerview-v7','22.2.0',252391),(81,'com.android.support:support-v4:22.2.0',7946,'com.android.support','support-v4','22.2.0',883426),(82,'com.squareup.retrofit:retrofit:1.9.0',766,'com.squareup.retrofit','retrofit','1.9.0',121559),(83,'com.google.code.gson:gson:2.3.1',1231,'com.google.code.gson','gson','2.3.1',210856),(84,'com.android.support:percent:23.0.0',97,'com.android.support','percent','23.0.0',11659),(85,'com.android.support:support-v4:23.0.0',8591,'com.android.support','support-v4','23.0.0',956260),(86,'com.facebook.fresco:fresco:0.7.0',91,'com.facebook.fresco','fresco','0.7.0',9206),(87,'com.android.support:support-v4:21.0.3',6721,'com.android.support','support-v4','21.0.3',762542),(88,'com.facebook.fresco:drawee:0.7.0',852,'com.facebook.fresco','drawee','0.7.0',93506),(89,'com.facebook.fresco:fbcore:0.7.0',866,'com.facebook.fresco','fbcore','0.7.0',103331),(90,'com.facebook.fresco:imagepipeline:0.7.0',2816,'com.facebook.fresco','imagepipeline','0.7.0',470604),(91,'com.makeramen:roundedimageview:2.1.1',224,'com.makeramen','roundedimageview','2.1.1',18757),(92,'com.wnafee:vector-compat:1.0.5',609,'com.wnafee','vector-compat','1.0.5',66760),(93,'com.android.support:appcompat-v7:22.1.0',5162,'com.android.support','appcompat-v7','22.1.0',568259),(94,'com.android.support:support-v4:22.1.0',7876,'com.android.support','support-v4','22.1.0',882586),(95,'com.squareup.okio:okio:1.6.0',610,'com.squareup.okio','okio','1.6.0',65928),(96,'com.squareup.leakcanary:leakcanary-android:1.3.1',454,'com.squareup.leakcanary','leakcanary-android','1.3.1',75028);
 /*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -83,4 +84,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-08-26 10:10:17
+-- Dump completed on 2015-09-02 16:44:15

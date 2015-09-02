@@ -1,0 +1,14 @@
+SET PASSWORD = PASSWORD('***REMOVED***');
+CREATE USER 'lmc'@'localhost' IDENTIFIED BY '***REMOVED***';
+CREATE DATABASE methods_count;
+GRANT ALL PRIVILEGES ON methods_count.* TO 'lmc'@'localhost';
+CREATE TABLE libraries (id INTEGER NOT NULL AUTO_INCREMENT, fqn VARCHAR(255) NOT NULL, group_id VARCHAR(255) NOT NULL, artifact_id VARCHAR(255) NOT NULL, version VARCHAR(255) NOT NULL, count INTEGER DEFAULT 0, size INTEGER DEFAULT 0, PRIMARY KEY (id));
+CREATE TABLE dependencies (library_id INTEGER NOT NULL, dependency_id INTEGER NOT NULL);
+
+
+
+
+
+INSERT INTO libraries (fqn, group_id, artifact_id, version, count) VALUES ("com.github.dextorer:sofa:1.0.0", "com.github.dextorer", "sofa", "1.0.0", 817);
+
+SELECT * FROM libraries WHERE id = ANY (SELECT dependency_id FROM libraries JOIN dependencies ON libraries.id = dependencies.library_id);

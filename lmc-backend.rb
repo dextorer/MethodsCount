@@ -19,7 +19,7 @@ end
 #   t.string :status
 #end
 
-class Sebastiano < Sinatra::Base
+class LMCBackend < Sinatra::Base
 
    register Sinatra::Namespace
 
