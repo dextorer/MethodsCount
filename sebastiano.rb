@@ -4,7 +4,7 @@ require 'sinatra/namespace'
 require 'active_record'
 require './model'
 
-class LMCBackend < Sinatra::Base
+class Sebastiano < Sinatra::Base
 
    register Sinatra::Namespace
 

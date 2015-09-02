@@ -40,6 +40,7 @@ function poll(libraryName) {
             obj = JSON.parse(response);
             if(obj["status"] == "done") {
                console.log("Done");
+               console.log(obj)
             }
             else {
                setTimeout(function() {

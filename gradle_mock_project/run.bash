@@ -31,7 +31,6 @@ function copyClassesFile {
 	cp classes.jar $jar_name
 	cp $jar_name $BASE_DIR/$dest_dir
 	cd ../../../
-	echo "$parent_dir:$local_dir:$local_version"
 }
 
 function _restore {
@@ -107,7 +106,7 @@ if [ "$VERBOSE" == true ]; then
 	echo "3. Run the build"
 fi
 
-./gradlew -q compileDebugJava
+./gradlew -q assembleDebug
 build_successful=$?
 
 if [ $build_successful -ne 0 ]; then

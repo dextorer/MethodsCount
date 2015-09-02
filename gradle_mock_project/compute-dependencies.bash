@@ -52,13 +52,14 @@ while IFS=$'\n' read line; do
 done <<< "$deps_raw"
 
 if [[ $extracted_library_fqn == *"+"* ]]; then
-	extracted_library_fqn=`echo "$extracted_library_fqn" | sed -e 's/---[[:space:]]*\([^->]*\)->[[:space:]]*\(.*\)/\1\2/' -e 's/\([^\+]*\)[^[[:space:]]]*\(.*\)/\1\2/' | tr -d '[[:space:]]'`
+	extracted_library_fqn=`echo "$extracted_library_fqn" | rev | sed -e 's/\(.*\)>[^:]*/\1/' | rev | sed -e 's/---[[:space:]]*\([^>]*\)->[[:space:]]*\(.*\)/\1\2/' -e 's/---\(.*\)/\1/' | tr -d '[[:space:]]'`
 else
 	extracted_library_fqn=`echo "$extracted_library_fqn" | sed -e 's/---[[:space:]]*\(.*\)/\1/'`
 fi
 
 for i in ${!extracted_deps_fqn[@]}; do
 	extracted_deps_fqn[i]=`echo "${extracted_deps_fqn[i]}" | tr -d '[[:space:]]' | tr -d '+' | sed 's/---\(.*\)/\1/'`
+	echo "${extracted_deps_fqn[i]}"
 done
 
 _restore_workspace
