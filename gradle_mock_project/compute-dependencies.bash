@@ -1,5 +1,7 @@
 #!/bin/bash
 
+RESTORE_ON_EXIT=true
+
 function _restore_workspace {
   	if [ -e "build.gradle" ]; then
 		rm build.gradle 2> /dev/null
@@ -20,6 +22,7 @@ cp -f "build.gradle.base" "build.gradle"
 sed -i "s/dummy/${library_fqn}/g" build.gradle
 
 deps_raw=`./gradlew dependencies`
+#echo "$deps_raw"
 
 deps_extracted=""
 capture=false
@@ -43,9 +46,7 @@ while IFS=$'\n' read line; do
 		case "$line" in
 			("-"*) extracted_library_fqn="$line"
 			;;
-			("     +"*) extracted_deps_fqn+=("$line")
-			;;
-			("     -"*) extracted_deps_fqn+=("$line")
+			("   "*) extracted_deps_fqn+=("$line")
 			;;
 		esac
 	fi
@@ -58,8 +59,9 @@ else
 fi
 
 for i in ${!extracted_deps_fqn[@]}; do
-	extracted_deps_fqn[i]=`echo "${extracted_deps_fqn[i]}" | tr -d '[[:space:]]' | tr -d '+' | sed 's/---\(.*\)/\1/'`
-	echo "${extracted_deps_fqn[i]}"
+	extracted_deps_fqn[i]=`echo "${extracted_deps_fqn[i]}" | tr -d '[[:space:]]' | tr -d '+' | tr -d '|' | sed 's/---\(.*\)/\1/'`
 done
 
-_restore_workspace
+if [ $"RESTORE_ON_EXIT" == true ]; then
+	_restore_workspace
+fi

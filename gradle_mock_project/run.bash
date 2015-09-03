@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# 0. Define functions and hooks
+PRINT_OUTPUT=false
+VERBOSE=false
+CLEAN_ON_EXIT=true
 
-trap _restore EXIT
+# 0. Define functions and hooks
+if [ "$CLEAN_ON_EXIT" == true ]; then
+	trap _restore EXIT
+fi
 
 function _help {
 	printf "Usage: run.bash gradle_compile_statement_for_library\n"
@@ -35,7 +40,7 @@ function copyClassesFile {
 
 function _restore {
 	if [ "$VERBOSE" == true ]; then 
-  		echo "\n (Restoring base project..)"
+  		printf "\n (Restoring base project..)\n"
   	fi
   	cd $BASE_DIR
   	if [ -e "build.gradle" ]; then
@@ -77,14 +82,14 @@ if [ -z "$ARCHIVE_FQN" ]; then
 	_help
 fi
 
-PRINT_OUTPUT=false
-VERBOSE=false
-
 # 1. Process input parameter
 if [ "$VERBOSE" == true ]; then 
-	echo "1. Process input parameter"
+	printf "1. Process input parameter\n"
 fi
 
+if [ "$CLEAN_ON_EXIT" == false ]; then
+	_restore
+fi
 mkdir -p $CLASSES_DIR
 cp -f "build.gradle.base" "build.gradle"
 
@@ -96,39 +101,39 @@ VERSION="$tokenized_version"
 
 # 2. Replace the dummy 'compile' statement of build.gradle
 if [ "$VERBOSE" == true ]; then 
-	echo "2. Replace the dummy \'compile\' statement of build.gradle"
+	printf "2. Replace the dummy \'compile\' statement of build.gradle\n"
 fi
 
 sed -i "s/dummy/${ARCHIVE_FQN}/g" build.gradle
 
 # 3. Run the build
 if [ "$VERBOSE" == true ]; then 
-	echo "3. Run the build"
+	printf "3. Run the build\n"
 fi
 
-./gradlew -q assembleDebug
+./gradlew -q compileDebugJava
 build_successful=$?
 
 if [ $build_successful -ne 0 ]; then
 	if [ "$VERBOSE" == true ]; then 
-		echo "3. Build failed, ABORTING"
+		printf "3. Build failed, ABORTING\n"
 	fi
 	exit -1;
 fi
 
 # 4. Cd into build/intermediates/exploded-aar/$LIBRARY_NAME
 if [ "$VERBOSE" == true ]; then 
-	echo "4. For each sub-module, copy 'classes.jar' to $CLASSES_DIR"
+	printf "4. For each sub-module, copy 'classes.jar' to $CLASSES_DIR\n"
 fi
 
 USE_ALTERNATIVE_DIR=false
 exploded_aar_dir="build/intermediates/exploded-aar"
-if ! [ -e $exploded_aar_dir ]; then
+#if ! [ -e $exploded_aar_dir ]; then
 	cd dependencies
 	USE_ALTERNATIVE_DIR=true
-else
-	cd $exploded_aar_dir
-fi
+#else
+#	cd $exploded_aar_dir
+#fi
 
 COUNTER=0
 declare -a SUBS
@@ -152,7 +157,7 @@ cd $BASE_DIR/$CLASSES_DIR
 
 # 5. Build file list
 if [ "$VERBOSE" == true ]; then 
-	echo "5. Build file list, create temporary DEX file and count methods"
+	printf "5. Build file list, create temporary DEX file and count methods\n"
 fi
 
 COUNTER=0
@@ -161,8 +166,15 @@ SELECTED=0
 declare -a SUBS_COUNT
 declare -a SUBS_SIZE
 for file in *; do
+	target="$file"
+	if [[ "$file" == *".aar" ]]; then
+		unzip -q "$file" classes.jar
+		new_filename="${file%.*}"
+		target="$new_filename.jar"
+		mv classes.jar "$target"
+	fi
 	SUBS_SIZE[COUNTER]=`stat -f%z $file`
-	dx --dex --output=temp.dex $file
+	dx --dex --output=temp.dex $target
   	SUBS_COUNT[COUNTER]=`cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
   	TOTAL=$((TOTAL+${SUBS_COUNT[COUNTER]}))
   	if [[ "${SUBS[COUNTER]}" == *"$ARTIFACT_ID"* ]]; then
@@ -178,13 +190,13 @@ ENDTIME=$(date +%s)
 
 # 6. Return result
 if [ "$PRINT_OUTPUT" == true ]; then
-	echo "\n\n\t\t COUNT FOR $ARCHIVE_FQN:\t -- $SELECTED -- \n"
+	printf "\n\n\t\t COUNT FOR $ARCHIVE_FQN:\t -- $SELECTED -- \n\n"
 	for i in ${!SUBS[@]}; do
 		current_sub="${SUBS[i]}"
 		current_sub_count="${SUBS_COUNT[i]}"
-		echo "\t\t $current_sub -- $current_sub_count"
+		printf "\t\t $current_sub -- $current_sub_count\n"
 	done
-	echo "\n\t\t TOTAL COUNT FOR $ARCHIVE_FQN:\t -- $TOTAL -- \n"
+	printf "\n\t\t TOTAL COUNT FOR $ARCHIVE_FQN:\t -- $TOTAL -- \n\n"
 
-	echo "\n\n Computational time: $(($ENDTIME - $STARTTIME)) seconds"
+	printf "\n\n Computational time: $(($ENDTIME - $STARTTIME)) seconds\n"
 fi

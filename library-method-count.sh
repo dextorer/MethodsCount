@@ -1,5 +1,7 @@
 #!/bin/sh
 
+SKIP_DB=false
+
 db_user="lmc"
 db_pwd="***REMOVED***"
 db_name="methods_count"
@@ -18,7 +20,7 @@ fi
 
 # 1. Connect to database and check if the result has been previously calculated
 library_id=`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "select id from libraries where fqn = '$library_name';"`
-if [ ! -z "$library_id" ]; then
+if [ ! -z "$library_id" ] && [ "$SKIP_DB" == false ]; then
 	# 1a. Retrieve result and dependencies
 	library_count=`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "select count from libraries where fqn = '$library_name';"`
 	library_size=`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "select size from libraries where fqn = '$library_name';"`
@@ -27,18 +29,22 @@ if [ ! -z "$library_id" ]; then
 	declare -a dep_count
 	declare -a dep_size
 	counter=0
-	while IFS=$' \t\n' read -a array; do
-		dep_fqn[counter]="${array[0]}"
-		dep_count[counter]="${array[1]}"
-		dep_size[counter]="${array[2]}"
-		counter="$((counter + 1))"
-	done <<< "$dependencies_count"
+	if [ ! -z "$dependencies_count" ]; then
+		while IFS=$' \t\n' read -a array; do
+			dep_fqn[counter]="${array[0]}"
+			dep_count[counter]="${array[1]}"
+			dep_size[counter]="${array[2]}"
+			counter="$((counter + 1))"
+		done <<< "$dependencies_count"
+	fi
 	# 1b. Return result
 	result="{\"library_fqn\":\"$library_name\",\"library_methods\":$library_count,\"library_size\":$library_size,\"dependencies_count\":$counter,\"dependencies\":["
 	for (( i=0; i<$counter; i++ )); do
 		result="$result{\"dependency_name\":\"${dep_fqn[i]}\",\"dependency_count\":${dep_count[i]}, \"dependency_size\":${dep_size[i]}},"
 	done
-	result="${result%?}"
+	if [ "$counter" -gt 0 ]; then
+		result="${result%?}"
+	fi
 	result="$result]}"
 	echo "$result"
 	exit 0
@@ -61,16 +67,14 @@ fi
 
 # 3. Update database
 
-if [ "$should_update_library_names" == true ]; then
+if [ "$USE_ALTERNATIVE_DIR" == true ]; then
 	for i in ${!SUBS[@]}; do
 		SUBS[i]=${SUBS[i]%.*}
-		SUBS[i]=`echo "${SUBS[i]}" | sed 's/-/:/'`
+		SUBS[i]=`echo "${SUBS[i]}" | rev | sed 's/-/:/' | rev`
 	done
 fi
 
-declare -a deps_name
-declare -a deps_count
-declare -a deps_size
+index_to_remove=-1
 for i in ${!SUBS[@]}; do
 	current_sub="${SUBS[i]}"
 	current_sub_count="${SUBS_COUNT[i]}"
@@ -93,13 +97,27 @@ for i in ${!SUBS[@]}; do
 		done
 	fi
 	if [[ "$current_sub" == *"$GROUP_ID:$ARTIFACT_ID:$VERSION" ]]; then
-		`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "INSERT INTO libraries (fqn, group_id, artifact_id, version, count, size) VALUES (\"$library_fqn\", \"$GROUP_ID\", \"$ARTIFACT_ID\", \"$VERSION\", \"$current_sub_count\", \"$current_sub_size\");"`		
-		deps_name=(${SUBS[@]/$current_sub})
-		deps_count=(${SUBS_COUNT[@]/$current_sub_count})
-		deps_size=(${SUBS_SIZE[@]/$current_sub_size})
-		result="{\"library_fqn\":\"$library_fqn\",\"library_methods\":$current_sub_count,\"library_size\":$current_sub_size,\"dependencies_count\":${#deps_name[@]}"
+		if [ "$SKIP_DB" == false ]; then
+			`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "INSERT INTO libraries (fqn, group_id, artifact_id, version, count, size) VALUES (\"$library_fqn\", \"$GROUP_ID\", \"$ARTIFACT_ID\", \"$VERSION\", \"$current_sub_count\", \"$current_sub_size\");"`		
+		fi
+		result="{\"library_fqn\":\"$library_fqn\",\"library_count\":$current_sub_count,\"library_size\":$current_sub_size,\"dependencies_count\":$((${#SUBS[@]} - 1))"
+		index_to_remove=$i
 	fi
 done
+
+declare -a deps_name
+declare -a deps_count
+declare -a deps_size
+
+deps_name=("${SUBS[@]}")
+deps_count=("${SUBS_COUNT[@]}")
+deps_size=("${SUBS_SIZE[@]}")
+
+if [ $index_to_remove -ge 0 ]; then
+	unset deps_name[$index_to_remove]
+	unset deps_count[$index_to_remove]
+	unset deps_size[$index_to_remove]
+fi
 
 result="$result,\"dependencies\":["
 
@@ -113,9 +131,11 @@ for i in ${!deps_name[@]}; do
 	current_dep_group_id="$tokenized_group_id"
 	current_dep_artifact_id="$tokenized_artifact_id"
 	current_dep_version="$tokenized_version"
-	`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "INSERT INTO libraries (fqn, group_id, artifact_id, version, count, size) VALUES (\"$current_dep\", \"$current_dep_group_id\", \"$current_dep_artifact_id\", \"$current_dep_version\", \"$current_dep_count\", \"$current_dep_size\");"`		
-	current_dep_id=`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "SELECT id FROM libraries WHERE fqn=\"$current_dep\";"`
-	`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "INSERT INTO dependencies (library_id, dependency_id) VALUES (\"$library_id\", \"$current_dep_id\");"`
+	if [ "$SKIP_DB" == false ]; then
+		`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "INSERT INTO libraries (fqn, group_id, artifact_id, version, count, size) VALUES (\"$current_dep\", \"$current_dep_group_id\", \"$current_dep_artifact_id\", \"$current_dep_version\", \"$current_dep_count\", \"$current_dep_size\");"`		
+		current_dep_id=`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "SELECT id FROM libraries WHERE fqn=\"$current_dep\";"`
+		`mysql --defaults-extra-file=.db_config.cnf -N -B --database=$db_name -e "INSERT INTO dependencies (library_id, dependency_id) VALUES (\"$library_id\", \"$current_dep_id\");"`
+	fi
 	result="$result{\"dependency_name\":\"$current_dep\",\"dependency_count\":$current_dep_count,\"dependency_size\":$current_dep_size},"
 done
 
