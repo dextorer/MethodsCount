@@ -33,7 +33,7 @@ dependencies {
 
 task copyDependencies(type: Copy) {
    from configurations.compile
-   into 'dependencies'
+   into 'extracted_deps'
 }
 
 afterEvaluate {
