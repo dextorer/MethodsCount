@@ -44,56 +44,56 @@ class CalculateMethods
 		Dir.foreach('.') do |item|
 			next if item == '.' or item == '..'
   			
-			_current_lib = Library.new
+			current_lib = Library.new
 
-  			_target = item
+  			target = item
 			if item.end_with?(".aar")
 				# extract AAR's classes.jar
 				system("unzip -q #{item} classes.jar")
 				_new_filename = item.gsub(".aar", ".jar")
 				FileUtils.mv("classes.jar", "#{_new_filename}")
-				_target = _new_filename
+				target = _new_filename
 			end
 
 			# calculate library size (in Bytes)
-			_size = File.size(_target)
-			_current_lib.size = _size
+			size = File.size(target)
+			current_lib.size = size
 
 			# build DEX file
-			system("dx --dex --output=temp.dex #{_target}")
-			_dx_result = $?
-			if _dx_result == nil
+			system("dx --dex --output=temp.dex #{target}")
+			dx_result = $?
+			if dx_result == nil
 				logger.error("Could not create DEX for #{target}")
 				abort("ABORTING")
 			end
 			
 			# extract methods count, update counter
-			_count = `cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
-			_current_lib.count = _count.to_i
+			count = `cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
+			current_lib.count = count.to_i()
 
 			# find library's FQN
-			_to_find = File.basename(item, File.extname(item))
-			_to_find.gsub!(/(.*)-(.*)/, '\1:\2')
+			to_find = File.basename(item, File.extname(item))
+			to_find.gsub!(/(.*)-(.*)/, '\1:\2')
 
-			if library_fqn.include?(_to_find)
-				_current_lib.library_fqn = library_fqn
-				_current_lib.is_main_library = true
+			if library_fqn.include?(to_find)
+				current_lib.library_fqn = library_fqn
+				current_lib.is_main_library = true
 			else
 				deps_fqn_list.each do |dep|
-					if dep.include?(_to_find)
-						_current_lib.library_fqn = dep
-						_current_lib.is_main_library = false
+					if dep.include?(to_find)
+						current_lib.library_fqn = dep
+						current_lib.is_main_library = false
 					end
 				end
 			end
 
 			# update library fields
-			_parts = tokenize_library_fqn(_current_lib.library_fqn)
-			_current_lib.group_id = _parts[0]
-			_current_lib.artifact_id = _parts[1]
-			_current_lib.version = _parts[2]
+			parts = tokenize_library_fqn(current_lib.library_fqn)
+			current_lib.group_id = parts[0]
+			current_lib.artifact_id = parts[1]
+			current_lib.version = parts[2]
 
-			@computed_library_list.push(_current_lib)
+			@computed_library_list.push(current_lib)
 		end
 
 		FileUtils.cd("..")
@@ -106,10 +106,10 @@ if __FILE__ == $0
 	inject_library_name "com.github.dextorer:sofa:1.0.0"
 
 	compute_deps = ComputeDependencies.new
-	compute_deps.fetch_dependencies
+	compute_deps.fetch_dependencies()
 
 	calculate_methods = CalculateMethods.new
-	calculate_methods.run_build
+	calculate_methods.run_build()
 	calculate_methods.process_deps(compute_deps.library_fqn, compute_deps.deps_fqn_list)
 
 	puts calculate_methods.computed_library_list.inspect

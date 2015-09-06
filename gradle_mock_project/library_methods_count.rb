@@ -22,16 +22,16 @@ class LibraryMethodsCount
 	end
 
 	def process_library
-		init_gradle_files
-		inject_library_name "#@library_fqn"
+		init_gradle_files()
+		inject_library_name("#@library_fqn")
 
 		# compute FQNs for both library and dependencies
 		compute_deps = ComputeDependencies.new
-		compute_deps.fetch_dependencies
+		compute_deps.fetch_dependencies()
 
 		# compute methods count for both library and dependencies
 		calculate_methods = CalculateMethods.new
-		calculate_methods.run_build
+		calculate_methods.run_build()
 		calculate_methods.process_deps(compute_deps.library_fqn, compute_deps.deps_fqn_list)
 
 		# write result to DB (insert into Libraries first)
@@ -74,16 +74,23 @@ end
 
 if __FILE__ == $0
 	system("export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH")
+	restore_workspace()
+
+	lib_fqn = ARGV[0]
+	if lib_fqn.nil? || lib_fqn.empty?
+		Logger.new(STDOUT).error("No library FQN supplied")
+		abort("ABORTING")
+	end
 
 	library_methods_count = LibraryMethodsCount.new
-	library_methods_count.library_fqn = "com.briangriffey:slideuppane:1.0"
-	lib = library_methods_count.retrieve_from_db
+	library_methods_count.library_fqn = lib_fqn
+	lib = library_methods_count.retrieve_from_db()
 	if lib == nil
-		library_methods_count.process_library
+		library_methods_count.process_library()
 	end
-	library_methods_count.generate_response
+	library_methods_count.generate_response()
 
 	Signal.trap("EXIT") do
-		restore_workspace		
+		restore_workspace()
 	end
 end

@@ -10,9 +10,9 @@ def init_gradle_files
 end
 
 def inject_library_name(library_name)
-	_text = File.read("#$gradle_script")
-	_new_text = _text.gsub(/dummy/, library_name)
-	File.open($gradle_script, "w") {|file| file.write(_new_text) }
+	text = File.read("#$gradle_script")
+	new_text = text.gsub(/dummy/, library_name)
+	File.open($gradle_script, "w") {|file| file.write(new_text) }
 end
 
 def tokenize_library_fqn(library_name)
@@ -25,5 +25,5 @@ def restore_workspace
 	end
 	FileUtils.rm_rf("build")
 	FileUtils.rm_rf("extracted_deps")
-  	init_gradle_files
+  	init_gradle_files()
 end
