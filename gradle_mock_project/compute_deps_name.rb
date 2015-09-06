@@ -21,6 +21,9 @@ class ComputeDependencies
 		substr.each_line do |line|
 			if line[/^(\\|\+|\|){1}-+.*?/]
 				updated_line = line.gsub(/^(\\|\+|\|){1}-+/, '').gsub(/\(\*\)/, '').gsub(/\n/, '')
+				if line.include?("+")
+					updated_line.gsub!(/(.*):[^>]*>(.*)/, '\1:\2')
+				end
 				@deps_fqn_list.push(updated_line)
 			end
 		end
@@ -33,7 +36,7 @@ end
 
 if __FILE__ == $0
 	init_gradle_files()
-	inject_library_name("com.github.dextorer:sofa:1.0.0")
+	inject_library_name("com.github.dextorer:sofa:1.+")
 	
 	c = ComputeDependencies.new
 	c.fetch_dependencies()

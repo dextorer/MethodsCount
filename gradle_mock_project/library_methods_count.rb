@@ -21,13 +21,17 @@ class LibraryMethodsCount
 		Libraries.find_by_fqn(@library_fqn)
 	end
 
-	def process_library
+	def process_library(skip_compute_deps = false, compute_deps_obj = nil)
 		init_gradle_files()
 		inject_library_name("#@library_fqn")
 
-		# compute FQNs for both library and dependencies
+		# compute FQNs for both library and dependencies (if necessary)
 		compute_deps = ComputeDependencies.new
-		compute_deps.fetch_dependencies()
+		if skip_compute_deps == true
+			compute_deps = compute_deps_obj
+		else
+			compute_deps.fetch_dependencies()
+		end
 
 		# compute methods count for both library and dependencies
 		calculate_methods = CalculateMethods.new
@@ -82,11 +86,23 @@ if __FILE__ == $0
 		abort("ABORTING")
 	end
 
+	already_computed_deps = false
+	compute_deps = nil
+	if lib_fqn.end_with?("+")
+		init_gradle_files()
+		inject_library_name(lib_fqn)
+
+		compute_deps = ComputeDependencies.new
+		compute_deps.fetch_dependencies()
+		already_computed_deps = true
+		lib_fqn = compute_deps.library_fqn
+	end
+
 	library_methods_count = LibraryMethodsCount.new
 	library_methods_count.library_fqn = lib_fqn
 	lib = library_methods_count.retrieve_from_db()
 	if lib == nil
-		library_methods_count.process_library()
+		library_methods_count.process_library(already_computed_deps, compute_deps)
 	end
 	library_methods_count.generate_response()
 
