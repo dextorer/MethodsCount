@@ -69,7 +69,7 @@ class LibraryMethodsCount
 
     if inserted_id < 0
       logger.error("DB insertion failed")
-      abort("ABORTING")
+      raise "DB insertion failed"
     end
 
     calculate_methods.computed_library_list.each do |lib|
