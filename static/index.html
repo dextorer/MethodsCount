@@ -1,62 +1,55 @@
-<script type="text/javascript">
-function request(verb, path, onsuccess, onfail) {
-   var xhr = new XMLHttpRequest();
-   xhr.open(verb, path, true);
-   xhr.onload = function (e) {
-      if (xhr.readyState === 4) {
-         if (xhr.status === 200) {
-            onsuccess(xhr.response)
-         } else {
-            onfail(xhr.statusText);
-         }
-      }
-   };
-   xhr.onerror = function (e) {
-      onfail(xhr.statusText);
-   };
-   xhr.send(null);
-}
+<head>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css" type="text/css">
+</head>
 
+<body ng-app="autocompleteDemo">
 
-function submitLibraryRequest(libraryName) {
-   request(
-         "POST",  
-         "/api/request/" + libraryName, 
-         function(response) {
-            obj = JSON.parse(response);
-            console.log("Successfully enqeueud job for " + obj["lib_name"]);
-            poll(libraryName);
-         },
-         function(errorText) {
-            console.error(errorText);
-         }
-         );
-}
+   <script src="bower_components/angular/angular.min.js"></script>
+   <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+   <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+   <script src="bower_components/angular-material/angular-material.min.js"></script>
 
+<!--    <input name="libraryName"  id="libraryName" type="text" />
+   <button type="button" onclick="submitLibraryRequest(document.getElementById('libraryName').value)" >Submit request</button>
+   <div><textarea id="output"></textarea></div>
+ -->
+  <div id="diomerda">
+   <div ng-controller="DemoCtrl as ctrl" layout="column">
+     <md-content class="md-padding">
+         <md-autocomplete
+             ng-disabled="ctrl.isDisabled"
+             md-no-cache="ctrl.noCache"
+             md-selected-item="ctrl.selectedItem"
+             md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+             md-search-text="ctrl.searchText"
+             md-selected-item-change="ctrl.selectedItemChange(item)"
+             md-items="item in ctrl.querySearch(ctrl.searchText)"
+             md-item-text="item.display"
+             md-min-length="0"
+             placeholder="Insert the 'compile' statement">
+           <md-item-template>
+             <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+           </md-item-template>
+           <md-not-found>
+             No matches found for "{{ctrl.searchText}}".
+           </md-not-found>
+         </md-autocomplete>
+         <br/>
+     </md-content>
+   </div>
+  </div>
 
-function poll(libraryName) {
-   request("GET", "/api/stats/" + libraryName,
-         function(response) {
-            obj = JSON.parse(response);
-            if(obj["status"] == "done") {
- 	       document.getElementById('result').innerHTML = obj["result"]
-               console.log("Done");
-               console.log(obj)
-            }
-            else {
-               setTimeout(function() {
-                  poll(libraryName);
-               }, 4000);
-            }
-         },
-         function(errorText) {
-            console.error(errorText);
-         });
-}
-</script>
+  <div layout="column" layout-fill style="padding-bottom: 32px;" class="whiteframeBasicUsage">
+    <md-whiteframe class="md-whiteframe-z2" layout layout-align="center center">
+      <span>Library result</span>
+    </md-whiteframe>
+  </div>
 
-Library name:
-<input name="libraryName"  id="libraryName" type="text" />
-<button type="button" onclick="submitLibraryRequest(document.getElementById('libraryName').value)" >Submit request</button>
+  <script type="text/javascript" src="something.js"></script>
+  <script type="text/javascript" src="api.js"></script>
 
-<div id="result" style="width:100%; height:100%;">result</div>
+</body>
+
+>>>>>>> Stashed changes
