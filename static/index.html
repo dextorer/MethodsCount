@@ -39,6 +39,7 @@ function poll(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             if(obj["status"] == "done") {
+ 	       document.getElementById('result').innerHTML = obj["result"]
                console.log("Done");
             }
             else {
@@ -57,4 +58,4 @@ Library name:
 <input name="libraryName"  id="libraryName" type="text" />
 <button type="button" onclick="submitLibraryRequest(document.getElementById('libraryName').value)" >Submit request</button>
 
-
+<div id="result" style="width:100%; height:100%;">result</div>

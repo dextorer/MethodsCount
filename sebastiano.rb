@@ -12,35 +12,45 @@ class Sebastiano < Sinatra::Base
    set :public_folder, File.dirname(__FILE__) + '/static'
 
    namespace '/api' do
+
       get '/stats/:lib_name' do
          content_type :json
          puts LibraryStatus.all
-         status = LibraryStatus.where(library_name: params[:lib_name]).first.status 
+         library_name = params[:lib_name]
+	 library_status = LibraryStatus.where(library_name: library_name).first
          result = {}
-         if status == "done"
-            result = `./library-method-count.sh #{params[:lib_name]}`
+	 if library_status && library_status.status == done
+            result = `./library-method-count.sh #{library_name}`
          end
          { 
             :status => status,
             :result => result, 
-            :lib_name => params[:lib_name]
+            :lib_name => library_name
          }.to_json
       end
 
+
       post '/request/:lib_name' do |argument|
-         Thread.new(params[:lib_name]) do |library_name|
-            new_lib = LibraryStatus.new
-            new_lib.library_name = library_name
-            new_lib.status = "processing"
-            new_lib.save!
-            system('bash library-method-count.sh ' + library_name) 
-            new_lib.status = "done"
-            new_lib.save!
-         end
+         content_type :json
+     	 library_name = params[:lib_name]
+
+         if LibraryStatus.where(library_name: library_name).count == 0 
+     	  
+	    Thread.new(params[:lib_name]) do |library_name|
+	       new_lib = LibraryStatus.new
+               new_lib.library_name = library_name
+               new_lib.status = "processing"
+               new_lib.save!
+               `./library-method-count.sh #{library_name}`
+               new_lib.status = "done"
+               new_lib.save!
+            end
+
+	 end
 
          {
             :enqueued => true, 
-            :lib_name => params[:lib_name] 
+            :lib_name => library_name 
          }.to_json
       end
    end
