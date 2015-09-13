@@ -41,6 +41,7 @@ function poll(libraryName) {
             if(obj["status"] == "done") {
  	       document.getElementById('result').innerHTML = obj["result"]
                console.log("Done");
+               console.log(obj)
             }
             else {
                setTimeout(function() {

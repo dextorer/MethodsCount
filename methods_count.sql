@@ -42,7 +42,7 @@ CREATE TABLE `dependencies` (
 
 LOCK TABLES `dependencies` WRITE;
 /*!40000 ALTER TABLE `dependencies` DISABLE KEYS */;
-INSERT INTO `dependencies` VALUES (39,40),(39,41),(39,42),(43,44),(43,45),(50,51);
+INSERT INTO `dependencies` VALUES (3,4),(3,5),(3,6),(3,7),(8,9),(8,10),(8,11),(12,13),(12,14),(12,15),(16,17),(16,18),(16,19),(16,20),(16,21),(16,22),(16,23),(24,25),(24,26),(27,28),(27,6),(27,7),(31,32);
 /*!40000 ALTER TABLE `dependencies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,8 +60,9 @@ CREATE TABLE `libraries` (
   `group_id` varchar(255) NOT NULL,
   `artifact_id` varchar(255) NOT NULL,
   `version` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,8 +71,56 @@ CREATE TABLE `libraries` (
 
 LOCK TABLES `libraries` WRITE;
 /*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
-INSERT INTO `libraries` VALUES (39,'com.github.dextorer:sofa:1.0.0',817,'com.github.dextorer','sofa','1.0.0'),(40,'com.android.support:leanback-v17:22.2.0',5223,'com.android.support','leanback-v17','22.2.0'),(41,'com.android.support:recyclerview-v7:22.2.0',1984,'com.android.support','recyclerview-v7','22.2.0'),(42,'com.android.support:support-v4:22.2.0',7946,'com.android.support','support-v4','22.2.0'),(43,'com.wnafee:vector-compat:1.0.5',609,'com.wnafee','vector-compat','1.0.5'),(44,'com.android.support:appcompat-v7:22.1.0',5162,'com.android.support','appcompat-v7','22.1.0'),(45,'com.android.support:support-v4:22.1.0',7876,'com.android.support','support-v4','22.1.0'),(46,'com.makeramen:roundedimageview:2.2.0',224,'com.makeramen','roundedimageview','2.2.0'),(47,'com.makeramen:roundedimageview:2.1.2',224,'com.makeramen','roundedimageview','2.1.2'),(48,'com.makeramen:roundedimageview:2.1.1',224,'com.makeramen','roundedimageview','2.1.1'),(49,'com.squareup.picasso:picasso:2.5.2',849,'com.squareup.picasso','picasso','2.5.2'),(50,'com.squareup.retrofit:retrofit:1.9.0',766,'com.squareup.retrofit','retrofit','1.9.0'),(51,'gson:2.3.1',1231,'gson','2.3.1','');
+INSERT INTO `libraries` VALUES (3,'com.github.dextorer:sofa:1.0.0',817,'com.github.dextorer','sofa','1.0.0',104108),(4,'com.android.support:leanback-v17:22.2.0',5223,'com.android.support','leanback-v17','22.2.0',842268),(5,'com.android.support:recyclerview-v7:22.2.0',1984,'com.android.support','recyclerview-v7','22.2.0',239214),(6,'com.android.support:support-annotations:22.2.0',20,'com.android.support','support-annotations','22.2.0',19096),(7,'com.android.support:support-v4:22.2.0',7946,'com.android.support','support-v4','22.2.0',1020632),(8,'com.wnafee:vector-compat:1.0.5',609,'com.wnafee','vector-compat','1.0.5',87234),(9,'com.android.support:appcompat-v7:22.1.0',5162,'com.android.support','appcompat-v7','22.1.0',829066),(10,'com.android.support:support-annotations:22.1.0',3,'com.android.support','support-annotations','22.1.0',11467),(11,'com.android.support:support-v4:22.1.0',7876,'com.android.support','support-v4','22.1.0',1005480),(12,'com.squareup.leakcanary:leakcanary-android:1.3.1',454,'com.squareup.leakcanary','leakcanary-android','1.3.1',114011),(13,'com.squareup.haha:haha:1.3',1759,'com.squareup.haha','haha','1.3',316913),(14,'com.squareup.leakcanary:leakcanary-analyzer:1.3.1',126,'com.squareup.leakcanary','leakcanary-analyzer','1.3.1',14774),(15,'com.squareup.leakcanary:leakcanary-watcher:1.3.1',73,'com.squareup.leakcanary','leakcanary-watcher','1.3.1',13798),(16,'com.facebook.fresco:fresco:0.7.0',91,'com.facebook.fresco','fresco','0.7.0',9419),(17,'com.parse.bolts:bolts-android:1.1.4',357,'com.parse.bolts','bolts-android','1.1.4',47225),(18,'com.facebook.fresco:drawee:0.7.0',852,'com.facebook.fresco','drawee','0.7.0',86979),(19,'com.facebook.fresco:fbcore:0.7.0',866,'com.facebook.fresco','fbcore','0.7.0',88827),(20,'com.facebook.fresco:imagepipeline:0.7.0',2816,'com.facebook.fresco','imagepipeline','0.7.0',3446143),(21,'com.nineoldandroids:library:2.4.0',929,'com.nineoldandroids','library','2.4.0',110747),(22,'com.android.support:support-annotations:21.0.3',3,'com.android.support','support-annotations','21.0.3',11467),(23,'com.android.support:support-v4:21.0.3',6721,'com.android.support','support-v4','21.0.3',860830),(24,'com.android.support:percent:23.0.0',97,'com.android.support','percent','23.0.0',12570),(25,'com.android.support:support-annotations:23.0.0',20,'com.android.support','support-annotations','23.0.0',19096),(26,'com.android.support:support-v4:23.0.0',8591,'com.android.support','support-v4','23.0.0',1108921),(27,'com.android.support:design:22.2.0',1751,'com.android.support','design','22.2.0',217438),(28,'com.android.support:appcompat-v7:22.2.0',5260,'com.android.support','appcompat-v7','22.2.0',846282),(29,'com.android.support:support-annotations:22.2.0',20,'com.android.support','support-annotations','22.2.0',19096),(30,'com.android.support:support-v4:22.2.0',7946,'com.android.support','support-v4','22.2.0',1020632),(31,'com.squareup.retrofit:retrofit:1.9.0',766,'com.squareup.retrofit','retrofit','1.9.0',121559),(32,'com.google.code.gson:gson:2.3.1',1231,'com.google.code.gson','gson','2.3.1',210856);
 /*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `library_statuses`
+--
+
+DROP TABLE IF EXISTS `library_statuses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `library_statuses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `library_name` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `library_statuses`
+--
+
+LOCK TABLES `library_statuses` WRITE;
+/*!40000 ALTER TABLE `library_statuses` DISABLE KEYS */;
+INSERT INTO `library_statuses` VALUES (1,'com.github.dextorer:sofa:1.0.0','done'),(2,'com.github.dextorer:sofa:1.0.0','done'),(3,'com.github.dextorer:sofa:1.0.0','done'),(4,'com.squareup.okio:okio:1.6.0','done'),(5,'com.android.support:percent:23.0.0','done');
+/*!40000 ALTER TABLE `library_statuses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `schema_migrations`
+--
+
+DROP TABLE IF EXISTS `schema_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) NOT NULL,
+  UNIQUE KEY `unique_schema_migrations` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schema_migrations`
+--
+
+LOCK TABLES `schema_migrations` WRITE;
+/*!40000 ALTER TABLE `schema_migrations` DISABLE KEYS */;
+INSERT INTO `schema_migrations` VALUES ('20150829153516');
+/*!40000 ALTER TABLE `schema_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -83,4 +132,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-08-26 10:10:17
+-- Dump completed on 2015-09-04  0:15:25
