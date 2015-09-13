@@ -12,3 +12,11 @@ class LibraryStatus < ActiveRecord::Base
 end
 
 
+class Libraries < ActiveRecord::Base
+	self.table_name = "libraries"
+end
+
+
+class Dependencies < ActiveRecord::Base
+	self.table_name = "dependencies"
+end

@@ -8,7 +8,14 @@ class ComputeDependencies
 	attr_reader :library_fqn
 	attr_reader :deps_fqn_list
 
+	def initialiaze(library_name)
+		@library = library_name
+	end
+
 	def fetch_dependencies
+		init_gradle_files()
+		inject_library_name(@library)
+
 		deps_raw = `./gradlew dependencies`
 
 		# extract only the dependencies part
@@ -29,7 +36,7 @@ class ComputeDependencies
 		end
 
 		# the first entry is the requested library
-		@library_fqn = deps_fqn_list[0]
+		@library_with_version = deps_fqn_list[0]
 		@deps_fqn_list.delete_at(0)
 	end
 end
