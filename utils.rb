@@ -4,6 +4,9 @@ require 'fileutils'
 
 $gradle_script = "build.gradle"
 $gradle_script_base = "build.gradle.base"
+$gradle_base_dir = "gradle_mock_project"
+$base_dir = ""
+$gradle_working_dir = ""
 
 def init_gradle_files
 	FileUtils.cp("#$gradle_script_base", "#$gradle_script")
@@ -19,11 +22,17 @@ def tokenize_library_fqn(library_name)
 	parts = library_name.split(/:/)
 end
 
+def clone_workspace(library_name)
+	$base_dir = Dir.pwd
+	now = Time.now.to_i
+	$gradle_working_dir = library_name.gsub(/:/, '_') + now.to_s
+	FileUtils.cp_r("#$gradle_base_dir", "#$gradle_working_dir")
+	FileUtils.cd("#$gradle_working_dir")
+end
+
 def restore_workspace
-	if File.exists?($gradle_script)
-		FileUtils.rm($gradle_script)
+	FileUtils.cd("#$base_dir")
+	if File.exists?($gradle_working_dir)
+		FileUtils.rm_r($gradle_working_dir)
 	end
-	FileUtils.rm_rf("build")
-	FileUtils.rm_rf("extracted_deps")
-  	init_gradle_files()
 end

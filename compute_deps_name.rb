@@ -5,10 +5,10 @@ require_relative 'utils'
 
 class ComputeDependencies 
 
-	attr_reader :library_fqn
+	attr_reader :library_with_version
 	attr_reader :deps_fqn_list
 
-	def initialiaze(library_name)
+	def initialize(library_name)
 		@library = library_name
 	end
 
@@ -42,13 +42,15 @@ class ComputeDependencies
 end
 
 if __FILE__ == $0
+	library_name = "com.github.dextorer:sofa:1.+"
+	clone_workspace(library_name)
 	init_gradle_files()
-	inject_library_name("com.github.dextorer:sofa:1.+")
+	inject_library_name(library_name)
 	
-	c = ComputeDependencies.new
+	c = ComputeDependencies.new(library_name)
 	c.fetch_dependencies()
 	
-	puts c.library_fqn
+	puts c.library_with_version
 	puts c.deps_fqn_list
 	
 	restore_workspace()

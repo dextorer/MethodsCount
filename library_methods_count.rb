@@ -8,7 +8,7 @@ require 'json'
 require_relative 'utils'
 require_relative 'compute_deps_name'
 require_relative 'calculate_methods'
-require_relative '../model'
+require_relative 'model'
 
 class LibraryMethodsCount
 
@@ -20,7 +20,6 @@ class LibraryMethodsCount
 
   # Warning: long taking blocking procedure
   def initialize(library_name="")
-
     return nil if library_name.blank?
 
     @library = library_name
@@ -34,29 +33,37 @@ class LibraryMethodsCount
 
 
   def compute_dependencies
+    clone_workspace(@library)
+    
     if not cached?
-      process_library()
+      # the FQN may contain a '+', meaning that we need to obtain the version and then
+      # check the DB again
+      process_library(!cached?)
     end
 
     generate_response()
+
+    restore_workspace()
   end
 
 
   private
 
 
-  def process_library
-    system("export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH")
-    restore_workspace()
-
+  def process_library(do_check = false)
+    #system("export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH")
     compute_deps = ComputeDependencies.new(@library)
     compute_deps.fetch_dependencies()
-    @library_with_version = compute_deps.library_fqn
+    @library_with_version = compute_deps.library_with_version
+
+    if do_check && Libraries.find_by_fqn(@library_with_version)
+      return
+    end
 
     # compute methods count for both library and dependencies
     calculate_methods = CalculateMethods.new
     calculate_methods.run_build()
-    calculate_methods.process_deps(compute_deps.library_fqn, compute_deps.deps_fqn_list)
+    calculate_methods.process_deps(compute_deps.library_with_version, compute_deps.deps_fqn_list)
 
     # write result to DB (insert into Libraries first)
     inserted_id = -1
@@ -93,7 +100,17 @@ class LibraryMethodsCount
 
     response = {:library_fqn => lib.fqn, :library_methods => lib.count, :dependencies_count => deps.length, :dependencies => deps_array}
 
+    puts response
     return response
   end
 
+end
+
+if __FILE__ == $0
+  begin
+    library_name = ARGV[0]
+    LibraryMethodsCount.new(library_name).compute_dependencies()
+  ensure
+    restore_workspace()
+  end
 end

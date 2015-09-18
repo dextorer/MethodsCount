@@ -35,25 +35,36 @@ class Sebastiano < Sinatra::Base
       content_type :json
       library_name = params[:lib_name]
 
-      if LibraryStatus.where(library_name: library_name).count == 0
-        Thread.new(params[:lib_name]) do |library_name|
-          begin
+      #if LibraryStatus.where(library_name: library_name).count == 0
+        #Thread.new(params[:lib_name]) do |library_name|
+          #begin
             new_lib = LibraryStatus.new
             new_lib.library_name = library_name
             new_lib.status = "processing"
-            new_lib.save!
+            #new_lib.save!
+            puts "dioboia"
             LibraryMethodsCount.new(library_name).compute_dependencies()
+            puts "diobestia"
             new_lib.status = "done"
-            new_lib.save!
-          rescue
-            LibraryStatus.where(library_name: library_name).destroy_all
-          end
-        end
-      end
+            #new_lib.save!
+          #rescue
+            #LibraryStatus.where(library_name: library_name).destroy_all
+          #end
+        #end
+      #end
 
       {
         :enqueued => true,
         :lib_name => library_name
+      }.to_json
+    end
+
+
+    get '/top/' do
+      content_type :json
+      top = Libraries.order(count: :desc).distinct(true).take(100)
+      {
+        :top_libs => top
       }.to_json
     end
   end
