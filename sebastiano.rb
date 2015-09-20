@@ -3,7 +3,7 @@ require 'json'
 require 'sinatra/namespace'
 require 'active_record'
 require './model'
-require './gradle_mock_project/library_methods_count'
+require './library_methods_count'
 
 class Sebastiano < Sinatra::Base
 

@@ -38,7 +38,7 @@ class LibraryMethodsCount
     if not cached?
       # the FQN may contain a '+', meaning that we need to obtain the version and then
       # check the DB again
-      process_library(!cached?)
+      process_library()
     end
 
     generate_response()
@@ -50,15 +50,12 @@ class LibraryMethodsCount
   private
 
 
-  def process_library(do_check = false)
-    #system("export DYLD_LIBRARY_PATH=/usr/local/mysql/lib:$DYLD_LIBRARY_PATH")
+  def process_library
     compute_deps = ComputeDependencies.new(@library)
     compute_deps.fetch_dependencies()
     @library_with_version = compute_deps.library_with_version
 
-    if do_check && Libraries.find_by_fqn(@library_with_version)
-      return
-    end
+    return if cached?
 
     # compute methods count for both library and dependencies
     calculate_methods = CalculateMethods.new
