@@ -8,5 +8,5 @@
 # For customization when using a Version Control System, please read the
 # header note.
 #Wed Jun 03 10:51:36 CEST 2015
-sdk.dir=/Users/dextor/Development/Android/sdk
-nkd.dir=/Users/dextor/Development/Android/android-ndk-r9b
+sdk.dir=< path to your android sdk directory >
+nkd.dir=< path to your android ndk directory >

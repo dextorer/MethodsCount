@@ -50,10 +50,16 @@ class LibraryMethodsCount
   private
 
 
-  def process_library
-    compute_deps = ComputeDependencies.new(@library)
+  def find_version(library)
+    compute_deps = ComputeDependencies.new(library)
     compute_deps.fetch_dependencies()
-    @library_with_version = compute_deps.library_with_version
+
+    return compute_deps.library_with_version
+  end
+
+
+  def process_library
+    @library_with_version = find_version(@library)
 
     return if cached?
 
