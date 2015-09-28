@@ -33,8 +33,6 @@ class LibraryMethodsCount
 
 
   def compute_dependencies
-    clone_workspace(@library)
-    
     if not cached?
       # the FQN may contain a '+', meaning that we need to obtain the version and then
       # check the DB again
@@ -42,8 +40,6 @@ class LibraryMethodsCount
     end
 
     generate_response()
-
-    restore_workspace()
   end
 
 
@@ -59,6 +55,8 @@ class LibraryMethodsCount
 
 
   def process_library
+    clone_workspace(@library)
+    
     compute_deps = ComputeDependencies.new(library)
     compute_deps.fetch_dependencies()
     @library_with_version = compute_deps.library_with_version
@@ -90,6 +88,8 @@ class LibraryMethodsCount
       dep_id = Libraries.find_by_fqn(lib.library_fqn).id
       Dependencies.create(library_id: inserted_id, dependency_id: dep_id)
     end
+
+    restore_workspace()
   end
 
 
