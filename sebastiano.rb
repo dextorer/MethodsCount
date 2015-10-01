@@ -25,8 +25,8 @@ class Sebastiano < Sinatra::Base
       end
       {
         :status => library_status.status,
-        :result => result,
-        :lib_name => library_name
+        :lib_name => library_name,
+        :result => result
       }.to_json
     end
 
@@ -42,9 +42,7 @@ class Sebastiano < Sinatra::Base
             new_lib.library_name = library_name
             new_lib.status = "processing"
             new_lib.save!
-            puts "dioboia"
             LibraryMethodsCount.new(library_name).compute_dependencies()
-            puts "diobestia"
             new_lib.status = "done"
             new_lib.save!
           rescue

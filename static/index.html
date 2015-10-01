@@ -1,6 +1,16 @@
+<head>
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="api.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
-   <input name="libraryName"  id="libraryName" type="text" />
-   <button type="button" onclick="submitLibraryRequest(document.getElementById('libraryName').value)" >Submit request</button>
-   <div><textarea id="output"></textarea></div>
-  <script type="text/javascript" src="api.js"></script>
+	<div id="input_block">
+		<input name="libraryName" id="libraryName" type="text" />
+		<button type="button" onclick="submitLibraryRequest(document.getElementById('libraryName').value)">Submit request</button>
+		<img src="images/progress.gif" id="progress" />
+	</div>
+	<div id="output_block">
+		<textarea id="output"></textarea>
+	</div>
 </body>

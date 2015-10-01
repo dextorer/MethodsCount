@@ -24,6 +24,7 @@ function submitLibraryRequest(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             console.log("Successfully enqeueud job for " + obj["lib_name"]);
+            $('#progress').css('visibility', 'visible')
             poll(libraryName);
          },
          function(errorText) {
@@ -40,7 +41,8 @@ function poll(libraryName) {
             if(obj["status"] == "done") {
                console.log("Done");
                console.log(obj)
-               document.getElementById('output').value = JSON.stringify(obj)
+               $('#progress').css('visibility', 'hidden')
+               document.getElementById('output').value = JSON.stringify(obj, null, "\t");
             }
             else {
                setTimeout(function() {

@@ -1,0 +1,17 @@
+#progress {
+	visibility: hidden;
+}
+
+#output_block {
+	margin-top: 10px;
+}
+
+#libraryName {
+	width: 600px;
+	margin-right: 10px;
+}
+
+#output {
+    width: 600px;
+    height: 400px;
+}
