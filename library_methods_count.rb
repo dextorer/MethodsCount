@@ -61,7 +61,10 @@ class LibraryMethodsCount
     compute_deps.fetch_dependencies()
     @library_with_version = compute_deps.library_with_version
 
-    return if cached?
+    if cached?
+      restore_workspace()
+      return
+    end
 
     # check whether dependencies are already calculated
     filtered_deps = compute_deps.deps_fqn_list.reject { |dep| Libraries.find_by_fqn(dep).id > 0 }
