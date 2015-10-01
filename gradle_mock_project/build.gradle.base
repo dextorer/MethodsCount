@@ -18,8 +18,8 @@ allprojects {
 apply plugin: 'com.android.library'
 
 android {
-	compileSdkVersion = 'android-23'
-	buildToolsVersion = "22.0.1"
+	compileSdkVersion = 'android-22'
+	buildToolsVersion = "23.0.1"
 
     lintOptions {
         disable 'GradleDependency'

@@ -1,4 +1,4 @@
 */.gradle/*
 *tmp/*
 log
-./gradle_mock_project/local.properties
+gradle_mock_project/local.properties
