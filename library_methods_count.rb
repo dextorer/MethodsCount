@@ -63,14 +63,19 @@ class LibraryMethodsCount
 
     return if cached?
 
+    # check whether dependencies are already calculated
+    filtered_deps = compute_deps.deps_fqn_list.reject { |dep| Libraries.find_by_fqn(dep).id > 0 }
+
     # compute methods count for both library and dependencies
     calculate_methods = CalculateMethods.new
     calculate_methods.run_build()
-    calculate_methods.process_deps(compute_deps.library_with_version, compute_deps.deps_fqn_list)
+    calculate_methods.process_deps(compute_deps.library_with_version, filtered_deps)
 
     # write result to DB (insert into Libraries first)
     inserted_id = -1
     calculate_methods.computed_library_list.each do |lib|
+      next if lib.skipped == true
+      
       Libraries.create(fqn: lib.library_fqn, group_id: lib.group_id, artifact_id: lib.artifact_id, version: lib.version, count: lib.count, size: lib.size)
       if lib.is_main_library
         inserted_id = Libraries.find_by_fqn(lib.library_fqn).id
@@ -85,7 +90,18 @@ class LibraryMethodsCount
     calculate_methods.computed_library_list.each do |lib|
       next if lib.is_main_library == true
 
+      if lib.skipped
+        # find the FQN
+        compute_deps.deps_fqn_list.each do |dep|
+          if dep.include?(lib.library_fqn)
+            lib.library_fqn = dep
+            break
+          end
+        end
+      end
+
       dep_id = Libraries.find_by_fqn(lib.library_fqn).id
+      next if dep_id < 0
       Dependencies.create(library_id: inserted_id, dependency_id: dep_id)
     end
 

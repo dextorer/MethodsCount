@@ -13,6 +13,7 @@ class Library
 	attr_accessor :count
 	attr_accessor :size
 	attr_accessor :is_main_library
+	attr_accessor :skipped
 end
 
 class CalculateMethods
@@ -46,6 +47,32 @@ class CalculateMethods
   			
 			current_lib = Library.new
 
+			# find library's FQN
+			to_find = File.basename(item, File.extname(item))
+			to_find.gsub!(/(.*)-(.*)/, '\1:\2')
+			found = false
+			if library_fqn.include?(to_find)
+				current_lib.library_fqn = library_fqn
+				current_lib.is_main_library = true
+				found = true
+			else
+				deps_fqn_list.each do |dep|
+					if dep.include?(to_find)
+						current_lib.library_fqn = dep
+						current_lib.is_main_library = false
+						found = true
+					end
+				end
+			end
+
+			if not found
+				# this dependency has already been calculated
+				current_lib.library_fqn = to_find
+				current_lib.skipped = true
+				@computed_library_list.push(current_lib)
+				next
+			end
+
   			target = item
 			if item.end_with?(".aar")
 				# extract AAR's classes.jar
@@ -70,22 +97,6 @@ class CalculateMethods
 			# extract methods count, update counter
 			count = `cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
 			current_lib.count = count.to_i()
-
-			# find library's FQN
-			to_find = File.basename(item, File.extname(item))
-			to_find.gsub!(/(.*)-(.*)/, '\1:\2')
-
-			if library_fqn.include?(to_find)
-				current_lib.library_fqn = library_fqn
-				current_lib.is_main_library = true
-			else
-				deps_fqn_list.each do |dep|
-					if dep.include?(to_find)
-						current_lib.library_fqn = dep
-						current_lib.is_main_library = false
-					end
-				end
-			end
 
 			# update library fields
 			parts = tokenize_library_fqn(current_lib.library_fqn)
