@@ -46,14 +46,6 @@ class LibraryMethodsCount
   private
 
 
-  def find_version(library)
-    compute_deps = ComputeDependencies.new(library)
-    compute_deps.fetch_dependencies()
-
-    return compute_deps.library_with_version
-  end
-
-
   def process_library
     clone_workspace(@library)
     
@@ -61,7 +53,7 @@ class LibraryMethodsCount
     compute_deps.fetch_dependencies()
     @library_with_version = compute_deps.library_with_version
 
-    if cached?
+    if cached? or not @library_with_version
       restore_workspace()
       return
     end

@@ -24,6 +24,7 @@ function submitLibraryRequest(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             console.log("Successfully enqeueud job for " + obj["lib_name"]);
+            document.getElementById('output').value = ""
             $('#progress').css('visibility', 'visible')
             poll(libraryName);
          },
@@ -38,13 +39,17 @@ function poll(libraryName) {
    request("GET", "/api/stats/" + libraryName,
          function(response) {
             obj = JSON.parse(response);
-            if(obj["status"] == "done") {
+            if (obj["status"] == "done") {
                console.log("Done");
                console.log(obj)
                $('#progress').css('visibility', 'hidden')
                document.getElementById('output').value = JSON.stringify(obj, null, "\t");
-            }
-            else {
+            } else if (obj["status"] == "error") {
+               console.log("Error");
+               console.log(obj)
+               $('#progress').css('visibility', 'hidden')
+               document.getElementById('output').value = "An error has occurred"
+            } else {
                setTimeout(function() {
                   poll(libraryName);
                }, 4000);

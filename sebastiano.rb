@@ -16,15 +16,26 @@ class Sebastiano < Sinatra::Base
 
     get '/stats/:lib_name' do
       content_type :json
-      puts LibraryStatus.all
       library_name = params[:lib_name]
       library_status = LibraryStatus.where(library_name: library_name).first
       result = {}
-      if library_status && library_status.status == "done"
-        result = LibraryMethodsCount.new(library_name).compute_dependencies()
+      status = ""
+      if library_status 
+        if library_status.status == "done"
+          result = LibraryMethodsCount.new(library_name).compute_dependencies()
+          status = library_status.status
+          LibraryStatus.where(library_name: library_name).destroy_all
+        elsif library_status.status == "processing"
+          status = library_status.status
+        elsif library_status.status == "error"
+          status = library_status.status
+          LibraryStatus.where(library_name: library_name).destroy_all
+        end
+      else
+        status = "undefined"
       end
       {
-        :status => library_status.status,
+        :status => status,
         :lib_name => library_name,
         :result => result
       }.to_json
@@ -37,16 +48,17 @@ class Sebastiano < Sinatra::Base
 
       if LibraryStatus.where(library_name: library_name).count == 0
         Thread.new(params[:lib_name]) do |library_name|
-          begin
-            new_lib = LibraryStatus.new
-            new_lib.library_name = library_name
+          new_lib = LibraryStatus.new
+          new_lib.library_name = library_name
+          begin  
             new_lib.status = "processing"
             new_lib.save!
             LibraryMethodsCount.new(library_name).compute_dependencies()
             new_lib.status = "done"
             new_lib.save!
           rescue
-            LibraryStatus.where(library_name: library_name).destroy_all
+            new_lib.status = "error"
+            new_lib.save!
           end
         end
       end

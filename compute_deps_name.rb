@@ -16,7 +16,11 @@ class ComputeDependencies
 		init_gradle_files()
 		inject_library_name(@library)
 
-		deps_raw = `./gradlew dependencies`
+		deps_raw = `./gradlew -q dependencies`
+		has_succeded = $?.exitstatus
+		if has_succeded != 0
+			return
+		end
 
 		# extract only the dependencies part
 		substr_begin = deps_raw.index(/default\s+-\s+/)
