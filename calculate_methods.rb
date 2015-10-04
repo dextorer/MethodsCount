@@ -2,7 +2,7 @@
 
 require 'fileutils'
 require 'logger'
-require 'dotenv'
+
 require_relative 'utils'
 require_relative 'compute_deps_name'
 
@@ -27,7 +27,6 @@ class CalculateMethods
 	attr_reader :computed_library_list
 
 	def initialize
-		Dotenv.load
 		FileUtils.mkdir_p(@@extracted_deps_dir)
 		@computed_library_list = Array.new
 	end

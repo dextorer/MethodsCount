@@ -4,6 +4,7 @@ require 'rubygems'
 require 'fileutils'
 require 'logger'
 require 'json'
+require 'dotenv'
 
 require_relative 'utils'
 require_relative 'compute_deps_name'
@@ -22,6 +23,7 @@ class LibraryMethodsCount
   def initialize(library_name="")
     return nil if library_name.blank?
 
+    Dotenv.load
     @library = library_name
     @library_with_version = @library.end_with?("+") ? nil : @library
   end
