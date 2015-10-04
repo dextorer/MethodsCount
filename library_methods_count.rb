@@ -59,7 +59,7 @@ class LibraryMethodsCount
     end
 
     # check whether dependencies are already calculated
-    filtered_deps = compute_deps.deps_fqn_list.reject { |dep| Libraries.find_by_fqn(dep).id > 0 }
+    filtered_deps = compute_deps.deps_fqn_list.reject { |dep| Libraries.find_by_fqn(dep) and Libraries.find_by_fqn(dep).id > 0 }
 
     # compute methods count for both library and dependencies
     calculate_methods = CalculateMethods.new
