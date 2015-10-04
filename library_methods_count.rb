@@ -111,12 +111,12 @@ class LibraryMethodsCount
     deps.each do |dep|
       dep_id = dep.dependency_id
       dep_lib = Libraries.find(dep_id.to_i)
-      deps_array.push({ :dependency_name => dep_lib.fqn, :dependency_count => dep_lib.count })
+      deps_array.push({ :dependency_name => dep_lib.fqn, :dependency_count => dep_lib.count, :dependency_size => dep_lib.size })
     end
 
-    response = {:library_fqn => lib.fqn, :library_methods => lib.count, :dependencies_count => deps.length, :dependencies => deps_array}
+    response = {:library_fqn => lib.fqn, :library_methods => lib.count, :library_size => lib.size, :dependencies_count => deps.length, :dependencies => deps_array}
 
-    puts response
+    puts response.to_json
     return response
   end
 
