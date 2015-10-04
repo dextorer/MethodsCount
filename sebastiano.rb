@@ -24,7 +24,6 @@ class Sebastiano < Sinatra::Base
         if library_status.status == "done"
           result = LibraryMethodsCount.new(library_name).compute_dependencies()
           status = library_status.status
-          LibraryStatus.where(library_name: library_name).destroy_all
         elsif library_status.status == "processing"
           status = library_status.status
         elsif library_status.status == "error"
