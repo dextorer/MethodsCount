@@ -55,6 +55,10 @@ main {
 	
 }
 
+#result-card-container {
+	visibility: hidden;
+}
+
 #result-card {
 	padding: 10px;
 }
