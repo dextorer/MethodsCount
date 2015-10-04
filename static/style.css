@@ -1,17 +1,137 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
 #progress {
 	visibility: hidden;
 }
 
-#output_block {
-	margin-top: 10px;
+#input-block {
+	height: 23%;
+	background-color: #64dee4;
+	position: relative;
 }
 
-#libraryName {
-	width: 600px;
-	margin-right: 10px;
+#input-content {
+	position: absolute;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	bottom: 0;
+	left: 0;
+	right: 0; 
+}
+
+.card-container {
+	position: relative;
+}
+
+.card {
+	width: 75%;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+.progress {
+	margin-top: 7%;
+	width: 75%;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+#welcome-card {
+	
+}
+
+#result-card {
+	padding: 10px;
+}
+
+.result-card-header {
+	font-size: 15px;
+}
+
+#result-lib-name {
+	font-size: medium;
+}
+
+#result-card-dep-container {
+	
+}
+
+.indent-right {
+	margin-left: 20px;	
+}
+
+th {
+	font-weight: normal;
+	padding-left: 0px;
+}
+
+td {
+	padding-left: 20px;
+}
+
+#search-box {
+	line-height: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+#search-button {
+	outline: 0;
+	border: 0;
+	padding: 0;
+	background: none;
+	display: none;
+}
+
+#output-block {
+	margin-top: 10px;
 }
 
 #output {
     width: 600px;
     height: 400px;
+    display: none;
 }
+
+.input-field input[type=text] {
+	border: 0px solid #000;
+    box-shadow: 0 0px 0 0 #000;
+}
+
+.input-field input[type=text]:focus {
+	border: 0px solid #000;
+    box-shadow: 0 0px 0 0 #000;
+}
+
+.footer-copyright {
+
+}
+
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
