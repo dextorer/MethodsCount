@@ -31,6 +31,9 @@ def clone_workspace(library_name)
 end
 
 def restore_workspace
+	if $base_dir.nil? || $base_dir.empty?
+		return
+	end
 	FileUtils.cd("#$base_dir")
 	if File.exists?($gradle_working_dir)
 		FileUtils.rm_r($gradle_working_dir)
