@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'logger'
+require 'dotenv'
 require_relative 'utils'
 require_relative 'compute_deps_name'
 
@@ -26,6 +27,7 @@ class CalculateMethods
 	attr_reader :computed_library_list
 
 	def initialize
+		Dotenv.load
 		FileUtils.mkdir_p(@@extracted_deps_dir)
 		@computed_library_list = Array.new
 	end
@@ -87,7 +89,8 @@ class CalculateMethods
 			current_lib.size = size
 
 			# build DEX file
-			system("dx --dex --output=temp.dex #{target}")
+			dx_path = ENV['DX_PATH']
+			system("#{dx_path}/dx --dex --output=temp.dex #{target}")
 			dx_result = $?
 			if dx_result == nil
 				logger.error("Could not create DEX for #{target}")
