@@ -18,7 +18,20 @@ function request(verb, path, onsuccess, onfail) {
 
 
 function submitLibraryRequest(libraryName) {
-   $('#welcome-card-container').fadeOut();
+   if ($('#welcome-card-container').css('visibility') == 'visible') {
+      $('#welcome-card-container').fadeOut();
+   }
+
+   if ($('#result-card-container').css('visibility') == 'visible') {
+      $('#result-card-container').fadeOut();
+   }
+   
+   if ($('#error-card-container').css('visibility') == 'visible') {
+      $('#error-card-container').fadeOut();
+   }
+
+   $('#progress').css('visibility','visible').hide().fadeIn();
+
    request(
          "POST",  
          "/api/request/" + libraryName, 
@@ -48,8 +61,8 @@ function poll(libraryName) {
             } else if (obj["status"] == "error") {
                console.log("Error");
                console.log(obj)
-               $('#progress').css('visibility', 'hidden')
-               // document.getElementById('output').value = "An error has occurred"
+               $('#progress').fadeOut();
+               $('#error-card-container').css('visibility','visible').hide().fadeIn();
             } else {
                setTimeout(function() {
                   poll(libraryName);
@@ -75,9 +88,35 @@ function fetchTopLibraries() {
 }
 
 
+function mockRequest() {
+   // simulate load time so to visualize progress
+   if ($('#welcome-card-container').css('visibility') == 'visible') {
+      $('#welcome-card-container').fadeOut();
+   }
+
+   if ($('#result-card-container').css('visibility') == 'visible') {
+      $('#result-card-container').fadeOut();
+   }
+   
+   if ($('#error-card-container').css('visibility') == 'visible') {
+      $('#error-card-container').fadeOut();
+   }
+
+   $('#progress').css('visibility','visible').hide().fadeIn();
+
+   var timeoutID = window.setTimeout(function() {
+      $('#progress').fadeOut();
+
+      var raw_resp = '{"library_fqn":"com.wnafee:vector-compat:1.0.5","library_methods":609,"library_size":87234,"dependencies_count":3,"dependencies":[{"dependency_name":"com.android.support:appcompat-v7:22.1.0","dependency_count":5162,"dependency_size":829066},{"dependency_name":"com.android.support:support-annotations:22.1.0","dependency_count":3,"dependency_size":11467},{"dependency_name":"com.android.support:support-v4:22.1.0","dependency_count":7876,"dependency_size":1005480}]}';
+      var response = JSON.parse(raw_resp);
+
+      $('#result-card-container').css('visibility','visible').hide().fadeIn();
+      showResponse(response);
+   }, 2000);
+}
+
+
 function showResponse(result) {
-   //var raw_resp = '{"library_fqn":"com.wnafee:vector-compat:1.0.5","library_methods":609,"library_size":87234,"dependencies_count":3,"dependencies":[{"dependency_name":"com.android.support:appcompat-v7:22.1.0","dependency_count":5162,"dependency_size":829066},{"dependency_name":"com.android.support:support-annotations:22.1.0","dependency_count":3,"dependency_size":11467},{"dependency_name":"com.android.support:support-v4:22.1.0","dependency_count":7876,"dependency_size":1005480}]}';
-   //var response = JSON.parse(result);
    var response = result;
    $('#result-library-stats tr').has('td').remove();
    $('#result-lib-name').text(response.library_fqn);
@@ -97,6 +136,7 @@ $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
       e.preventDefault();
       submitLibraryRequest($('#search-box').val());
+      //mockRequest();
       } 
 });
 

@@ -51,11 +51,15 @@ main {
 	right: 0;
 }
 
-#welcome-card {
-	
+#welcome-card-container {
+	visibility: visible;
 }
 
 #result-card-container {
+	visibility: hidden;
+}
+
+#error-card-container {
 	visibility: hidden;
 }
 
