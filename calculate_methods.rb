@@ -19,8 +19,10 @@ end
 
 class CalculateMethods
 	
-	logger = Logger.new(STDOUT)
-	logger.level = Logger::DEBUG
+	@@tag = "[CalculateMethods]"
+
+	@@logger = Logger.new(STDOUT)
+	@@logger.level = Logger::DEBUG
 
 	@@extracted_deps_dir = "extracted_deps"
 
@@ -33,10 +35,10 @@ class CalculateMethods
 
 	def run_build
 		system("./gradlew -q compileDebugJava")
-		_build_result = $?
-		if _build_result == nil
-			logger.error("3. Build failed")
-			abort("ABORTING")
+		build_result = $?
+		if build_result == nil
+			@@logger.error("Build failed")
+			raise "Gradle build failed"
 		end
 	end
 
@@ -44,6 +46,7 @@ class CalculateMethods
 		FileUtils.cd(@@extracted_deps_dir)
 
 		Dir.foreach('.') do |item|
+			@@logger.debug("#{@@tag} Processing library: #{item}")
 			next if item == '.' or item == '..'
   			
 			current_lib = Library.new
@@ -67,6 +70,7 @@ class CalculateMethods
 			end
 
 			if not found
+				@@logger.debug("#{@@tag} [#{item}] Already computed, skipping")
 				# this dependency has already been calculated
 				current_lib.library_fqn = to_find
 				current_lib.skipped = true
@@ -74,31 +78,67 @@ class CalculateMethods
 				next
 			end
 
+			res_only = false
   			target = item
 			if item.end_with?(".aar")
+				@@logger.debug("#{@@tag} [#{item}] Format: AAR")
 				# extract AAR's classes.jar
 				system("unzip -q #{item} classes.jar")
-				_new_filename = item.gsub(".aar", ".jar")
-				FileUtils.mv("classes.jar", "#{_new_filename}")
-				target = _new_filename
+				if File.exists?("classes.jar")
+					new_filename = item.gsub(".aar", ".jar")
+					FileUtils.mv("classes.jar", "#{new_filename}")
+					target = new_filename
+				else
+					res_only = true
+				end
+			else
+				@@logger.debug("#{@@tag} [#{item}] Format: JAR")
 			end
 
-			# calculate library size (in Bytes)
-			size = File.size(target)
-			current_lib.size = size
+			if not res_only
+				@@logger.debug("#{@@tag} [#{item}] Target: #{target}")
 
-			# build DEX file
-			dx_path = ENV['DX_PATH']
-			system("#{dx_path}/dx --dex --output=temp.dex #{target}")
-			dx_result = $?
-			if dx_result == nil
-				logger.error("Could not create DEX for #{target}")
-				abort("ABORTING")
+				# calculate library size (in Bytes)
+				size = File.size(target)
+				current_lib.size = size
+
+				@@logger.debug("#{@@tag} [#{item}] Size: #{size}")
+
+				# build DEX file
+				dx_path = ENV['DX_PATH']
+				if dx_path.to_s.empty?
+					dx_path = "dx"
+				else
+					dx_path << "/dx"
+				end
+
+				res_only = false
+				if not File.exists?("#{target}")
+					@@logger.error("#{@@tag} [#{item}] Target does not exist")
+					res_only = true
+				end
+
+				system("#{dx_path} --dex --output=temp.dex #{target}")
+				dx_result = $?
+				if dx_result == nil
+					@@logger.error("Could not create DEX for #{target}")
+					raise "Could not create DEX for #{target}"
+				else
+					@@logger.debug("#{@@tag} [#{item}] DXed successfully (result code: #{dx_result})")
+				end
+				
+				# extract methods count, update counter
+				count = `cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
+				current_lib.count = count.to_i()
+
+				@@logger.debug("#{@@tag} [#{item}] Count: #{count}")
+			else
+				current_lib.size = 0
+				current_lib.count = 0
+				@@logger.debug("#{@@tag} [#{item}] Target: res-only")
+				@@logger.debug("#{@@tag} [#{item}] Size: 0")
+				@@logger.debug("#{@@tag} [#{item}] Count: 0")
 			end
-			
-			# extract methods count, update counter
-			count = `cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
-			current_lib.count = count.to_i()
 
 			# update library fields
 			parts = tokenize_library_fqn(current_lib.library_fqn)
@@ -115,19 +155,24 @@ class CalculateMethods
 end
 
 if __FILE__ == $0
-	init_gradle_files
-	inject_library_name "com.github.dextorer:sofa:1.0.0"
+	begin
+		library_name = ARGV[0]
+		if library_name.to_s.empty?
+			library_name = "com.github.dextorer:sofa:1.0.0"
+		end
+		clone_workspace(library_name)
 
-	compute_deps = ComputeDependencies.new
-	compute_deps.fetch_dependencies()
+		compute_deps = ComputeDependencies.new(library_name)
+		compute_deps.fetch_dependencies()
 
-	calculate_methods = CalculateMethods.new
-	calculate_methods.run_build()
-	calculate_methods.process_deps(compute_deps.library_fqn, compute_deps.deps_fqn_list)
+		calculate_methods = CalculateMethods.new
+		calculate_methods.run_build()
+		calculate_methods.process_deps(compute_deps.library_with_version, compute_deps.deps_fqn_list)
 
-	puts calculate_methods.computed_library_list.inspect
-	
-	Signal.trap("EXIT") do
-		restore_workspace		
+		puts calculate_methods.computed_library_list.inspect
+	rescue => e
+		puts "Failed, reason: #{e}"
+	ensure
+		restore_workspace
 	end
 end
