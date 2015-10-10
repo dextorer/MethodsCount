@@ -55,7 +55,8 @@ class Sebastiano < Sinatra::Base
             LibraryMethodsCount.new(library_name).compute_dependencies()
             new_lib.status = "done"
             new_lib.save!
-          rescue
+          rescue => e
+            puts "Failure, error is: #{e}"
             new_lib.status = "error"
             new_lib.save!
           end

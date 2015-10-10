@@ -137,7 +137,9 @@ $('#search-box').on('keydown', function(e) {
       e.preventDefault();
       submitLibraryRequest($('#search-box').val());
       //mockRequest();
-      } 
+      }
 });
 
-
+$('#try-now').click(function() {
+   $('#search-box').val("com.google.code.gson:gson:2.4");
+});

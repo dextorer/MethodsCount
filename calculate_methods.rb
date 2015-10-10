@@ -109,13 +109,12 @@ class CalculateMethods
 				if dx_path.to_s.empty?
 					dx_path = "dx"
 				else
-					dx_path << "/dx"
+					dx_path = dx_path + "/dx"
 				end
 
-				res_only = false
 				if not File.exists?("#{target}")
 					@@logger.error("#{@@tag} [#{item}] Target does not exist")
-					res_only = true
+					raise "Target #{target} does not exist"
 				end
 
 				system("#{dx_path} --dex --output=temp.dex #{target}")
