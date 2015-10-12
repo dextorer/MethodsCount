@@ -134,6 +134,8 @@ function showResponse(result) {
       });
       $('#result-dependency-summary tr').has('td').remove();
       $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td></tr>");
+      $('#result-card-dep-container').show();
+      $('#result-dep-summary-container').show();
    } else {
       $('#result-card-dep-container').hide();
       $('#result-dep-summary-container').hide();
