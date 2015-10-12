@@ -126,13 +126,17 @@ function showResponse(result) {
    var dependencies = response.dependencies;
    var total_count = 0;
    var total_size = 0;
-   dependencies.forEach(function(dependency) {
-      $('#result-card-dep-list').append("<li><div><p>" + dependency.dependency_name + "</p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Library size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p></blockquote></div></div></li>");
-      total_count += dependency.dependency_count;
-      total_size += dependency.dependency_size;
-   });
-   $('#result-dependency-summary tr').has('td').remove();
-   $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td></tr>");
+   if (dependencies.length > 0) {
+      dependencies.forEach(function(dependency) {
+         $('#result-card-dep-list').append("<li><div><p>" + dependency.dependency_name + "</p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Library size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p></blockquote></div></div></li>");
+         total_count += dependency.dependency_count;
+         total_size += dependency.dependency_size;
+      });
+      $('#result-dependency-summary tr').has('td').remove();
+      $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td></tr>");
+   } else {
+      $('#result-card-dep-container').css('visibility','hidden');
+   }
 }
 
 $('#result-card-container').css('visibility', 'hidden')
@@ -146,6 +150,10 @@ $('#search-box').on('keydown', function(e) {
       }
 });
 
+$('#result-card-dep-list-title').click(function() {
+    $('#result-card-dep-list').slideToggle('slow');
+});
+
 $('#search-button').click(function() {
    submitLibraryRequest($('#search-box').val());
 });
@@ -153,3 +161,4 @@ $('#search-button').click(function() {
 $('#try-now').click(function() {
    $('#search-box').val("com.google.code.gson:gson:2.4");
 });
+

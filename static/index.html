@@ -10,7 +10,7 @@
 			<div id="input-content">
 				<div class="input-field input-item">
 					<input id="search-box" name="libraryName" placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" type="text" class="white" />
-					<a id="search-button" href="#" class="material-icons">search</a>
+					<a id="search-button" href="#" class="material-icons material-icons turquoise">search</a>
 				</div>
 			</div>
 		</div>
@@ -28,8 +28,10 @@
 	      	</div>
       	</div>
 
-      	<div id="progress" class="progress">
-      		<div class="indeterminate"></div>
+      	<div id="progress-container">
+	      	<div id="progress" class="progress">
+	      		<div class="indeterminate"></div>
+	  		</div>
   		</div>
 
 		<div id="result-card-container" class="card-container">
@@ -68,23 +70,25 @@
 	        		</table>
 	        	</div>
 	        	<hr/>
-	        	<div>
-	        		<p class="grey-text text-darken-1 result-card-header">Dependency list</p>
-	        	</div>
-	        	<div id="result-card-dep-container" class="indent-right">
-	        		<ul id="result-card-dep-list">
-	        			<li>
-		        			<div>
-		        				<p>com.android.support:leanback-v17:22.2.0</p>
-		        				<div class="indent-right">
-			        				<blockquote>
-			        					<p>Methods count: 5223</p>
-			        					<p>Library size: 64 KB</p>
-			        				</blockquote>
-		        				</div>
-		        			</div>
-	        			</li>
-	        		</ul>
+	        	<div id="result-card-dep-container">
+		        	<div>
+		        		<p id="result-card-dep-list-title" class="grey-text text-darken-1 result-card-header">Dependency list <i>(click to expand)</i></p>
+		        	</div>
+		        	<div class="indent-right">
+		        		<ul id="result-card-dep-list">
+		        			<li>
+			        			<div>
+			        				<p>com.android.support:leanback-v17:22.2.0</p>
+			        				<div class="indent-right">
+				        				<blockquote>
+				        					<p>Methods count: 5223</p>
+				        					<p>Library size: 64 KB</p>
+				        				</blockquote>
+			        				</div>
+			        			</div>
+		        			</li>
+		        		</ul>
+		        	</div>
 	        	</div>
 	      	</div>
       	</div>
@@ -103,17 +107,17 @@
 
 	</main>
 
-	<footer class="page-footer cyan lighten-2">
-    	<div class="footer-copyright">
-        	<div class="container">
-        		&copy; 2015 Sebastiano Gottardo
-        	</div>
-      	</div>
-    </footer>
-
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.js"></script>
 	<script type="text/javascript" src="api.js"></script>
 
 </body>
+
+<footer class="page-footer cyan lighten-2">
+	<div class="footer-copyright">
+    	<div class="container">
+    		&copy; 2015 Sebastiano Gottardo
+    	</div>
+  	</div>
+</footer>

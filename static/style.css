@@ -78,6 +78,10 @@ main {
 	
 }
 
+#result-card-dep-list {
+	display: none;
+}
+
 .indent-right {
 	margin-left: 20px;	
 }
@@ -130,11 +134,11 @@ td {
     box-shadow: 0 0px 0 0 #000;
 }
 
-/*.page-footer {
+.page-footer {
 	position: fixed;
 	width: 100%;
 	bottom: 0px;
-}*/
+}
 
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
@@ -146,3 +150,5 @@ td {
 
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+.material-icons.turquoise { color: #64dee4; }
