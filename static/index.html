@@ -1,5 +1,5 @@
 <head>
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="bower_components/Materialize/dist/css/materialize.min.css"  media="screen,projection"/>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,10 +9,8 @@
 		<div id="input-block" class="cyan lighten-2"> <!--class="cyan accent-2" -->
 			<div id="input-content">
 				<div class="input-field input-item">
-					<input id="search-box" name="libraryName" placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4) and press 'Enter'" type="text" class="white" />
-				</div>
-				<div class="input-item">
-					<button id="search-button" type="button" class="material-icons md-light md-36" onclick="">search</button>
+					<input id="search-box" name="libraryName" placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" type="text" class="white" />
+					<a id="search-button" href="#" class="material-icons">search</a>
 				</div>
 			</div>
 		</div>
@@ -47,7 +45,7 @@
 	        		<table id="result-library-stats">
 	        			<th class="grey-text text-darken-1 result-card-header">Methods count</th>
 	        			<th class="grey-text text-darken-1 result-card-header">Dependencies</th>
-	        			<th class="grey-text text-darken-1 result-card-header">Size (bytes)</th>
+	        			<th class="grey-text text-darken-1 result-card-header">Size (KB)</th>
 	        			<tbody>
 		        			<tr>
 		        				<td>817</td>
@@ -55,6 +53,18 @@
 		        				<td>103622</td>
 		        			</tr>
 	        			</tbody>
+	        		</table>
+	        	</div>
+	        	<hr/>
+	        	<div>
+	        		<table id="result-dependency-summary">
+	        			<th class="grey-text text-darken-1 result-card-header">Dependencies methods count</th>
+	        			<th class="grey-text text-darken-1 result-card-header">Dependencies size (KB)</th>
+	        			<tbody>
+	        				<tr>
+	        					<td>123456</td>
+	        					<td>999999</td>
+	   						</tr>
 	        		</table>
 	        	</div>
 	        	<hr/>

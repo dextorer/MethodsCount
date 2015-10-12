@@ -57,6 +57,7 @@ class Sebastiano < Sinatra::Base
             new_lib.save!
           rescue => e
             puts "Failure, error is: #{e}"
+            puts "Backtrace: #{e.backtrace}"
             new_lib.status = "error"
             new_lib.save!
           end

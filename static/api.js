@@ -124,9 +124,15 @@ function showResponse(result) {
 
    $('#result-card-dep-list').empty();
    var dependencies = response.dependencies;
+   var total_count = 0;
+   var total_size = 0;
    dependencies.forEach(function(dependency) {
       $('#result-card-dep-list').append("<li><div><p>" + dependency.dependency_name + "</p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Library size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p></blockquote></div></div></li>");
+      total_count += dependency.dependency_count;
+      total_size += dependency.dependency_size;
    });
+   $('#result-dependency-summary tr').has('td').remove();
+   $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td></tr>");
 }
 
 $('#result-card-container').css('visibility', 'hidden')
@@ -138,6 +144,10 @@ $('#search-box').on('keydown', function(e) {
       submitLibraryRequest($('#search-box').val());
       //mockRequest();
       }
+});
+
+$('#search-button').click(function() {
+   submitLibraryRequest($('#search-box').val());
 });
 
 $('#try-now').click(function() {

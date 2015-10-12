@@ -34,7 +34,6 @@ main {
 
 .card {
 	width: 75%;
-	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
@@ -102,11 +101,13 @@ td {
 }
 
 #search-button {
-	outline: 0;
-	border: 0;
-	padding: 0;
-	background: none;
-	display: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+    font-size: 40px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 8px;
 }
 
 #output-block {
@@ -129,9 +130,11 @@ td {
     box-shadow: 0 0px 0 0 #000;
 }
 
-.footer-copyright {
-
-}
+/*.page-footer {
+	position: fixed;
+	width: 100%;
+	bottom: 0px;
+}*/
 
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
