@@ -136,6 +136,7 @@ function showResponse(result) {
       $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td></tr>");
    } else {
       $('#result-card-dep-container').css('visibility','hidden');
+      $('#result-dep-summary-container').css('visibility','hidden');
    }
 }
 
