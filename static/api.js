@@ -153,6 +153,19 @@ $('#search-box').on('keydown', function(e) {
       }
 });
 
+var options = {
+   url: function(phrase) {
+      return "/api/top/";
+   },
+   list: {
+      match: {
+         enabled: true
+      }
+   },
+   getValue: "fqn"
+};
+$('#search-box').easyAutocomplete(options);
+
 $('#result-card-dep-list-title').click(function() {
     $('#result-card-dep-list').slideToggle('slow');
 });

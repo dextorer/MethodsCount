@@ -74,9 +74,7 @@ class Sebastiano < Sinatra::Base
     get '/top/' do
       content_type :json
       top = Libraries.order(count: :desc).distinct(true).take(100)
-      {
-        :top_libs => top
-      }.to_json
+      top.to_json
     end
   end
 end
