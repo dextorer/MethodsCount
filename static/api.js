@@ -160,6 +160,9 @@ var options = {
    list: {
       match: {
          enabled: true
+      },
+      onClickEvent: function() {
+         submitLibraryRequest($('#search-box').val());
       }
    },
    getValue: "fqn"
