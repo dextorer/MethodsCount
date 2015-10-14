@@ -68,6 +68,7 @@ main {
 	top: 0;
 	left: 0;
 	right: 0;
+	margin-bottom: 70px;
 }
 
 #error-card-container {
