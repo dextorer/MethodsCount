@@ -163,11 +163,24 @@ var options = {
       },
       onClickEvent: function() {
          submitLibraryRequest($('#search-box').val());
+      },
+      onLoadEvent: function() {
+         //$('#result-card-container').fadeOut();
+         //$('#welcome-card-container').fadeOut();      
       }
    },
    getValue: "fqn"
 };
 $('#search-box').easyAutocomplete(options);
+
+$('#search-box').on("focus", function() {
+   // has acquired focus
+});
+
+$('#search-box').blur(function() {
+   //$('#result-card-container').fadeIn();
+   //$('#welcome-card-container').fadeIn();
+});
 
 $('#result-card-dep-list-title').click(function() {
     $('#result-card-dep-list').slideToggle('slow');
@@ -180,4 +193,11 @@ $('#search-button').click(function() {
 $('#try-now').click(function() {
    $('#search-box').val("com.google.code.gson:gson:2.4");
 });
+
+var loadingMessages = [
+   "This may take a while... Grab a coffee, perhaps?",
+   "Gradle and DX require some time to do their magic",
+   ""
+];
+
 

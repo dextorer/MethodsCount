@@ -23,9 +23,9 @@ main {
 	width: 75%;
 	margin-left: auto;
 	margin-right: auto;
-	bottom: 0;
+	bottom: 15px;
 	left: 0;
-	right: 0; 
+	right: 0;
 }
 
 .card-container {
@@ -50,16 +50,32 @@ main {
 	right: 0;
 }
 
+#main-container {
+	position: relative;
+}
+
 #welcome-card-container {
 	visibility: visible;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 #result-card-container {
 	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 #error-card-container {
 	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 #result-card {
@@ -99,6 +115,7 @@ td {
 	line-height: normal;
     padding-left: 10px;
     padding-right: 10px;
+    margin-bottom: 0px;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
