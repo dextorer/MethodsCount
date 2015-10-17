@@ -75,19 +75,6 @@ function poll(libraryName) {
 }
 
 
-function fetchTopLibraries() {
-   request("GET", "/api/top/",
-      function(response) {
-         console.log("response" + response)
-         obj = JSON.parse(response);
-         console.log(obj)
-      },
-      function(errorText) {
-         console.error(errorText)
-      });
-}
-
-
 function mockRequest() {
    // simulate load time so to visualize progress
    if ($('#welcome-card-container').css('visibility') == 'visible') {
@@ -148,15 +135,21 @@ $('#progress').css('visibility', 'hidden')
 $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
       e.preventDefault();
-      submitLibraryRequest($('#search-box').val());
+      $('#search-form').submit();
+      //submitLibraryRequest($('#search-box').val());
       //mockRequest();
       }
 });
 
+var cache = [];
+$.getJSON("/api/top/", function(data) {
+   data.forEach(function(elem) {
+      cache.push(elem.fqn);
+   });
+});
+
 var options = {
-   url: function(phrase) {
-      return "/api/top/";
-   },
+   data: cache,
    list: {
       match: {
          enabled: true
@@ -168,30 +161,33 @@ var options = {
          //$('#result-card-container').fadeOut();
          //$('#welcome-card-container').fadeOut();      
       }
-   },
-   getValue: "fqn"
+   }
 };
 $('#search-box').easyAutocomplete(options);
-
-$('#search-box').on("focus", function() {
-   // has acquired focus
-});
-
-$('#search-box').blur(function() {
-   //$('#result-card-container').fadeIn();
-   //$('#welcome-card-container').fadeIn();
-});
 
 $('#result-card-dep-list-title').click(function() {
     $('#result-card-dep-list').slideToggle('slow');
 });
 
 $('#search-button').click(function() {
-   submitLibraryRequest($('#search-box').val());
+   $('#search-form').submit();
+   //submitLibraryRequest($('#search-box').val());
 });
 
 $('#try-now').click(function() {
    $('#search-box').val("com.google.code.gson:gson:2.4");
+});
+
+$.validate({
+   showHelpOnFocus: false,
+   addSuggestions: false,
+   validateOnBlur: false,
+   onError: function($form) {
+      Materialize.toast("This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)", 3000);
+   },
+   onSuccess: function($form) {
+      submitLibraryRequest($('#search-box').val());
+   }
 });
 
 var loadingMessages = [

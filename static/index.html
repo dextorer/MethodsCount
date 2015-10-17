@@ -1,6 +1,7 @@
 <head>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="bower_components/Materialize/dist/css/materialize.min.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
     <link type="text/css" rel="stylesheet" href="bower_components/EasyAutocomplete/dist/easy-autocomplete.css"/>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,10 +10,16 @@
 	<main>
 		<div id="input-block" class="cyan lighten-2"> <!--class="cyan accent-2" -->
 			<div id="input-content">
-				<div class="input-field input-item">
-					<input id="search-box" name="libraryName" placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" type="text" class="white" />
-					<a id="search-button" href="#" class="material-icons material-icons turquoise">search</a>
-				</div>
+				<form id="search-form" action="" onsubmit="return false;" method="POST">
+					<div class="input-field">
+						<input id="search-box" type="text" class="white validate" type="submit"
+						placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
+						data-position="bottom" data-validation="custom" 
+						data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
+						data-validation-error-msg-container="#fuck" data-validation-regexp="^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+]+)$" />
+						<a id="search-button" href="#" class="material-icons material-icons turquoise">search</a>
+					</div>
+				</form>
 			</div>
 		</div>
 
@@ -112,8 +119,10 @@
 	</main>
 
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.js"></script> 
 	<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
 	<script type="text/javascript" src="api.js"></script>
 
 </body>
