@@ -8,8 +8,23 @@ main {
 	flex: 1 0 auto;
 }
 
-#progress {
+#progress-container {
 	visibility: hidden;
+	margin-top: 7%;
+	width: 75%;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+}
+
+#progress {
+
+}
+
+#progress-message {
+    text-align: center;
 }
 
 #input-block {
@@ -34,16 +49,6 @@ main {
 
 .card {
 	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
-	left: 0;
-	right: 0;
-}
-
-.progress {
-	margin-top: 7%;
-	width: 75%;
-	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;

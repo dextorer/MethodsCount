@@ -17,6 +17,28 @@ function request(verb, path, onsuccess, onfail) {
 }
 
 
+var windowId;
+
+function startMessageCycling() {
+   var currentIndex = 1;
+   $('#progress-message').text(loadingMessages[0]);
+   $('#progress-message').css('visibility', 'visible');
+   windowId = setInterval(function() {
+      $('#progress-message').fadeOut('fast', function() {
+         $('#progress-message').text(loadingMessages[currentIndex++]);
+         if (currentIndex >= loadingMessages.length) {
+            currentIndex = 0;
+         }
+         $('#progress-message').fadeIn();
+      });
+   }, 10000);
+}
+
+
+function stopMessageCycling() {
+   clearInterval(windowId);
+}
+
 function submitLibraryRequest(libraryName) {
    if ($('#welcome-card-container').css('visibility') == 'visible') {
       $('#welcome-card-container').fadeOut();
@@ -31,6 +53,7 @@ function submitLibraryRequest(libraryName) {
    }
 
    $('#progress').css('visibility','visible').hide().fadeIn();
+   startMessageCycling();
 
    request(
          "POST",  
@@ -43,6 +66,7 @@ function submitLibraryRequest(libraryName) {
          },
          function(errorText) {
             console.error(errorText);
+            stopMessageCycling();
          }
    );
 }
@@ -56,12 +80,14 @@ function poll(libraryName) {
                console.log("Done");
                console.log(obj)
                $('#progress').fadeOut();
+               stopMessageCycling();
                $('#result-card-container').css('visibility','visible').hide().fadeIn();
                showResponse(obj.result);
             } else if (obj["status"] == "error") {
                console.log("Error");
                console.log(obj)
                $('#progress').fadeOut();
+               stopMessageCycling();
                $('#error-card-container').css('visibility','visible').hide().fadeIn();
             } else {
                setTimeout(function() {
@@ -129,14 +155,10 @@ function showResponse(result) {
    }
 }
 
-$('#result-card-container').css('visibility', 'hidden')
-$('#progress').css('visibility', 'hidden')
-
 $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
       e.preventDefault();
       $('#search-form').submit();
-      //submitLibraryRequest($('#search-box').val());
       //mockRequest();
       }
 });
@@ -171,7 +193,6 @@ $('#result-card-dep-list-title').click(function() {
 
 $('#search-button').click(function() {
    $('#search-form').submit();
-   //submitLibraryRequest($('#search-box').val());
 });
 
 $('#try-now').click(function() {
@@ -192,8 +213,10 @@ $.validate({
 
 var loadingMessages = [
    "This may take a while... Grab a coffee, perhaps?",
-   "Gradle and DX require some time to do their magic",
-   ""
+   "Gradle and DX require some time to do their magic.",
+   "Results are and will be cached. Next time is going to be much faster!",
+   "Still processing, hang on...",
+   "You can leave me here and come back in a while, no worries"
 ];
 
 
