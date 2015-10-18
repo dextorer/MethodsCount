@@ -211,6 +211,25 @@ $.validate({
    }
 });
 
+var mainContainer = $('#main-container');
+var aboutContainer = $('#about-container');
+
+$('#tab-main').click(function() {
+   if (mainContainer.css('visibility') == 'hidden' || mainContainer.css('display') == 'none') {
+      aboutContainer.fadeOut('fast', function() {
+         mainContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+      });
+   }
+});
+
+$('#tab-about').click(function() {
+   if (aboutContainer.css('visibility') == 'hidden' || aboutContainer.css('display') == 'none') {
+      mainContainer.fadeOut('fast', function() {
+         aboutContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+      });
+   }
+});
+
 var loadingMessages = [
    "This may take a while... Grab a coffee, perhaps?",
    "Gradle and DX require some time to do their magic.",

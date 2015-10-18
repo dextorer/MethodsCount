@@ -11,16 +11,9 @@ main {
 #progress-container {
 	visibility: hidden;
 	margin-top: 7%;
-	width: 75%;
 	position: absolute;
-	margin-left: auto;
-	margin-right: auto;
 	left: 0;
 	right: 0;
-}
-
-#progress {
-
 }
 
 #progress-message {
@@ -29,51 +22,62 @@ main {
 
 #input-block {
 	height: 23%;
-	background-color: #64dee4;
 	position: relative;
+}
+
+#navigation-container {
+	right: 0;
+	top: 0;
+	margin-right: 30px;
+	position: absolute;
+}
+
+#page-title {
+	position: absolute;
+	top: 0;
+	left: 30px;
+	background-color:
+}
+
+.tabs .tab a:hover {
+    color: #f9f9f9; 
+}
+
+.tabs .tab a {
+    color: #fff;
+}
+
+.tabs .indicator {
+	background-color: #fff;
 }
 
 #input-content {
 	position: absolute;
-	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
 	bottom: 15px;
-	left: 0;
-	right: 0;
-}
-
-.card-container {
-	position: relative;
-}
-
-.card {
-	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
 	left: 0;
 	right: 0;
 }
 
 #main-container {
 	position: relative;
+	margin-top: 20px;
+}
+
+#about-container {
+	visibility: hidden;
+	margin-top: 20px;
+}
+
+#about-card {
+	padding: 10px;
 }
 
 #welcome-card-container {
 	visibility: visible;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
 }
 
 #result-card-container {
 	visibility: hidden;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	margin-bottom: 70px;
 }
 
 #error-card-container {
@@ -94,10 +98,6 @@ main {
 
 #result-lib-name {
 	font-size: medium;
-}
-
-#result-card-dep-container {
-	
 }
 
 #result-card-dep-list {
@@ -139,12 +139,6 @@ td {
 
 #output-block {
 	margin-top: 10px;
-}
-
-#output {
-    width: 600px;
-    height: 400px;
-    display: none;
 }
 
 .input-field input[type=text] {

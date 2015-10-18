@@ -8,10 +8,10 @@
 </head>
 <body>
 	<main>
-		<div id="input-block" class="cyan lighten-2"> <!--class="cyan accent-2" -->
-			<div id="input-content">
+		<div id="input-block" class="cyan lighten-2 z-depth-1">
+			<div id="input-content" class="container">
 				<form id="search-form" action="" onsubmit="return false;" method="POST">
-					<div class="input-field">
+					<div class="input-field hoverable">
 						<input id="search-box" type="text" class="white validate" type="submit"
 						placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
 						data-position="bottom" data-validation="custom" 
@@ -21,11 +21,22 @@
 					</div>
 				</form>
 			</div>
+
+			<div id="navigation-container">
+				<ul class="tabs">
+					<li id="tab-main" class="tab active cyan lighten-2"><a href="">Main</a></li>
+					<li id="tab-about" class="tab cyan lighten-2"><a href="">About</a></li>
+				</ul>
+			</div>
+
+			<div id="page-title" class="cyan lighten-2">
+				<p class="white-text">LIBRARY METHODS COUNT - <i>Your solution for a perfectly fit APK</i></p>
+			</div>
 		</div>
 
-		<div id="main-container">
+		<div id="main-container" class="container">
 			<div id="welcome-card-container" class="card-container">
-				<div id="welcome-card" class="card">
+				<div id="welcome-card" class="card hoverable">
 		        	<div class="card-content">
 		          		<span class="card-title grey-text text-darken-3">Library methods count</span>
 		          			<p>Android libraries are great, but they come at a cost. Use this tool to avoid the dreaded 65K method limit of the DEX file format!</p>
@@ -36,7 +47,7 @@
 		      	</div>
 	      	</div>
 
-	      	<div id="progress-container">
+	      	<div id="progress-container" class="container">
 	      		<div>
 	      			<p id="progress-message"></p>
 	      		</div>
@@ -45,8 +56,8 @@
 		  		</div>
 	  		</div>
 
-			<div id="result-card-container" class="card-container">
-				<div id="result-card" class="card">
+			<div id="result-card-container">
+				<div id="result-card" class="card hoverable">
 		        	<div>
 		        		<p class="grey-text text-darken-1 result-card-header">Library name</p>
 		        	</div>
@@ -105,7 +116,7 @@
 	      	</div>
 
 	      	<div id="error-card-container" class="card-container">
-				<div id="error-card" class="card">
+				<div id="error-card" class="card hoverable">
 		        	<div class="card-content">
 		          		<span class="card-title grey-text text-darken-3">Wait, what?</span>
 		          			<p>An error has occurred while retrieving the information on this library. Please try again or contact me!</p>
@@ -115,6 +126,12 @@
 		        	</div>
 		      	</div>
 	      	</div>
+      	</div>
+
+      	<div id="about-container" class="container">
+      		<div id="about-card" class="card">
+      			<p>about</p>
+      		</div>
       	</div>
 	</main>
 
