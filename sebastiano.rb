@@ -90,9 +90,11 @@ class Sebastiano < Sinatra::Base
         parts = library_name.split(/:/)
         most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
         time_limit = (Time.now.to_i - 7 * 24 * 60 * 60)
-        puts "[POST] creation_time: #{most_recent.creation_time}"
-        puts "[POST] time limit: #{time_limit}"
-        if most_recent.last_updated > time_limit
+        if most_recent
+          puts "[POST] creation_time: #{most_recent.creation_time}"
+          puts "[POST] time limit: #{time_limit}"
+        end
+        if most_recent and most_recent.last_updated > time_limit
           puts "[POST] inside time limit!"
           new_lib = LibraryStatus.new
           new_lib.library_name = library_name
@@ -100,7 +102,7 @@ class Sebastiano < Sinatra::Base
           new_lib.save!
           must_calculate = false
         else
-          puts "[POST] outside time frame, calculating.."
+          puts "[POST] empty or outside time frame, calculating.."
           LibraryStatus.where(library_name: library_name).destroy_all
         end
       end
