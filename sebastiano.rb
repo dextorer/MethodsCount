@@ -35,6 +35,10 @@ class Sebastiano < Sinatra::Base
           most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
           status = plus_lib.status
           result = LibraryMethodsCount.new(most_recent.fqn).compute_dependencies()
+          library_entry.increment("hit_count")
+          if most_recent.creation_time == 0
+            library_entry.update_column("creation_time", Time.now.to_i)
+          end
           most_recent.update_column("last_updated", Time.now.to_i)
           most_recent.save!
         else
