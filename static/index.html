@@ -56,7 +56,7 @@
 		  		</div>
 	  		</div>
 
-			<div id="result-card-container">
+			<div id="result-card-container" class="card-container">
 				<div id="result-card" class="card hoverable">
 		        	<div>
 		        		<p class="grey-text text-darken-1 result-card-header">Library name</p>
@@ -128,9 +128,54 @@
 	      	</div>
       	</div>
 
-      	<div id="about-container" class="container">
+      	<div id="about-container" class="container card-container">
       		<div id="about-card" class="card">
-      			<p>about</p>
+      			<h5>On Android and DEX</h5>
+	      			<p class="flow-text about-paragraph">Developing Android apps has become easier and easier thoughout the years, in particular as more developers jumped onboard and started crafting <b>libraries for the community</b>. Everything, from asynchronously loading images to parsing JSON, is now more straightforward than ever, thanks to the likes of Picasso, Gson and thousands more. And let's not forget about supporting older Android versions, too! Google provides us <b>"support libraries"</b> that we use, for instance, to bring Material Design goodness to everything that came before Lollipop. It's all a matter of adding a 'compile' statement to our Gradle build file and we are good to go. Thanks, progress!</p>
+	      			
+	      			<p class="flow-text about-paragraph">However, as you may or may not are (though you should be) aware, <b>there is a limit to the methods that your app can reference</b>, and that limit amounts to 65536. More specifically, this limit is found inside the header of the DEX file, which contains all the compiled Java classes required by our app. It may seem like a lot of room for one app, but if you start considering that the most popular libraries contain thousands of methods each, that limit will look tremendously nearer to you.</p>
+	      			
+	      			<p class="flow-text about-paragraph">This issue has grown bigger and bigger, and big companies were usually the first to trip into this obstacle, having to resort to hacky workarounds (e.g. loading a secondary DEX at runtime, or using ProGuard/DexGuard to strip the libraries from unused methods). But there was no official way of addressing the problem, especially from Google. Until Lollipop, of course. <b>Enter MultiDex.</b></p>
+	      			
+	      		<br/>
+      			<h5>MultiDex to the rescue!</h5>
+      				<p class="flow-text about-paragraph">Starting from Lollipop, we have <b>a new runtime called ART</b> (<b>A</b>ndroid <b>R</b>un<b>T</b>ime). Among the greatest advantages that it brought, we find the ability of <b>loading multiple DEX files</b> for a single app. By explicitely declaring the use of MultiDex programmatically, the build system takes care of creating multiple DEXs and bundling them into the final APK. Thanks to ART, the DEXs are then assembled back and converted to another file (an OAT file), which will then be loaded when the user opens the app.</p>
+
+      				<p class="flow-text about-paragraph">But what about <b>Android versions prior to Lollipop</b>? Since they still run on the Dalvik runtime, a different approach had to be taken. In this case, DEXs are loaded at runtime by patching the class loader. However, this technique is a little "hacky", and thus is not guaranteed to work across all the previous Android versions. For this reasons, big companies are still likely to rely on their custom-made solutions.</p>
+      			
+      				<p class="flow-text about-paragraph">Even though MultiDex offers a way out, the recommended approach is still the following:
+      					<blockquote style="font-size: 20px;"><i>Stay below the limit, as much as you can.</i></blockquote>
+
+      			<br/>
+      			<h5>Staying below the limit (or, what this is all about)</h5>
+      				<p class="flow-text about-paragraph">This service should help you dealing with the issue of the methods limit. By checking how many methods a library contains, you can determine if it fits in your app or not, before experiencing the dreadful experience of not being able to build anymore. In addition, you are able to check what dependencies does the library rely on, and how many methods do they contain as well.</p>
+
+      				<blockquote>
+      				<p class="flow-text about-paragraph"><b>DISCLAIMER</b></p>
+      				<p class="flow-text about-paragraph">The methods count is read directly from the DEX header file and is meant to be an <b>UPPER BOUND</b> to what will end up in the final APK. Be aware that there are techniques, such as ProGuard's stripping, that can reduce the overall methods number and library size (drastically, in some cases).</p>
+      				</blockquote>
+      			
+				<br/>
+      			<h5>What libraries are supported?</h5>
+      				<p class="flow-text about-paragraph">Every Android/Java library that you can find the Gradle 'compile' statement for. However, these are the repositories that are currently included in the process:</p>
+      				<ul class="flow-text about-paragraph">
+      					<li>Maven Central</li>
+      					<li>jCenter</li>
+      					<li>JitPack</li>
+      				</ul>
+      				<p class="flow-text about-paragraph">Know another one that I should add? Be sure to let me know!</p>
+
+      			<br/>
+      			<h5>Why so <strike>serious</strike> slow?</h5>
+      				<p class="flow-text about-paragraph">Because the library you have requested has not been computed yet. The computation of a library involves fetching the library, DEXing it and retrieving the method number and the size. For large libraries, <b>this can take quite a long time</b> (even minutes). However, the more libraries are added to the system, the less chances are that you will ask for a library that has not been processed yet.</p>
+      			
+      			<br/>
+      			<h5>What's next?</h5>
+      				<p class="flow-text about-paragraph">This is the initial version of the service, and is therefore barely functional. First of all, I will try to make it as stable and responsive as possible. A thing that I have planned for the near future is adding a chart for each library, that shows <b>the trend on the methods count and the size</b>. I believe it's going to be extremely interesting, and it will perhaps instill some awareness to developers that recklessly include huge libraries without seeking for alternatives first.</p>
+
+  				<br/>
+      			<h5>Can I help?</h5>
+      				<p class="flow-text about-paragraph">Sure! I'm extremely open to suggestions and improvements. Be sure to contact me via the social channels that you find at the bottom of this page. And in the meantime, thank you! :-)</p>
       		</div>
       	</div>
 	</main>

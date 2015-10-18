@@ -61,10 +61,11 @@ main {
 #main-container {
 	position: relative;
 	margin-top: 20px;
+	display: none;
 }
 
 #about-container {
-	visibility: hidden;
+	display: block;
 	margin-top: 20px;
 }
 
@@ -90,6 +91,10 @@ main {
 
 #result-card {
 	padding: 10px;
+}
+
+.card-container {
+	margin-bottom: 90px;
 }
 
 .result-card-header {
@@ -139,6 +144,10 @@ td {
 
 #output-block {
 	margin-top: 10px;
+}
+
+.about-paragraph {
+	font-size: 17px;
 }
 
 .input-field input[type=text] {
