@@ -61,11 +61,11 @@ main {
 #main-container {
 	position: relative;
 	margin-top: 20px;
-	display: none;
+	visibility: visible;
 }
 
 #about-container {
-	display: block;
+	visibility: hidden;
 	margin-top: 20px;
 }
 
