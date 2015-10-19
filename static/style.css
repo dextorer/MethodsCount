@@ -21,32 +21,35 @@ main {
 }
 
 #input-block {
-	height: 23%;
-	position: relative;
+	height: 10%;
 }
 
 #navigation-container {
-	right: 0;
-	top: 0;
-	margin-right: 30px;
-	position: absolute;
+	width: 18%;
+	float: right;
 }
 
 #page-title {
-	position: absolute;
-	top: 0;
-	left: 30px;
-	background-color:
+	float: left;
 }
 
 #page-title #title {
 	font-size: 25px;
+	margin-top: 10px;
 	margin-bottom: 0px;
 }
 
 #page-title #subtitle {
-	margin-top: 5px;
+	margin-top: 0px;
 	font-size: 14px;
+}
+
+.tabs {
+	background-color: transparent;
+}
+
+.tabs .tab {
+	
 }
 
 .tabs .tab a:hover {
@@ -62,20 +65,18 @@ main {
 }
 
 #input-content {
-	position: absolute;
-	bottom: 15px;
-	left: 0;
-	right: 0;
+	padding-top: 7px;
+	padding-bottom: 5px;
 }
 
 #main-container {
 	position: relative;
 	margin-top: 20px;
-	visibility: visible;
+	display: block;
 }
 
 #about-container {
-	visibility: hidden;
+	display: none;
 	margin-top: 20px;
 }
 
@@ -117,6 +118,10 @@ main {
 
 #result-card-dep-list {
 	display: none;
+}
+
+#shadow-container {
+	height: 2px;
 }
 
 .indent-right {
@@ -174,6 +179,10 @@ td {
 	position: fixed;
 	width: 100%;
 	bottom: 0px;
+}
+
+.easy-autocomplete {
+	width: 100% !important;
 }
 
 .material-icons.md-18 { font-size: 18px; }

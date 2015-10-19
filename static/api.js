@@ -176,6 +176,7 @@ var options = {
       match: {
          enabled: true
       },
+      maxNumberOfElements: 10,
       onClickEvent: function() {
          submitLibraryRequest($('#search-box').val());
       },
@@ -217,6 +218,7 @@ var aboutContainer = $('#about-container');
 $('#tab-main').click(function() {
    if (mainContainer.css('visibility') == 'hidden' || mainContainer.css('display') == 'none') {
       aboutContainer.fadeOut('fast', function() {
+         aboutContainer.css('display', 'none');
          mainContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
       });
    }
@@ -225,6 +227,7 @@ $('#tab-main').click(function() {
 $('#tab-about').click(function() {
    if (aboutContainer.css('visibility') == 'hidden' || aboutContainer.css('display') == 'none') {
       mainContainer.fadeOut('fast', function() {
+         mainContainer.css('display', 'none');
          aboutContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
       });
    }

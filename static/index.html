@@ -8,38 +8,37 @@
 </head>
 <body>
 	<main>
-		<div class="blue darken-1 z-depth-1">
+		<div class="blue darken-1">
 			<div id="input-block" class="container">
-				<div id="input-content" >
-					<form id="search-form" action="" onsubmit="return false;" method="POST">
-						<div class="input-field hoverable">
-							<input id="search-box" type="text" class="white validate" type="submit"
-							placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
-							data-position="bottom" data-validation="custom" 
-							data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
-							data-validation-error-msg-container="#fuck" data-validation-regexp="^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+]+)$" />
-							<a id="search-button" href="#" class="material-icons material-icons">search</a>
-						</div>
-					</form>
-				</div>
-
 				<div id="navigation-container">
-					<div class="row">
-    					<div class="col s12">
-							<ul class="tabs">
-								<li id="tab-main" class="tab col s3 active blue darken-1"><a href="">Main</a></li>
-								<li id="tab-about" class="tab col s3 blue darken-1"><a href="">About</a></li>
-							</ul>
-						</div>
-					</div>
+					<ul class="tabs">
+						<li id="tab-main" class="tab col s6 active"><a href="">Main</a></li>
+						<li id="tab-about" class="tab col s6"><a href="">About</a></li>
+					</ul>
 				</div>
 
-				<div id="page-title">
+				<div id="page-title" class="hide-on-med-and-down">
 					<p id="title" class="white-text">LIBRARY METHODS COUNT</p>
 					<p id="subtitle" class="white-text"><i>Your solution for a perfectly fit APK</i></p>
 				</div>
 			</div>
 		</div>
+
+		<div class="blue darken-1">
+			<div id="input-content" class="container">
+				<form id="search-form" action="" onsubmit="return false;" method="POST">
+					<div class="input-field hoverable">
+						<input id="search-box" type="text" class="white validate" type="submit"
+						placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
+						data-position="bottom" data-validation="custom" 
+						data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
+						data-validation-error-msg-container="#fuck" data-validation-regexp="^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+]+)$" />
+						<a id="search-button" href="#" class="material-icons material-icons">search</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="shadow-container" class="blue darken-1 z-depth-1"></div>
 
 		<div id="main-container" class="container">
 			<div id="welcome-card-container" class="card-container">
