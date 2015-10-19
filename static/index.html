@@ -8,29 +8,36 @@
 </head>
 <body>
 	<main>
-		<div id="input-block" class="cyan lighten-2 z-depth-1">
-			<div id="input-content" class="container">
-				<form id="search-form" action="" onsubmit="return false;" method="POST">
-					<div class="input-field hoverable">
-						<input id="search-box" type="text" class="white validate" type="submit"
-						placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
-						data-position="bottom" data-validation="custom" 
-						data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
-						data-validation-error-msg-container="#fuck" data-validation-regexp="^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+]+)$" />
-						<a id="search-button" href="#" class="material-icons material-icons turquoise">search</a>
+		<div class="blue darken-1 z-depth-1">
+			<div id="input-block" class="container">
+				<div id="input-content" >
+					<form id="search-form" action="" onsubmit="return false;" method="POST">
+						<div class="input-field hoverable">
+							<input id="search-box" type="text" class="white validate" type="submit"
+							placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
+							data-position="bottom" data-validation="custom" 
+							data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
+							data-validation-error-msg-container="#fuck" data-validation-regexp="^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+]+)$" />
+							<a id="search-button" href="#" class="material-icons material-icons">search</a>
+						</div>
+					</form>
+				</div>
+
+				<div id="navigation-container">
+					<div class="row">
+    					<div class="col s12">
+							<ul class="tabs">
+								<li id="tab-main" class="tab col s3 active blue darken-1"><a href="">Main</a></li>
+								<li id="tab-about" class="tab col s3 blue darken-1"><a href="">About</a></li>
+							</ul>
+						</div>
 					</div>
-				</form>
-			</div>
+				</div>
 
-			<div id="navigation-container">
-				<ul class="tabs">
-					<li id="tab-main" class="tab active cyan lighten-2"><a href="">Main</a></li>
-					<li id="tab-about" class="tab cyan lighten-2"><a href="">About</a></li>
-				</ul>
-			</div>
-
-			<div id="page-title" class="cyan lighten-2">
-				<p class="white-text">LIBRARY METHODS COUNT - <i>Your solution for a perfectly fit APK</i></p>
+				<div id="page-title">
+					<p id="title" class="white-text">LIBRARY METHODS COUNT</p>
+					<p id="subtitle" class="white-text"><i>Your solution for a perfectly fit APK</i></p>
+				</div>
 			</div>
 		</div>
 
@@ -42,7 +49,7 @@
 		          			<p>Android libraries are great, but they come at a cost. Use this tool to avoid the dreaded 65K method limit of the DEX file format!</p>
 		        	</div>
 		        	<div class="card-action">
-		          		<a id="try-now" href="#">Try now</a>
+		          		<a id="try-now" class="pink-text text-darken-1" href="#">Try now</a>
 		        	</div>
 		      	</div>
 	      	</div>
@@ -189,7 +196,7 @@
 
 </body>
 
-<footer class="page-footer cyan lighten-2">
+<footer class="page-footer blue darken-1">
 	<div class="footer-copyright">
     	<div class="container">
     		&copy; 2015 Sebastiano Gottardo

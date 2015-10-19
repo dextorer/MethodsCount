@@ -39,6 +39,16 @@ main {
 	background-color:
 }
 
+#page-title #title {
+	font-size: 25px;
+	margin-bottom: 0px;
+}
+
+#page-title #subtitle {
+	margin-top: 5px;
+	font-size: 14px;
+}
+
 .tabs .tab a:hover {
     color: #f9f9f9; 
 }
@@ -135,8 +145,8 @@ td {
 #search-button {
 	position: absolute;
 	right: 0;
-	top: 0;
-    font-size: 40px;
+	top: 5px;
+    font-size: 30px;
     padding-top: 2px;
     padding-bottom: 2px;
     margin-right: 8px;
