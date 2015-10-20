@@ -19,7 +19,7 @@ class ComputeDependencies
 		deps_raw = `./gradlew -q dependencies`
 		has_succeded = $?.exitstatus
 		if has_succeded != 0
-			return
+			raise "Error while computing FNQs"
 		end
 
 		# extract only the dependencies part
