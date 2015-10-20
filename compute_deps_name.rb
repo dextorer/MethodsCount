@@ -46,16 +46,20 @@ class ComputeDependencies
 end
 
 if __FILE__ == $0
-	library_name = "com.github.dextorer:sofa:1.+"
-	clone_workspace(library_name)
-	init_gradle_files()
-	inject_library_name(library_name)
-	
-	c = ComputeDependencies.new(library_name)
-	c.fetch_dependencies()
-	
-	puts c.library_with_version
-	puts c.deps_fqn_list
-	
-	restore_workspace()
+	library_name = ARGV[0]
+	if library_name.to_s.empty?
+		library_name = "com.github.dextorer:sofa:1.+"
+	end
+
+	begin
+		clone_workspace(library_name)
+		
+		c = ComputeDependencies.new(library_name)
+		c.fetch_dependencies()
+		
+		puts c.library_with_version
+		puts c.deps_fqn_list
+	ensure
+		restore_workspace()
+	end
 end

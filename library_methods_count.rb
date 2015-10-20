@@ -16,8 +16,8 @@ class LibraryMethodsCount
   attr_accessor :library
   attr_reader :library_with_version
 
-  logger = Logger.new(STDOUT)
-  logger.level = Logger::DEBUG
+  @@logger = Logger.new(STDOUT)
+  @@logger.level = Logger::DEBUG
 
   # Warning: long taking blocking procedure
   def initialize(library_name="")
@@ -81,7 +81,7 @@ class LibraryMethodsCount
       end
 
       if inserted_id < 0
-        logger.error("DB insertion failed")
+        @@logger.error("DB insertion failed")
         raise "DB insertion failed"
       end
 
