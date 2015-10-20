@@ -74,7 +74,7 @@ class LibraryMethodsCount
       calculate_methods.computed_library_list.each do |lib|
         next if lib.skipped == true
         
-        Libraries.create(fqn: lib.library_fqn, group_id: lib.group_id, artifact_id: lib.artifact_id, version: lib.version, count: lib.count, size: lib.size)
+        Libraries.create(fqn: lib.library_fqn, group_id: lib.group_id, artifact_id: lib.artifact_id, version: lib.version, count: lib.count, size: lib.size, hit_count: 1, creation_time: Time.now.to_i, last_updated: Time.now.to_i)
         if lib.is_main_library
           inserted_id = Libraries.find_by_fqn(lib.library_fqn).id
         end
