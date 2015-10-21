@@ -41,15 +41,21 @@ function stopMessageCycling() {
 
 function submitLibraryRequest(libraryName) {
    if ($('#welcome-card-container').css('visibility') == 'visible') {
-      $('#welcome-card-container').fadeOut();
+      $('#welcome-card-container').fadeOut('fast', function() {
+         $('#welcome-card-container').css('display', 'none');
+      });
    }
 
    if ($('#result-card-container').css('visibility') == 'visible') {
-      $('#result-card-container').fadeOut();
+      $('#result-card-container').fadeOut('fast', function() {
+         $('#result-card-container').css('display', 'none');
+      });
    }
    
    if ($('#error-card-container').css('visibility') == 'visible') {
-      $('#error-card-container').fadeOut();
+      $('#error-card-container').fadeOut('fast', function() {
+         $('#error-card-container').css('display', 'none');
+      });
    }
 
    $('#progress').css('visibility','visible').hide().fadeIn();
@@ -104,15 +110,21 @@ function poll(libraryName) {
 function mockRequest() {
    // simulate load time so to visualize progress
    if ($('#welcome-card-container').css('visibility') == 'visible') {
-      $('#welcome-card-container').fadeOut();
+      $('#welcome-card-container').fadeOut('fast', function() {
+         $('#welcome-card-container').css('display', 'none');
+      });
    }
 
    if ($('#result-card-container').css('visibility') == 'visible') {
-      $('#result-card-container').fadeOut();
+      $('#result-card-container').fadeOut('fast', function() {
+         $('#result-card-container').css('display', 'none');
+      });
    }
    
    if ($('#error-card-container').css('visibility') == 'visible') {
-      $('#error-card-container').fadeOut();
+      $('#error-card-container').fadeOut('fast', function() {
+         $('#error-card-container').css('display', 'none');
+      });
    }
 
    $('#progress').css('visibility','visible').hide().fadeIn();

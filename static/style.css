@@ -20,6 +20,14 @@ main {
     text-align: center;
 }
 
+#progress-container .progress {
+	background-color: #1e88e5;
+}
+
+#progress-container .indeterminate {
+	background-color: #bbdefb;
+}
+
 #input-block {
 	height: 10%;
 }
