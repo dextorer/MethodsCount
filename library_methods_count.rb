@@ -63,6 +63,7 @@ class LibraryMethodsCount
 
       # check whether dependencies are already calculated
       filtered_deps = compute_deps.deps_fqn_list.reject { |dep| Libraries.find_by_fqn(dep) and Libraries.find_by_fqn(dep).id > 0 }
+      excluded_deps = compute_deps.deps_fqn_list.reject { |dep| filtered_deps.include?(dep) }
 
       # compute methods count for both library and dependencies
       calculate_methods = CalculateMethods.new
@@ -90,8 +91,10 @@ class LibraryMethodsCount
 
         if lib.skipped
           # find the FQN
-          compute_deps.deps_fqn_list.each do |dep|
-            if dep.include?(lib.library_fqn)
+          excluded_deps.each do |dep|
+            dep_parts = tokenize_library_fqn(dep)
+            dep_processed = "#{dep_parts[1]}-#{dep_parts[2]}"
+            if lib.library_fqn.include?(dep_processed)
               lib.library_fqn = dep
               break
             end
