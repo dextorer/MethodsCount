@@ -3,3 +3,8 @@
 log
 gradle_mock_project/local.properties
 .env
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
