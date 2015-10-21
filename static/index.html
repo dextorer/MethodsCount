@@ -11,10 +11,14 @@
 		<div class="blue darken-1">
 			<div id="input-block" class="container">
 				<div id="navigation-container">
-					<ul class="tabs">
-						<li id="tab-main" class="tab col s6 active"><a href="">Main</a></li>
-						<li id="tab-about" class="tab col s6"><a href="">About</a></li>
-					</ul>
+					<div class="row">
+    					<div class="col s12">
+							<ul class="tabs">
+								<li id="tab-main" class="tab col s6 active"><a href="">Main</a></li>
+								<li id="tab-about" class="tab col s6"><a href="">About</a></li>
+							</ul>
+						</div>
+					</div>
 				</div>
 
 				<div id="page-title" class="hide-on-med-and-down">
@@ -191,6 +195,7 @@
 	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.js"></script> 
 	<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.js"></script>
 	<script type="text/javascript" src="bower_components/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
+	<script type="text/javascript" src="https://apis.google.com/js/platform.js" async defer></script>
 	<script type="text/javascript" src="api.js"></script>
 
 </body>
@@ -198,7 +203,15 @@
 <footer class="page-footer blue darken-1">
 	<div class="footer-copyright">
     	<div class="container">
-    		&copy; 2015 Sebastiano Gottardo
+    		<div class="row">
+    			<div class="col s4">
+    				&copy; 2015 Sebastiano Gottardo
+    			</div>
+    			<div id="footer-social-buttons" class="col s4">
+		    		<a href="https://twitter.com/rotxed" class="twitter-follow-button" data-show-count="true">Follow @rotxed</a>
+					<div class="g-follow" data-href="https://plus.google.com/+SebastianoGottardo" data-rel="author"></div>
+				</div>
+			</div>
     	</div>
   	</div>
 </footer>
