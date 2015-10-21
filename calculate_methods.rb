@@ -54,7 +54,7 @@ class CalculateMethods
 			# find library's FQN
 			to_find = File.basename(item, File.extname(item))
 			fqn_parts = tokenize_library_fqn(library_fqn)
-			fqn_processed = "#{fqn_parts[1]}-#{fqn_parts[2]}" 
+			fqn_processed = "#{fqn_parts[1]}-#{fqn_parts[2]}"
 			
 			found = false
 			if fqn_processed.include?(to_find)
@@ -65,7 +65,7 @@ class CalculateMethods
 				deps_fqn_list.each do |dep|
 					dep_parts = tokenize_library_fqn(dep)
 					dep_processed = "#{dep_parts[1]}-#{dep_parts[2]}"
-					if dep.include?(to_find)
+					if to_find.include?(dep_processed)
 						current_lib.library_fqn = dep
 						current_lib.is_main_library = false
 						found = true
