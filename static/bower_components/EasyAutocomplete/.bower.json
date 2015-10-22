@@ -1,0 +1,30 @@
+{
+  "name": "EasyAutocomplete",
+  "description": "EasyAutocomplete is a jQuery autocomplete plugin. Easy to create autocomplete dropdown list for text input fields",
+  "version": "1.1.6",
+  "authors": [
+    "Łukasz Pawełczak <lukaspawelczak@gmail.com>"
+  ],
+  "main": [
+    "dist/jquery.easy-autocomplete.js",
+    "dist/easy-autocomplete.css"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~1.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pawelczak/EasyAutocomplete.git"
+  },
+  "homepage": "https://github.com/pawelczak/EasyAutocomplete",
+  "_release": "1.1.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.6",
+    "commit": "96939460db6931ffa1a4b382314e4018f33c6479"
+  },
+  "_source": "git://github.com/pawelczak/EasyAutocomplete.git",
+  "_target": "~1.1.6",
+  "_originalSource": "EasyAutocomplete"
+}
