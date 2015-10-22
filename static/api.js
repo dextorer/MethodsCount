@@ -253,4 +253,31 @@ var loadingMessages = [
    "You can leave me here and come back in a while, no worries"
 ];
 
+// twitter
 !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+
+// query params
+var getUrlParameter = function getUrlParameter(sParam) {
+   var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+         sURLVariables = sPageURL.split('&'),
+         sParameterName,
+         i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+         return sParameterName[1] === undefined ? true : sParameterName[1];
+      }
+    }
+};
+
+$(document).ready(function() {
+   var reqLib = getUrlParameter("lib");
+   if (reqLib) {
+      $('#search-box').val(reqLib);
+      $('#search-button').trigger("click");
+   }
+});
+
+
