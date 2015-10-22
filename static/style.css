@@ -50,6 +50,7 @@ main {
 #page-title #subtitle {
 	margin-top: 0px;
 	font-size: 14px;
+	opacity: 0.6;
 }
 
 .tabs {
