@@ -2,10 +2,10 @@ require 'active_record'
 
 ActiveRecord::Base.establish_connection(
    :adapter  => "mysql2",
-   :host     => "localhost",
+   :host     => ENV["DATABASE_ENDPOINT"] || "localhost",
    :username => "lmc",
    :password => "***REMOVED***",
-   :database => "methods_count"
+   :database => ENV["DATABASE_NAME"] || "methods_count"
 )
 
 class LibraryStatus < ActiveRecord::Base
