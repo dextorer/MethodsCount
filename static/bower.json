@@ -17,9 +17,11 @@
   "dependencies": {
     "EasyAutocomplete": "~1.1.6",
     "Materialize": "materialize#~0.97.1",
+    "highlightjs": "~8.8.0",
     "jquery": "~2.1.4",
-    "jquery-ui": "~1.11.4",
-    "jquery-form-validator" : ">=2.2.8"
+    "jquery-dropdown": "~2.0.2",
+    "jquery-form-validator": ">=2.2.8",
+    "jquery-ui": "~1.11.4"
   },
   "resolutions": {
     "jquery": "2.1.4"
