@@ -165,6 +165,27 @@ function showResponse(result) {
       $('#result-card-dep-container').hide();
       $('#result-dep-summary-container').hide();
    }
+
+   window.history.pushState(response.library_fqn, response.library_fqn, "/index.html?lib=" + encodeURIComponent(response.library_fqn));
+   var currentUrl = window.location.href;
+   var methodsBadge = ""
+   if (total_count > 0) {
+      methodsBadge = "core: " + response.library_methods + " | deps: " + total_count + ""
+   } else {
+      methodsBadge = response.library_methods
+   }
+
+   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-red.svg\"></img></a>";
+   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-orange.svg\"></img></a>";
+   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-yellow.svg\"></img></a>";
+
+   $('#badge-methods-code').text(methodsCode);
+   $('#badge-size-code').text(sizeCode);
+   $('#badge-all-code').text(allCode);
+
+   $('#badge-methods-preview').html(methodsCode);
+   $('#badge-size-preview').html(sizeCode);
+   $('#badge-all-preview').html(allCode);
 }
 
 $('#search-box').on('keydown', function(e) {
@@ -210,6 +231,7 @@ $('#search-button').click(function() {
 
 $('#try-now').click(function() {
    $('#search-box').val("com.google.code.gson:gson:2.4");
+   $('#search-button').trigger('click');
 });
 
 $.validate({
@@ -279,5 +301,7 @@ $(document).ready(function() {
       $('#search-button').trigger("click");
    }
 });
+
+hljs.initHighlightingOnLoad();
 
 

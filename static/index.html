@@ -3,8 +3,11 @@
     <link type="text/css" rel="stylesheet" href="bower_components/Materialize/dist/css/materialize.min.css" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
     <link type="text/css" rel="stylesheet" href="bower_components/EasyAutocomplete/dist/easy-autocomplete.css"/>
+    <link type="text/css" rel="stylesheet" href="bower_components/jquery-dropdown/jquery.dropdown.min.css" />
+    <link type="text/css" rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Methods Count - Your solution for a perfectly fit APK</title>
 </head>
 <body>
 	<main>
@@ -22,8 +25,10 @@
 				</div>
 
 				<div id="page-title" class="hide-on-med-and-down">
-					<p id="title" class="white-text">LIBRARY METHODS COUNT</p>
-					<p id="subtitle" class="white-text"><i>Your solution for a perfectly fit APK</i></p>
+					<a href="index.html">
+						<p id="title" class="white-text">METHODS COUNT</p>
+						<p id="subtitle" class="white-text"><i>Your solution for a perfectly fit APK</i></p>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -37,7 +42,7 @@
 						data-position="bottom" data-validation="custom" 
 						data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
 						data-validation-error-msg-container="#fuck" data-validation-regexp="^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+\-a-z]+)$" />
-						<a id="search-button" href="#" class="material-icons material-icons">search</a>
+						<a id="search-button" href="#" class="material-icons">search</a>
 					</div>
 				</form>
 			</div>
@@ -69,7 +74,19 @@
 			<div id="result-card-container" class="card-container">
 				<div id="result-card" class="card hoverable">
 		        	<div>
-		        		<p class="grey-text text-darken-1 result-card-header">Library name</p>
+		        		<div class="result-card-header-container">
+		        			<p class="grey-text text-darken-1 result-card-header">Library name</p>
+		        		</div>
+		        		<div class="result-card-header-buttons-container">
+		        			<div id="result-card-header-badges" class="result-card-header-button" data-jq-dropdown="#badge-dropdown">
+		        				<p class="blue-text text-darken-1">BADGES</p>
+		        				<a id="show_badges_button" href="#" class="material-icons">face</a>
+	        				</div>
+	        				<div id="result-card-header-share" class="result-card-header-button" data-jq-dropdown="#share-dropdown">
+	        					<p class="blue-text text-darken-1">SHARE</p>
+		        				<a id="share_button" href="#" class="material-icons">share</a>
+        					</div>
+		        		</div>
 		        	</div>
 		        	<div>
 		        		<p id="result-lib-name" class="indent-right">com.github.dextorer:sofa:1.0.0&nbsp;</p>
@@ -190,11 +207,41 @@
       	</div>
 	</main>
 
+	<div id="badge-dropdown" class="jq-dropdown jq-dropdown-tip jq-dropdown-anchor-right">
+	    <div class="jq-dropdown-panel">
+	        <div>
+	        	<p id="badge-dropdown-title">Are you the author of this library?</p>
+	        	<p id="badge-dropdown-message">Place this code in your library page and let everyone know that you care about methods!</p>
+	        	<div id="badge-methods-preview"></div>
+	        	<pre><code id="badge-methods-code" class="html"></code></pre>
+	        	<div id="badge-size-preview"></div>
+	        	<pre><code id="badge-size-code" class="html"></code></pre>
+	        	<div id="badge-all-preview"></div>
+	        	<pre><code id="badge-all-code" class="html"></code></pre>
+	        </div>
+	    </div>
+	</div>
+
+	<div id="share-dropdown" class="jq-dropdown jq-dropdown-tip jq-dropdown-anchor-right">
+	    <div class="jq-dropdown-panel">
+	        <div>
+	        	<div id="share-dropdown-twitter">
+	        		<a href="https://twitter.com/intent/tweet?button_hashtag=MethodsCount" class="twitter-hashtag-button" data-size="large" data-related="rotxed" data-url="http://localhost:9292/index.html?lib=com.google.code.gson%3Agson%3A2.4#">Tweet #MethodsCount</a>
+        		</div>
+        		<div id="share-dropdown-gplus">
+	        		<div class="g-plus" data-action="share" data-width="120" data-height="24" data-annotation="bubble"></div>
+        		</div>
+	        </div>
+        </div>
+    </div>
+
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.js"></script> 
 	<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.js"></script>
 	<script type="text/javascript" src="bower_components/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-dropdown/jquery.dropdown.js"></script>
+	<script type="text/javascript" src="bower_components/highlightjs/highlight.pack.js"></script>
 	<script type="text/javascript" src="https://apis.google.com/js/platform.js" async defer></script>
 	<script type="text/javascript" src="api.js"></script>
 
