@@ -103,10 +103,6 @@ main {
 
 #error-card-container {
 	visibility: hidden;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
 }
 
 #result-card {
