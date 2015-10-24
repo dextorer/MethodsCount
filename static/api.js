@@ -58,7 +58,7 @@ function submitLibraryRequest(libraryName) {
       });
    }
 
-   $('#progress').css('visibility','visible').hide().fadeIn();
+   $('#progress-container').css('visibility','visible').hide().fadeIn();
    startMessageCycling();
 
    request(
@@ -67,7 +67,7 @@ function submitLibraryRequest(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             console.log("Successfully enqeueud job for " + obj["lib_name"]);
-            $('#progress').css('visibility','visible').hide().fadeIn();
+            $('#progress-container').css('visibility','visible').hide().fadeIn();
             poll(libraryName);
          },
          function(errorText) {
@@ -85,14 +85,18 @@ function poll(libraryName) {
             if (obj["status"] == "done") {
                console.log("Done");
                console.log(obj)
-               $('#progress').fadeOut();
+               $('#progress-container').fadeOut('fast', function() {
+                  $('#progress-container').css('display', 'none');
+               });
                stopMessageCycling();
                $('#result-card-container').css('visibility','visible').hide().fadeIn();
                showResponse(obj.result);
             } else if (obj["status"] == "error") {
                console.log("Error");
                console.log(obj)
-               $('#progress').fadeOut();
+               $('#progress-container').fadeOut('fast', function() {
+                  $('#progress-container').css('display', 'none');
+               });
                stopMessageCycling();
                $('#error-card-container').css('visibility','visible').hide().fadeIn();
             } else {
@@ -127,10 +131,10 @@ function mockRequest() {
       });
    }
 
-   $('#progress').css('visibility','visible').hide().fadeIn();
+   $('#progress-container').css('visibility','visible').hide().fadeIn();
 
    var timeoutID = window.setTimeout(function() {
-      $('#progress').fadeOut();
+      $('#progress-container').fadeOut();
 
       var raw_resp = '{"library_fqn":"com.wnafee:vector-compat:1.0.5","library_methods":609,"library_size":87234,"dependencies_count":3,"dependencies":[{"dependency_name":"com.android.support:appcompat-v7:22.1.0","dependency_count":5162,"dependency_size":829066},{"dependency_name":"com.android.support:support-annotations:22.1.0","dependency_count":3,"dependency_size":11467},{"dependency_name":"com.android.support:support-v4:22.1.0","dependency_count":7876,"dependency_size":1005480}]}';
       var response = JSON.parse(raw_resp);
