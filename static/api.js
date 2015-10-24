@@ -58,7 +58,7 @@ function submitLibraryRequest(libraryName) {
       });
    }
 
-   $('#progress').css('visibility','visible').hide().fadeIn();
+   $('#progress-container').css('visibility','visible').hide().fadeIn();
    startMessageCycling();
 
    request(
@@ -67,7 +67,7 @@ function submitLibraryRequest(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             console.log("Successfully enqeueud job for " + obj["lib_name"]);
-            $('#progress').css('visibility','visible').hide().fadeIn();
+            $('#progress-container').css('visibility','visible').hide().fadeIn();
             poll(libraryName);
          },
          function(errorText) {
@@ -85,14 +85,18 @@ function poll(libraryName) {
             if (obj["status"] == "done") {
                console.log("Done");
                console.log(obj)
-               $('#progress').fadeOut();
+               $('#progress-container').fadeOut('fast', function() {
+                  $('#progress-container').css('display', 'none');
+               });
                stopMessageCycling();
                $('#result-card-container').css('visibility','visible').hide().fadeIn();
                showResponse(obj.result);
             } else if (obj["status"] == "error") {
                console.log("Error");
                console.log(obj)
-               $('#progress').fadeOut();
+               $('#progress-container').fadeOut('fast', function() {
+                  $('#progress-container').css('display', 'none');
+               });
                stopMessageCycling();
                $('#error-card-container').css('visibility','visible').hide().fadeIn();
             } else {
@@ -127,10 +131,10 @@ function mockRequest() {
       });
    }
 
-   $('#progress').css('visibility','visible').hide().fadeIn();
+   $('#progress-container').css('visibility','visible').hide().fadeIn();
 
    var timeoutID = window.setTimeout(function() {
-      $('#progress').fadeOut();
+      $('#progress-container').fadeOut();
 
       var raw_resp = '{"library_fqn":"com.wnafee:vector-compat:1.0.5","library_methods":609,"library_size":87234,"dependencies_count":3,"dependencies":[{"dependency_name":"com.android.support:appcompat-v7:22.1.0","dependency_count":5162,"dependency_size":829066},{"dependency_name":"com.android.support:support-annotations:22.1.0","dependency_count":3,"dependency_size":11467},{"dependency_name":"com.android.support:support-v4:22.1.0","dependency_count":7876,"dependency_size":1005480}]}';
       var response = JSON.parse(raw_resp);
@@ -165,6 +169,27 @@ function showResponse(result) {
       $('#result-card-dep-container').hide();
       $('#result-dep-summary-container').hide();
    }
+
+   window.history.pushState(response.library_fqn, response.library_fqn, "/index.html?lib=" + encodeURIComponent(response.library_fqn));
+   var currentUrl = window.location.href;
+   var methodsBadge = ""
+   if (total_count > 0) {
+      methodsBadge = "core: " + response.library_methods + " | deps: " + total_count + ""
+   } else {
+      methodsBadge = response.library_methods
+   }
+
+   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-red.svg\"></img></a>";
+   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-orange.svg\"></img></a>";
+   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-yellow.svg\"></img></a>";
+
+   $('#badge-methods-code').text(methodsCode);
+   $('#badge-size-code').text(sizeCode);
+   $('#badge-all-code').text(allCode);
+
+   $('#badge-methods-preview').html(methodsCode);
+   $('#badge-size-preview').html(sizeCode);
+   $('#badge-all-preview').html(allCode);
 }
 
 $('#search-box').on('keydown', function(e) {
@@ -210,6 +235,7 @@ $('#search-button').click(function() {
 
 $('#try-now').click(function() {
    $('#search-box').val("com.google.code.gson:gson:2.4");
+   $('#search-button').trigger('click');
 });
 
 $.validate({
@@ -279,5 +305,7 @@ $(document).ready(function() {
       $('#search-button').trigger("click");
    }
 });
+
+hljs.initHighlightingOnLoad();
 
 
