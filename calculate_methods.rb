@@ -121,7 +121,8 @@ class CalculateMethods
 					raise "Target #{target} does not exist"
 				end
 
-				system("#{dx_path} --dex --output=temp.dex #{target}")
+				target_without_ext = File.basename(target, File.extname(target))
+				system("#{dx_path} --dex --output=#{target_without_ext}.dex #{target}")
 				dx_result = $?
 				if dx_result == nil
 					@@logger.error("Could not create DEX for #{target}")
@@ -131,7 +132,7 @@ class CalculateMethods
 				end
 				
 				# extract methods count, update counter
-				count = `cat temp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
+				count = `cat #{target_without_ext}.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
 				current_lib.count = count.to_i()
 
 				@@logger.debug("#{@@tag} [#{item}] Count: #{count}")

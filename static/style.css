@@ -8,23 +8,6 @@ main {
 	flex: 1 0 auto;
 }
 
-#progress-container {
-	visibility: hidden;
-	margin-top: 7%;
-}
-
-#progress-message {
-    text-align: center;
-}
-
-#progress-container .progress {
-	background-color: #1e88e5;
-}
-
-#progress-container .indeterminate {
-	background-color: #bbdefb;
-}
-
 #input-block {
 	height: 10%;
 }
@@ -79,6 +62,7 @@ main {
 #main-container {
 	margin-top: 20px;
 	display: block;
+	position: relative;
 }
 
 #about-container {
@@ -92,14 +76,47 @@ main {
 
 #welcome-card-container {
 	visibility: visible;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 #result-card-container {
 	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 #error-card-container {
 	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+#progress-card-container {
+	visibility: hidden;
+	margin-top: 7%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+#progress-message {
+    text-align: center;
+}
+
+#progress-card-container .progress {
+	background-color: #1e88e5;
+}
+
+#progress-card-container .indeterminate {
+	background-color: #bbdefb;
 }
 
 #result-card {
