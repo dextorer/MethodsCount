@@ -12,6 +12,10 @@ class Sebastiano < Sinatra::Base
   set :static, true
   set :public_folder, File.dirname(__FILE__) + '/static'
 
+  get '/' do
+    redirect '/index.html'
+  end
+
   namespace '/api' do
 
     get '/stats/:lib_name' do
