@@ -187,6 +187,10 @@ main {
 	margin-top: 10px;
 }
 
+#share-dropdown-link {
+	margin-top: 10px;	
+}
+
 th {
 	font-weight: normal;
 	padding-left: 0px;
