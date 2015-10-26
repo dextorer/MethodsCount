@@ -190,6 +190,8 @@ function showResponse(result) {
    $('#badge-methods-preview').html(methodsCode);
    $('#badge-size-preview').html(sizeCode);
    $('#badge-all-preview').html(allCode);
+
+   $('#share-dropdown-link-code').html(currentUrl);
 }
 
 $('#search-box').on('keydown', function(e) {
