@@ -46,6 +46,8 @@ class CalculateMethods
 	def process_deps(library_fqn, deps_fqn_list)
 		FileUtils.cd(@@extracted_deps_dir)
 
+		@@logger.debug("Root library FQN: #{library_fqn}")
+
 		Dir.foreach('.') do |item|
 			@@logger.debug("#{@@tag} Processing library: #{item}")
 			next if item == '.' or item == '..'
