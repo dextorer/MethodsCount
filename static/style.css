@@ -252,6 +252,26 @@ td {
 	margin-top: 4px;
 }
 
+#copyright-container {
+    display: inline-block;
+    float: left;
+}
+
+#copyright-row {
+	margin-top: 0;
+}
+
+#gde-badge-container {
+	float: left;
+	margin-left: 7px;
+    margin-top: 6px;
+}
+
+#gde-badge {
+	width: 40px;
+	height: 40px;
+}
+
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
