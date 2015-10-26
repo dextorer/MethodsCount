@@ -2,6 +2,8 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
+require './library_methods_count'
+
 class AndroidArsenalParser 
 
 	def initialize(page_start, page_end)
@@ -31,10 +33,10 @@ class AndroidArsenalParser
 			start_index = start_index + 1
 		end
 
+		compile_statements = []
 		libs_urls.each do |lib_url|
 			lib_page = Nokogiri::HTML(open(lib_url))
-			lib_content = lib_page.css('pre')
-			compile_statements = []
+			lib_content = lib_page.css('pre')	
 			lib_content.each do |node|
 				compile = node.text.sub(/(.*\:.*\:.*)/) { |match|
 					match = match.sub(/compile/, '')
@@ -47,20 +49,23 @@ class AndroidArsenalParser
 					
 					match.sub(/^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+\-a-z]+)$/) { |powermatch|
 						compile_statements.push(powermatch)
+
+						begin
+				    		LibraryMethodsCount.new(powermatch).compute_dependencies()
+				  		rescue
+				    		puts "Error, skipping"
+				  		end
 					}
 				}
 			end
-
-			puts compile_statements
 		end
 
+		return compile_statements
 	end
 
 end
 
 if __FILE__ == $0
-
-	parser = AndroidArsenalParser.new(1, 4)
-	parser.parse
-
+	parser = AndroidArsenalParser.new(1, 63)
+	compile_statements = parser.parse
 end
