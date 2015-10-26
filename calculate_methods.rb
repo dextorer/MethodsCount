@@ -131,12 +131,12 @@ class CalculateMethods
 					raise "'dx' operation timed out, invalidating current library"
 				end
 				
-				dx_result = $?
-				if dx_result == nil
+				dx_result = $?.exitstatus
+				if dx_result == 0
+					@@logger.debug("#{@@tag} [#{item}] DXed successfully (result code: #{dx_result})")
+				else
 					@@logger.error("Could not create DEX for #{target}")
 					raise "Could not create DEX for #{target}"
-				else
-					@@logger.debug("#{@@tag} [#{item}] DXed successfully (result code: #{dx_result})")
 				end
 				
 				# extract methods count, update counter

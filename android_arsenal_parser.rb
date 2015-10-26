@@ -35,7 +35,12 @@ class AndroidArsenalParser
 
 		compile_statements = []
 		libs_urls.each do |lib_url|
-			lib_page = Nokogiri::HTML(open(lib_url))
+			begin
+				lib_page = Nokogiri::HTML(open(lib_url))
+			rescue
+				puts "Error opening page"
+				next
+			end
 			lib_content = lib_page.css('pre')	
 			lib_content.each do |node|
 				compile = node.text.sub(/(.*\:.*\:.*)/) { |match|
