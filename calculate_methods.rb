@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'logger'
+require 'timeout'
 
 require_relative 'utils'
 require_relative 'compute_deps_name'
@@ -122,7 +123,14 @@ class CalculateMethods
 				end
 
 				target_without_ext = File.basename(target, File.extname(target))
-				system("#{dx_path} --dex --output=#{target_without_ext}.dex #{target}")
+				begin
+					Timeout::timeout(2 * 60) { # 2 minutes
+						system("#{dx_path} --dex --output=#{target_without_ext}.dex #{target}")
+					}
+				rescue Timeout::Error
+					raise "'dx' operation timed out, invalidating current library"
+				end
+				
 				dx_result = $?
 				if dx_result == nil
 					@@logger.error("Could not create DEX for #{target}")
