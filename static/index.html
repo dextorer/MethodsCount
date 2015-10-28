@@ -170,12 +170,12 @@
 
       				<p class="flow-text about-paragraph">But what about <b>Android versions prior to Lollipop</b>? Since they still run on the Dalvik runtime, a different approach had to be taken. In this case, DEXs are loaded at runtime by patching the class loader. However, this technique is a little "hacky", and thus is not guaranteed to work across all the previous Android versions. For this reasons, big companies are still likely to rely on their custom-made solutions.</p>
       			
-      				<p class="flow-text about-paragraph">Even though MultiDex offers a way out, the recommended approach is still the following:
+      				<p class="flow-text about-paragraph">Even though MultiDex offers a way out, <a href="http://developer.android.com/tools/building/multidex.html">the recommended approach</a> is still the following:
       					<blockquote style="font-size: 20px;"><i>Stay below the limit, as much as you can.</i></blockquote>
 
       			<br/>
       			<h5>Staying below the limit (or, what this is all about)</h5>
-      				<p class="flow-text about-paragraph">This service should help you dealing with the issue of the methods limit. By checking how many methods a library contains, you can determine if it fits in your app or not, before experiencing the dreadful experience of not being able to build anymore. In addition, you are able to check what dependencies does the library rely on, and how many methods do they contain as well.</p>
+      				<p class="flow-text about-paragraph">This service should help you dealing with the issue of the methods limit. By checking how many methods a library contains, you can determine whether it fits in your app, before drowing into the dreadful experience of not being able to build anymore. In addition, you are able to check what dependencies does the library rely on, and how many methods do they contain as well.</p>
 
       				<blockquote>
       				<p class="flow-text about-paragraph"><b>DISCLAIMER</b></p>
@@ -213,11 +213,11 @@
       				<p class="flow-text about-paragraph">I really need to thank some people, who helped me building this service and gave their invaluable opinion on several matters. My respect goes to you.</p>
 
       				<ul class="flow-text about-paragraph collection">
-      					<li class="collection-item"><a href="https://twitter.com/@sirnicolaz" target="_blank">Nicola Miotto</a> - Built the infrastructure that holds the service</li>
-      					<li class="collection-item"><a href="https://twitter.com/@graphicure" target="_blank">Luca Burgio</a> - Gave me the design guidelines I needed</li>
-      					<li class="collection-item"><a href="https://twitter.com/@ziby_bonny" target="_blank">Stefano Bonetta</a> and <a href="https://twitter.com/@mattiamaestrini" target="_blank">Mattia Maestrini</a> - Amazing colleagues and friends</li>
-						<li class="collection-item">The "Bonanza" - Roberto Orgiu, Mario Viviani, Sebastiano Poggi, Francesco Pontillo, Matteo Bonifazi, Daniele Bonaldo</li>
-						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a> - For the early feedback</li>
+      					<li class="collection-item"><a href="https://twitter.com/sirnicolaz" target="_blank">Nicola Miotto</a> - Built the infrastructure that holds the service</li>
+      					<li class="collection-item"><a href="https://twitter.com/graphicure" target="_blank">Luca Burgio</a> - Gave me the design guidelines I needed</li>
+      					<li class="collection-item"><a href="https://twitter.com/ziby_bonny" target="_blank">Stefano Bonetta</a> and <a href="https://twitter.com/mattiamaestrini" target="_blank">Mattia Maestrini</a> - Amazing colleagues and friends</li>
+						<li class="collection-item">The "Bonanza" - <a href="https://twitter.com/_tiwiz" target="_blank">Roberto Orgiu</a>, <a href="https://twitter.com/Mariuxtheone" target="_blank">Mario Viviani</a>, <a href="https://twitter.com/seebrock3r" target="_blank">Sebastiano Poggi</a>, <a href="https://twitter.com/frapontillo" target="_blank">Francesco Pontillo</a>, <a href="https://twitter.com/mbonifazi" target="_blank">Matteo Bonifazi</a>, <a href="https://twitter.com/danybony_" target="_blank">Daniele Bonaldo</a></li>
+						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a>, <a href="https://twitter.com/@dmarcato" target="_blank">Dario Marcato</a> - For the early feedback</li>
       				</ul>
       		</div>
       	</div>
