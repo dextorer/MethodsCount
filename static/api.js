@@ -192,6 +192,18 @@ function showResponse(result) {
    $('#badge-all-preview').html(allCode);
 
    $('#share-dropdown-link-code').html(currentUrl);
+
+   $('#share-dropdown-twitter').html('');
+   twttr.widgets.createShareButton(
+      '',
+      document.getElementById('share-dropdown-twitter'),
+      {
+         text: " ",
+         url: window.location.href,
+         hashtags: "MethodsCount",
+         via: "rotxed"
+      }
+   );
 }
 
 $('#search-box').on('keydown', function(e) {
