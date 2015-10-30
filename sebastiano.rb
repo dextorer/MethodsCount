@@ -62,7 +62,11 @@ class Sebastiano < Sinatra::Base
               parts = library_name.split(/:/)
               library_entry = Libraries.where(["group_id = ? and artifact_id = ? and version = ?", parts[0], parts[1], parts[2]]).first
             else
-              library_entry = Libraries.find_by_fqn(library_name)
+              in_db = library_name
+              if library_name.end_with?("@aar") or library_name.end_with?("@jar")
+                in_db = library_name.sub(/@aar/, '').sub(/@jar/, '')
+              end
+              library_entry = Libraries.find_by_fqn(in_db)
             end
             library_entry.increment("hit_count")
             library_entry.update_column("creation_time", Time.now.to_i)
