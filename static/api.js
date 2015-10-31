@@ -179,9 +179,9 @@ function showResponse(result) {
       methodsBadge = response.library_methods
    }
 
-   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-red.svg\"></img></a>";
-   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-orange.svg\"></img></a>";
-   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-yellow.svg\"></img></a>";
+   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-e91e63.svg\"></img></a>";
+   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"></img></a>";
+   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"></img></a>";
 
    $('#badge-methods-code').text(methodsCode);
    $('#badge-size-code').text(sizeCode);
@@ -192,6 +192,18 @@ function showResponse(result) {
    $('#badge-all-preview').html(allCode);
 
    $('#share-dropdown-link-code').html(currentUrl);
+
+   $('#share-dropdown-twitter').html('');
+   twttr.widgets.createShareButton(
+      '',
+      document.getElementById('share-dropdown-twitter'),
+      {
+         text: " ",
+         url: window.location.href,
+         hashtags: "MethodsCount",
+         via: "rotxed"
+      }
+   );
 }
 
 $('#search-box').on('keydown', function(e) {

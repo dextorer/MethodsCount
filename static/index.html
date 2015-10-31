@@ -2,7 +2,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="bower_components/Materialize/dist/css/materialize.min.css" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
-    <link type="text/css" rel="stylesheet" href="bower_components/EasyAutocomplete/dist/easy-autocomplete.css"/>
+    <link type="text/css" rel="stylesheet" href="bower_components/EasyAutocomplete/dist/easy-autocomplete.min.css"/>
     <link type="text/css" rel="stylesheet" href="bower_components/jquery-dropdown/jquery.dropdown.min.css" />
     <link type="text/css" rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -146,10 +146,7 @@
 				<div id="error-card" class="card hoverable">
 		        	<div class="card-content">
 		          		<span class="card-title grey-text text-darken-3">Wait, what?</span>
-		          			<p>An error has occurred while retrieving the information on this library. Please try again or contact me!</p>
-		        	</div>
-		        	<div class="card-action">
-		          		<a href="">Ping me</a>
+		          			<p>An error has occurred while retrieving the information on this library. Please try again, or ping me via the social links at the bottom!</p>
 		        	</div>
 		      	</div>
 	      	</div>
@@ -170,12 +167,12 @@
 
       				<p class="flow-text about-paragraph">But what about <b>Android versions prior to Lollipop</b>? Since they still run on the Dalvik runtime, a different approach had to be taken. In this case, DEXs are loaded at runtime by patching the class loader. However, this technique is a little "hacky", and thus is not guaranteed to work across all the previous Android versions. For this reasons, big companies are still likely to rely on their custom-made solutions.</p>
       			
-      				<p class="flow-text about-paragraph">Even though MultiDex offers a way out, the recommended approach is still the following:
+      				<p class="flow-text about-paragraph">Even though MultiDex offers a way out, <a href="http://developer.android.com/tools/building/multidex.html">the recommended approach</a> is still the following:
       					<blockquote style="font-size: 20px;"><i>Stay below the limit, as much as you can.</i></blockquote>
 
       			<br/>
       			<h5>Staying below the limit (or, what this is all about)</h5>
-      				<p class="flow-text about-paragraph">This service should help you dealing with the issue of the methods limit. By checking how many methods a library contains, you can determine if it fits in your app or not, before experiencing the dreadful experience of not being able to build anymore. In addition, you are able to check what dependencies does the library rely on, and how many methods do they contain as well.</p>
+      				<p class="flow-text about-paragraph">This service should help you dealing with the issue of the methods limit. By checking how many methods a library contains, you can determine whether it fits in your app, before drowing into the dreadful experience of not being able to build anymore. In addition, you are able to check what dependencies does the library rely on, and how many methods do they contain as well.</p>
 
       				<blockquote>
       				<p class="flow-text about-paragraph"><b>DISCLAIMER</b></p>
@@ -213,11 +210,11 @@
       				<p class="flow-text about-paragraph">I really need to thank some people, who helped me building this service and gave their invaluable opinion on several matters. My respect goes to you.</p>
 
       				<ul class="flow-text about-paragraph collection">
-      					<li class="collection-item"><a href="https://twitter.com/@sirnicolaz" target="_blank">Nicola Miotto</a> - Built the infrastructure that holds the service</li>
-      					<li class="collection-item"><a href="https://twitter.com/@graphicure" target="_blank">Luca Burgio</a> - Gave me the design guidelines I needed</li>
-      					<li class="collection-item"><a href="https://twitter.com/@ziby_bonny" target="_blank">Stefano Bonetta</a> and <a href="https://twitter.com/@mattiamaestrini" target="_blank">Mattia Maestrini</a> - Amazing colleagues and friends</li>
-						<li class="collection-item">The "Bonanza" - Roberto Orgiu, Mario Viviani, Sebastiano Poggi, Francesco Pontillo, Matteo Bonifazi, Daniele Bonaldo</li>
-						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a> - For the early feedback</li>
+      					<li class="collection-item"><a href="https://twitter.com/sirnicolaz" target="_blank">Nicola Miotto</a> - Built the infrastructure that holds the service</li>
+      					<li class="collection-item"><a href="https://twitter.com/graphicure" target="_blank">Luca Burgio</a> - Gave me the design guidelines I needed</li>
+      					<li class="collection-item"><a href="https://twitter.com/ziby_bonny" target="_blank">Stefano Bonetta</a> and <a href="https://twitter.com/mattiamaestrini" target="_blank">Mattia Maestrini</a> - Amazing colleagues and friends</li>
+						<li class="collection-item">The "Bonanza" - <a href="https://twitter.com/_tiwiz" target="_blank">Roberto Orgiu</a>, <a href="https://twitter.com/Mariuxtheone" target="_blank">Mario Viviani</a>, <a href="https://twitter.com/seebrock3r" target="_blank">Sebastiano Poggi</a>, <a href="https://twitter.com/frapontillo" target="_blank">Francesco Pontillo</a>, <a href="https://twitter.com/mbonifazi" target="_blank">Matteo Bonifazi</a>, <a href="https://twitter.com/danybony_" target="_blank">Daniele Bonaldo</a></li>
+						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a>, <a href="https://twitter.com/@dmarcato" target="_blank">Dario Marcato</a> - For the early feedback</li>
       				</ul>
       		</div>
       	</div>
@@ -242,7 +239,6 @@
 	    <div class="jq-dropdown-panel">
 	        <div>
 	        	<div id="share-dropdown-twitter">
-	        		<a href="https://twitter.com/intent/tweet?button_hashtag=MethodsCount" class="twitter-hashtag-button" data-size="large" data-related="rotxed" data-url="http://localhost:9292/index.html?lib=com.google.code.gson%3Agson%3A2.4#">Tweet #MethodsCount</a>
         		</div>
         		<div id="share-dropdown-gplus">
 	        		<div class="g-plus" data-action="share" data-width="120" data-height="24" data-annotation="bubble"></div>
@@ -254,13 +250,30 @@
         </div>
     </div>
 
-	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
-	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
-	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.js"></script> 
-	<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.js"></script>
-	<script type="text/javascript" src="bower_components/jquery-form-validator/form-validator/jquery.form-validator.js"></script>
-	<script type="text/javascript" src="bower_components/jquery-dropdown/jquery.dropdown.js"></script>
-	<script type="text/javascript" src="bower_components/highlightjs/highlight.pack.js"></script>
+	<script>window.twttr = (function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0],
+	    t = window.twttr || {};
+	  if (d.getElementById(id)) return t;
+	  js = d.createElement(s);
+	  js.id = id;
+	  js.src = "https://platform.twitter.com/widgets.js";
+	  fjs.parentNode.insertBefore(js, fjs);
+	 
+	  t._e = [];
+	  t.ready = function(f) {
+	    t._e.push(f);
+	  };
+	 
+	  return t;
+	}(document, "script", "twitter-wjs"));</script>
+
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.min.js"></script> 
+	<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.min.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-form-validator/form-validator/jquery.form-validator.min.js"></script>
+	<script type="text/javascript" src="bower_components/jquery-dropdown/jquery.dropdown.min.js"></script>
+	<script type="text/javascript" src="bower_components/highlightjs/highlight.pack.min.js"></script>
 	<script type="text/javascript" src="https://apis.google.com/js/platform.js" async defer></script>
 	<script type="text/javascript" id="github-bjs" src="https://buttons.github.io/buttons.js" async defer></script>
 	<script type="text/javascript" src="api.js"></script>
