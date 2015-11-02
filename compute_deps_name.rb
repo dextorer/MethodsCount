@@ -8,15 +8,18 @@ class ComputeDependencies
 	attr_reader :library_with_version
 	attr_reader :deps_fqn_list
 
-	def initialize(library_name)
+	def initialize(library_name, utils)
 		@library = library_name
+		@utils = utils
 	end
 
 	def fetch_dependencies
-		init_gradle_files()
-		inject_library_name(@library)
+		@utils.init_gradle_files()
+		@utils.inject_library_name(@library)
 
-		deps_raw = `./gradlew -q dependencies`
+		working_dir = @utils.get_working_dir
+
+		deps_raw = `#{working_dir}/gradlew -p #{working_dir} -q dependencies`
 		has_succeded = $?.exitstatus
 		if has_succeded != 0
 			raise "Error while computing FNQs"
@@ -51,15 +54,17 @@ if __FILE__ == $0
 		library_name = "com.github.dextorer:sofa:1.+"
 	end
 
+	utils = Utils.new
+
 	begin
-		clone_workspace(library_name)
+		utils.clone_workspace(library_name)
 		
-		c = ComputeDependencies.new(library_name)
+		c = ComputeDependencies.new(library_name, utils)
 		c.fetch_dependencies()
 		
 		puts c.library_with_version
 		puts c.deps_fqn_list
 	ensure
-		restore_workspace()
+		#utils.restore_workspace()
 	end
 end
