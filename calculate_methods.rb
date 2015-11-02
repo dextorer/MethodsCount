@@ -165,8 +165,6 @@ class CalculateMethods
 
 			@computed_library_list.push(current_lib)
 		end
-
-		FileUtils.cd("..")
 	end
 
 end
