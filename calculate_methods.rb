@@ -129,7 +129,7 @@ class CalculateMethods
 				target_without_ext = File.basename(target, File.extname(target))
 				begin
 					Timeout::timeout(2 * 60) { # 2 minutes
-						@logger.debug("#{@@tag} [#{item}] exec: #{dx_path} --dex --output=#{target_without_ext}.dex #{target}")
+						@logger.debug("#{@tag} [#{item}] exec: #{dx_path} --dex --output=#{target_without_ext}.dex #{target}")
 						system("#{dx_path} --dex --output=#{target_dir}/#{target_without_ext}.dex #{target_dir}/#{target}")
 					}
 				rescue Timeout::Error
