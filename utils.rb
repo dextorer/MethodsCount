@@ -31,7 +31,6 @@ class Utils
 		now = Time.now.to_i
 		@gradle_working_dir = library_name.gsub(/:/, '_') + now.to_s
 		FileUtils.cp_r("#@gradle_base_dir", "#@gradle_working_dir")
-		#FileUtils.cd("#@gradle_working_dir")
 	end
 
 	def get_working_dir
@@ -43,7 +42,6 @@ class Utils
 			return
 		end
 		
-		#FileUtils.cd("#@base_dir")
 		if File.exists?(@gradle_working_dir)
 			FileUtils.rm_r(@gradle_working_dir)
 		end
