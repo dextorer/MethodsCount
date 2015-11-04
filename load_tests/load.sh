@@ -29,12 +29,13 @@ lib_status() {
 	contains "$JSON" '"status":"done"' && echo "done"
 	contains "$JSON" '"status":"processing"' && echo "processing"
 	contains "$JSON" '"status":"error"' && echo "error"
+	contains "$JSON" '"status":"error"' && echo "undefined"
 }
 
 background_lib_check() {
 	status=$(lib_status $1)
 	end=$((SECONDS+300)) # stop after 5 minutes
-	while [ "done" != "$status" -a "error" != "$status" -a $SECONDS -lt $end ];
+	while [ "processing" == "$status" -a $SECONDS -lt $end ];
 	do
 		sleep 5
 		status=$(lib_status $1)
@@ -47,6 +48,6 @@ background_lib_check() {
 while read lib; do
 	echo $lib
 	enqueue_lib "$lib" && background_lib_check "$lib" & 
-	sleep 20
+	sleep 1
 done < lib_list.txt
 
