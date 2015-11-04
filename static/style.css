@@ -262,8 +262,50 @@ td {
     float: left;
 }
 
-#copyright-row {
+.copyright-row-container {
+	float: left;
+	margin-top: 8px;
+}
+
+#copyright-row-year {
+	width: 100%;
+	margin-top: 12px;
+}
+
+#copyright-row-year p {
+	text-align: right;
+	margin-top: 6px;
+}
+
+#copyright-row-people {
+	margin-left: 10px;
+}
+
+#copyright-row-people #sebastiano {
+	float: left;
+}
+
+#copyright-row-people #nicola {
+	float: left;
+	margin-top: 4px;
+}
+
+#copyright-row-people .social {
+	margin-left: 6px;
+	margin-top: -3px;
+	width: 20px;
+	float: left;
+}
+
+#copyright-row-people #nicola-container .social {
+	margin-top: 2px;
+}
+
+.copyright-row {
 	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0;
+	line-height: 14px;
 }
 
 #gde-badge-container {
