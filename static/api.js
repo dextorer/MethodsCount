@@ -67,7 +67,7 @@ function submitLibraryRequest(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             console.log("Successfully enqeueud job for " + obj["lib_name"]);
-            window.history.pushState(libraryName, libraryName, "/index.html?lib=" + encodeURIComponent(libraryName));
+            window.history.pushState(libraryName, libraryName, "/?lib=" + encodeURIComponent(libraryName));
             $('#progress-card-container').css('visibility','visible').hide().fadeIn();
             poll(libraryName);
          },
