@@ -29,7 +29,7 @@ lib_status() {
 	contains "$JSON" '"status":"done"' && echo "done"
 	contains "$JSON" '"status":"processing"' && echo "processing"
 	contains "$JSON" '"status":"error"' && echo "error"
-	contains "$JSON" '"status":"error"' && echo "undefined"
+	contains "$JSON" '"status":"undefined"' && echo "undefined"
 }
 
 background_lib_check() {
@@ -45,9 +45,10 @@ background_lib_check() {
 }
 
 
+
 while read lib; do
 	echo $lib
 	enqueue_lib "$lib" && background_lib_check "$lib" & 
-	sleep 1
+	sleep 5
 done < lib_list.txt
 
