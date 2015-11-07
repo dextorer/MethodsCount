@@ -170,6 +170,11 @@ main {
 	display: none;
 }
 
+#result-card-dep-list-title {
+    margin-bottom: 0;
+    margin-top: 10;
+}
+
 #shadow-container {
 	height: 2px;
 }
