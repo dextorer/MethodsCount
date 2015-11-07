@@ -6,10 +6,33 @@ require 'logger'
 require 'json'
 require 'dotenv'
 
-require_relative 'utils'
-require_relative 'compute_deps_name'
-require_relative 'calculate_methods'
 require_relative 'model'
+
+class Dep
+  attr_accessor :fqn
+  attr_accessor :group_id
+  attr_accessor :artifact_id
+  attr_accessor :version
+  attr_accessor :file
+  attr_accessor :size
+  attr_accessor :count
+
+  def initialize(line)
+    @group_id, @artifact_id, @version, @file, @size = line.split("|")
+    @fqn = "#{group_id}:#{artifact_id}:#{version}"
+  end
+
+  def self.from_gradle_output(output)
+    deps = Array.new
+    output.split("\n").each do |line| 
+      if line
+        deps.push(Dep.new(line))
+      end
+    end
+    return deps
+  end
+
+end
 
 class LibraryMethodsCount
 
@@ -23,7 +46,8 @@ class LibraryMethodsCount
   def initialize(library_name="")
     return nil if library_name.blank?
 
-    @utils = Utils.new
+    @tag = "[LibraryMethodsCount]"
+    @gradle_env_dir = "gradle_env"
     Dotenv.load
     @library = library_name
     @library_with_version = @library.end_with?("+") ? nil : @library
@@ -48,69 +72,116 @@ class LibraryMethodsCount
 
   private
 
+  def count_methods(dep, tmp_dir)
+    res_only = false
+    log_name = dep.artifact_id
+    item = dep.file
+    if item.end_with?(".aar")
+      @@logger.debug("#{@tag} [#{log_name}] Format: AAR")
+      # extract AAR's classes.jar
+      system("unzip -q #{item} -d #{tmp_dir} classes.jar")
+      if File.exists?("#{tmp_dir}/classes.jar")
+        item = "#{tmp_dir}/classes.jar"
+      else
+        res_only = true
+      end
+    else
+      @@logger.debug("#{@tag} [#{log_name}] Format: JAR")
+    end
 
-  def process_library
-    begin
-      @utils.clone_workspace(@library)
+    if not res_only
+      # build DEX file
+      dx_path = ENV['DX_PATH']
+      if dx_path.to_s.empty?
+        dx_path = "dx"
+      else
+        dx_path = dx_path + "/dx"
+      end
+
+      if not File.exists?("#{item}")
+        @@logger.error("#{@tag} [#{log_name}] Target does not exist")
+        raise "Target #{item} does not exist"
+      end
+
+      begin
+        Timeout::timeout(2 * 60) { # 2 minutes
+          @@logger.debug("#{@tag} [#{log_name}] exec: #{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
+          system("#{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
+        }
+      rescue Timeout::Error
+        raise "'dx' operation timed out, invalidating current library"
+      end
       
-      compute_deps = ComputeDependencies.new(library, @utils)
-      compute_deps.fetch_dependencies()
-      @library_with_version = compute_deps.library_with_version
-
-      if cached? or not @library_with_version
-        @utils.restore_workspace()
-        return
+      dx_result = $?.exitstatus
+      if dx_result == 0
+        @@logger.debug("#{@tag} [#{log_name}] DXed successfully (result code: #{dx_result})")
+      else
+        @@logger.error("Could not create DEX for #{item}")
+        raise "Could not create DEX for #{item}"
       end
+      
+      # extract methods count, update counter
+      count = `cat #{tmp_dir}/tmp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
+      dep.count = count.to_i()
 
-      # check whether dependencies are already calculated
-      filtered_deps = compute_deps.deps_fqn_list.reject { |dep| Libraries.find_by_fqn(dep) and Libraries.find_by_fqn(dep).id > 0 }
-      excluded_deps = compute_deps.deps_fqn_list.reject { |dep| filtered_deps.include?(dep) }
-
-      # compute methods count for both library and dependencies
-      calculate_methods = CalculateMethods.new(@utils)
-      calculate_methods.run_build()
-      calculate_methods.process_deps(compute_deps.library_with_version, filtered_deps)
-
-      # write result to DB (insert into Libraries first)
-      inserted_id = -1
-      calculate_methods.computed_library_list.each do |lib|
-        next if lib.skipped == true
-        
-        Libraries.create(fqn: lib.library_fqn, group_id: lib.group_id, artifact_id: lib.artifact_id, version: lib.version, count: lib.count, size: lib.size, hit_count: 1, creation_time: Time.now.to_i, last_updated: Time.now.to_i)
-        if lib.is_main_library
-          inserted_id = Libraries.find_by_fqn(lib.library_fqn).id
-        end
-      end
-
-      if inserted_id < 0
-        @@logger.error("DB insertion failed")
-        raise "DB insertion failed"
-      end
-
-      calculate_methods.computed_library_list.each do |lib|
-        next if lib.is_main_library == true
-
-        if lib.skipped
-          # find the FQN
-          excluded_deps.each do |dep|
-            dep_parts = @utils.tokenize_library_fqn(dep)
-            dep_processed = "#{dep_parts[1]}-#{dep_parts[2]}"
-            if lib.library_fqn.include?(dep_processed)
-              lib.library_fqn = dep
-              break
-            end
-          end
-        end
-
-        dep_id = Libraries.find_by_fqn(lib.library_fqn).id
-        next if dep_id < 0
-        Dependencies.create(library_id: inserted_id, dependency_id: dep_id)
-      end
-    ensure
-      @utils.restore_workspace()
+      @@logger.debug("#{@tag} [#{log_name}] Count: #{count}")
+    else
+      dep.count = 0
+      @@logger.debug("#{@tag} [#{log_name}] Target: res-only")
+      @@logger.debug("#{@tag} [#{log_name}] Count: 0")
+    end
+    if File.exist?("#{tmp_dir}/classes.jar")
+      File.delete("#{tmp_dir}/classes.jar")
+    end
+    if File.exist?("#{tmp_dir}/tmp.dex")
+      File.delete("#{tmp_dir}/tmp.dex")
     end
   end
 
+  def process_library
+    # calculate dependencies with gradle
+    result = `cd #{@gradle_env_dir} && ./gradlew -q deps -PinputDep=#{@library}`
+    if $?.exitstatus != 0
+      raise "Error while calculating dependencies with Gradle"
+    end
+
+    # generate Dep classes from gradle output
+    deps = Dep.from_gradle_output(result)
+
+    # filter already processed deps
+    filtered_deps = deps.reject do |dep| 
+      lib = Libraries.find_by_fqn(dep.fqn)
+      lib and lib.id > 0
+    end
+
+    # calculate methods count for new dependencies
+    rand = Random::DEFAULT.rand().to_s
+    Dir.mkdir(rand)
+    tmp_dir = File.absolute_path(rand)
+    filtered_deps.each { |dep| count_methods(dep, tmp_dir) }
+    Dir.delete(tmp_dir)
+
+    # insert all dependencies into DB (first dep is always the requested one)
+    inserted_id = -1
+    deps.each_with_index do |dep, i|
+      lib = nil
+      if filtered_deps.index(dep) == nil
+        lib = Libraries.find_by_fqn(dep.fqn)
+      else
+        lib = Libraries.create(fqn: dep.fqn, group_id: dep.group_id, artifact_id: dep.artifact_id, version: dep.version, count: dep.count, size: dep.size, hit_count: 1, creation_time: Time.now.to_i, last_updated: Time.now.to_i)
+      end
+      if i == 0
+        inserted_id = lib.id
+      else
+        Dependencies.create(library_id: inserted_id, dependency_id: lib.id)
+      end
+    end
+
+    if inserted_id < 0
+      @@logger.error("DB insertion failed")
+      raise "DB insertion failed"
+    end
+  end
 
   def generate_response
     lib = Libraries.where(:fqn => @library_with_version).first
