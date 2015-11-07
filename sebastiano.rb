@@ -13,7 +13,7 @@ class Sebastiano < Sinatra::Base
   set :public_folder, File.dirname(__FILE__) + '/static'
 
   get '/' do
-    redirect '/index.html'
+    File.read(File.join('static', 'index.html'))
   end
 
   namespace '/api' do
@@ -120,21 +120,20 @@ class Sebastiano < Sinatra::Base
       end
 
       # handle libraries with version
-      if must_calculate and LibraryStatus.where(library_name: library_name).count == 0
-        Thread.new(params[:lib_name]) do |library_name|
-          new_lib = LibraryStatus.new
-          new_lib.library_name = library_name
-          begin  
-            new_lib.status = "processing"
-            new_lib.save!
-            LibraryMethodsCount.new(library_name).compute_dependencies()
-            new_lib.status = "done"
-            new_lib.save!
+      lib_status = LibraryStatus.where(library_name: library_name).first_or_create
+      if must_calculate && lib_status.status.to_s.empty?
+        lib_status.status = "processing"
+        lib_status.save!
+        Thread.new(lib_status) do |new_lib_status|
+          begin
+            LibraryMethodsCount.new(new_lib_status.library_name).compute_dependencies()
+            new_lib_status.status = "done"
           rescue => e
             puts "Failure, error is: #{e}"
             puts "Backtrace: #{e.backtrace}"
-            new_lib.status = "error"
-            new_lib.save!
+            new_lib_status.status = "error"
+          ensure
+            new_lib_status.save!
           end
         end
       end

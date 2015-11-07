@@ -58,6 +58,8 @@ function submitLibraryRequest(libraryName) {
       });
    }
 
+   $('#search-box').trigger('blur');
+
    $('#progress-card-container').css('visibility','visible').hide().fadeIn();
    startMessageCycling();
 
@@ -67,7 +69,7 @@ function submitLibraryRequest(libraryName) {
          function(response) {
             obj = JSON.parse(response);
             console.log("Successfully enqeueud job for " + obj["lib_name"]);
-            window.history.pushState(libraryName, libraryName, "/index.html?lib=" + encodeURIComponent(libraryName));
+            window.history.pushState(libraryName, libraryName, "/?lib=" + encodeURIComponent(libraryName));
             $('#progress-card-container').css('visibility','visible').hide().fadeIn();
             poll(libraryName);
          },
@@ -193,17 +195,8 @@ function showResponse(result) {
 
    $('#share-dropdown-link-code').html(currentUrl);
 
-   $('#share-dropdown-twitter').html('');
-   twttr.widgets.createShareButton(
-      '',
-      document.getElementById('share-dropdown-twitter'),
-      {
-         text: " ",
-         url: window.location.href,
-         hashtags: "MethodsCount",
-         via: "rotxed"
-      }
-   );
+   $('#share-dropdown-twitter a').attr('href', 'https://twitter.com/intent/tweet?hashtags=MethodsCount&url=' + encodeURIComponent(currentUrl) + '&via=rotxed');
+   $('#share-dropdown-gplus a').attr('href', 'https://plus.google.com/share?url=' + encodeURIComponent(currentUrl));
 }
 
 $('#search-box').on('keydown', function(e) {
@@ -292,9 +285,6 @@ var loadingMessages = [
    "Still processing, hang on...",
    "You can leave me here and come back in a while, no worries"
 ];
-
-// twitter
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 
 // query params
 var getUrlParameter = function getUrlParameter(sParam) {
