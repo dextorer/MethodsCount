@@ -140,7 +140,7 @@ class LibraryMethodsCount
 
   def process_library
     # calculate dependencies with gradle
-    result = `cd #{@gradle_env_dir} && ./gradlew -q deps -PinputDep=#{@library}`
+    result = `#{@gradle_env_dir}/gradlew -p #{@gradle_env_dir} -q deps -PinputDep=#{@library}`
     if $?.exitstatus != 0
       raise "Error while calculating dependencies with Gradle"
     end
