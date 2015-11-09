@@ -160,6 +160,7 @@ class Sebastiano < Sinatra::Base
 
         puts "[aa] calculated feed"
         compile_statements.each do |lib|
+          puts "[aa] lib #{lib}"
           lmc = LibraryMethodsCount.new(lib)
           lmc.compute_dependencies
         end
