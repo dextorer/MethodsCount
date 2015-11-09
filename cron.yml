@@ -2,4 +2,4 @@ version: 1
 cron:
  - name: "AA feed scraper"          # required - unique across all entries in this file
    url: "/api/aa"              # required - does not need to be unique
-   schedule: "5 * * * *"    # required - does not need to be unique
+   schedule: "5 1 * * *"    # required - does not need to be unique
