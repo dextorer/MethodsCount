@@ -3,6 +3,7 @@
 require 'rubygems'
 require 'fileutils'
 require 'logger'
+require 'timeout'
 require 'json'
 require 'dotenv'
 
@@ -172,6 +173,9 @@ class LibraryMethodsCount
       end
       if i == 0
         inserted_id = lib.id
+        if @library.end_with?("+")
+          @library_with_version = lib.fqn
+        end
       else
         Dependencies.create(library_id: inserted_id, dependency_id: lib.id)
       end
