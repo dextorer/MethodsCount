@@ -1,6 +1,10 @@
 apply plugin: 'groovy'
 
 repositories {
+    // local android maven repositories - ANDROID_HOME env variable should be set!!!
+    maven { url "file://${System.getenv("ANDROID_HOME")}/extras/android/m2repository" }
+    maven { url "file://${System.getenv("ANDROID_HOME")}/extras/google/m2repository" }
+
     jcenter()
     mavenCentral()
     maven { url "https://jitpack.io" }
@@ -11,7 +15,7 @@ String NEW_LINE = "\n"
 String INPUT_DEP = project.properties['inputDep']
 
 if (!INPUT_DEP) {
-    throw new RuntimeException("No input dependency specified :(")
+    throw new GradleException("No input dependency specified :(")
 }
 project.dependencies.add("compile", INPUT_DEP)
 
@@ -20,7 +24,7 @@ task deps << {
     def transitiveDepsWriter = new StringWriter()
     def deps = project.configurations.compile.resolve()
     if (deps.isEmpty()) {
-        throw new RuntimeException("Nothing resolved :(")
+        throw new GradleException("Nothing resolved :(")
     } else {
         project.configurations.compile.resolvedConfiguration.resolvedArtifacts.each { artifact ->
             // group|name|version|file|size
