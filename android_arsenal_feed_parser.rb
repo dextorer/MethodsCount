@@ -58,7 +58,12 @@ if __FILE__ == $0
 	compile_statements = parser.process_feed
 
 	compile_statements.each do |lib|
-		lmc = LibraryMethodsCount.new(lib)
-		lmc.compute_dependencies
+		begin
+			lmc = LibraryMethodsCount.new(lib)
+			lmc.compute_dependencies
+		rescue => e
+			puts "Failure, error is: #{e}"
+            puts "Backtrace: #{e.backtrace}"
+		end
 	end
 end
