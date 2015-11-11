@@ -4,6 +4,7 @@ require 'sinatra/namespace'
 require 'active_record'
 require './model'
 require './library_methods_count'
+require './android_arsenal_feed_parser'
 
 class Sebastiano < Sinatra::Base
 
@@ -150,5 +151,22 @@ class Sebastiano < Sinatra::Base
       top = Libraries.order(count: :desc).distinct(true).take(100)
       top.to_json
     end
+
+    post '/aa' do
+      content_type :json
+      Thread.new do
+        parser = AndroidArsenalParser.new(1, 63)
+        compile_statements = parser.process_feed
+
+        puts "[aa] calculated feed"
+        compile_statements.each do |lib|
+          puts "[aa] lib #{lib}"
+          lmc = LibraryMethodsCount.new(lib)
+          lmc.compute_dependencies
+        end
+        puts "[aa] done with libs"
+      end
+    end
+
   end
 end
