@@ -17,6 +17,7 @@ class Dep
   attr_accessor :file
   attr_accessor :size
   attr_accessor :count
+  attr_accessor :dex_size
 
   def initialize(line)
     @group_id, @artifact_id, @version, @file, @size = line.split("|")
@@ -124,6 +125,7 @@ class LibraryMethodsCount
       # extract methods count, update counter
       count = `cat #{tmp_dir}/tmp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
       dep.count = count.to_i()
+      dep.dex_size = File.size("#{tmp_dir}/tmp.dex")
 
       @@logger.debug("#{@tag} [#{log_name}] Count: #{count}")
     else
@@ -169,7 +171,7 @@ class LibraryMethodsCount
       if filtered_deps.index(dep) == nil
         lib = Libraries.find_by_fqn(dep.fqn)
       else
-        lib = Libraries.create(fqn: dep.fqn, group_id: dep.group_id, artifact_id: dep.artifact_id, version: dep.version, count: dep.count, size: dep.size, hit_count: 1, creation_time: Time.now.to_i, last_updated: Time.now.to_i)
+        lib = Libraries.create(fqn: dep.fqn, group_id: dep.group_id, artifact_id: dep.artifact_id, version: dep.version, count: dep.count, size: dep.size, dex_size: dep.dex_size, hit_count: 1, creation_time: Time.now.to_i, last_updated: Time.now.to_i)
       end
       if i == 0
         inserted_id = lib.id
@@ -194,10 +196,10 @@ class LibraryMethodsCount
     deps.each do |dep|
       dep_id = dep.dependency_id
       dep_lib = Libraries.find(dep_id.to_i)
-      deps_array.push({ :dependency_name => dep_lib.fqn, :dependency_count => dep_lib.count, :dependency_size => dep_lib.size })
+      deps_array.push({ :dependency_name => dep_lib.fqn, :dependency_count => dep_lib.count, :dependency_size => dep_lib.size, :dependency_dex_size => dep_lib.dex_size })
     end
 
-    response = {:library_fqn => lib.fqn, :library_methods => lib.count, :library_size => lib.size, :dependencies_count => deps.length, :dependencies => deps_array}
+    response = {:library_fqn => lib.fqn, :library_methods => lib.count, :library_size => lib.size, :library_dex_size => lib.dex_size, :dependencies_count => deps.length, :dependencies => deps_array}
 
     puts response.to_json
     return response
