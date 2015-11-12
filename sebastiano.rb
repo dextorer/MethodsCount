@@ -148,7 +148,7 @@ class Sebastiano < Sinatra::Base
 
     get '/top/' do
       content_type :json
-      top = Libraries.order(count: :desc).distinct(true).take(100)
+      top = Libraries.order(hit_count: :desc).distinct(true).take(100)
       top.to_json
     end
 
@@ -161,8 +161,13 @@ class Sebastiano < Sinatra::Base
         puts "[aa] calculated feed"
         compile_statements.each do |lib|
           puts "[aa] lib #{lib}"
-          lmc = LibraryMethodsCount.new(lib)
-          lmc.compute_dependencies
+          begin
+            lmc = LibraryMethodsCount.new(lib)
+            lmc.compute_dependencies
+          rescue => e
+            puts "[aa] Failure, error is: #{e}"
+            puts "[aa] Backtrace: #{e.backtrace}"
+          end
         end
         puts "[aa] done with libs"
       end
