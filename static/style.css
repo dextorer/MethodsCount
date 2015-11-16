@@ -134,6 +134,7 @@ main {
 .result-card-header {
 	font-size: 15px;
 	margin-top: 0;
+	display: table-cell;
 }
 
 .result-card-header-buttons-container {
@@ -156,6 +157,18 @@ main {
 
 #show_badges_button {
 	margin-right: 7px;
+}
+
+#result-library-stats {
+	display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#result-dependency-summary {
+	display: table;
+    width: 100%;
+    table-layout: fixed;	
 }
 
 #result-card-header-share {
