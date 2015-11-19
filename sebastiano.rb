@@ -54,7 +54,7 @@ class Sebastiano < Sinatra::Base
       library_status = LibraryStatus.where(library_name: library_name).first
 
       # handle libraries with version
-      if not ends_with_plus 
+      if not ends_with_plus
         if library_status
           if library_status.status == "done"
             result = LibraryMethodsCount.new(library_name).compute_dependencies()
@@ -83,7 +83,7 @@ class Sebastiano < Sinatra::Base
           status = "undefined"
         end
       end
-      
+
       {
         :status => status,
         :lib_name => library_name,
@@ -99,7 +99,7 @@ class Sebastiano < Sinatra::Base
       must_calculate = true
 
       # handle '+' libraries
-      if library_name.end_with?("+")  
+      if library_name.end_with?("+")
         parts = library_name.split(/:/)
         most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
         time_limit = (Time.now.to_i - 7 * 24 * 60 * 60)
@@ -125,18 +125,14 @@ class Sebastiano < Sinatra::Base
       if must_calculate && lib_status.status.to_s.empty?
         lib_status.status = "processing"
         lib_status.save!
-        Thread.new(lib_status) do |new_lib_status|
-          begin
-            LibraryMethodsCount.new(new_lib_status.library_name).compute_dependencies()
-            new_lib_status.status = "done"
-          rescue => e
-            puts "Failure, error is: #{e}"
-            puts "Backtrace: #{e.backtrace}"
-            new_lib_status.status = "error"
-          ensure
-            new_lib_status.save!
-          end
-        end
+
+        sqs = Aws::SQS::Client.new(region: 'eu-west-1')
+        sqs.send_message({
+                           queue_url: ENV['SQS_QUEUE_URL'],
+                           message_body: {
+                             lib_name: library_name
+                           }.to_json
+        })
       end
 
       {
@@ -152,6 +148,7 @@ class Sebastiano < Sinatra::Base
       top.to_json
     end
 
+    # Workers api
     post '/aa' do
       content_type :json
       Thread.new do
@@ -169,9 +166,31 @@ class Sebastiano < Sinatra::Base
             puts "[aa] Backtrace: #{e.backtrace}"
           end
         end
-        puts "[aa] done with libs"
       end
     end
 
+
+    post '/process_lib' do
+      content_type :json
+      library_name = params[:lib_name]
+      process_library(library_name)
+    end
+
+
+    private
+
+    def process_library(library_name)
+      lib_status = LibraryStatus.where(library_name: library_name).first
+      begin
+        LibraryMethodsCount.new(library_name).compute_dependencies()
+        lib_status.status = "done"
+      rescue => e
+        puts "Failure, error is: #{e}"
+        puts "Backtrace: #{e.backtrace}"
+        lib_status.status = "error"
+      ensure
+        lib_status.save!
+      end
+    end
   end
 end
