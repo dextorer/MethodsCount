@@ -169,7 +169,10 @@ class Sebastiano < Sinatra::Base
 
     post '/process_lib' do
       content_type :json
-      library_name = params[:lib_name]
+      request.body.rewind
+      payload = JSON.parse(request.body.read)
+      
+      library_name = payload[:lib_name]
       process_library(library_name)
     end
 
