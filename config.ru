@@ -3,6 +3,6 @@ require 'bundler'
 
 Bundler.require
 
-require './app/sebastiano'
+require './sebastiano'
 
 run Sebastiano
