@@ -171,8 +171,8 @@ class Sebastiano < Sinatra::Base
       content_type :json
       request.body.rewind
       payload = JSON.parse(request.body.read)
-      
-      library_name = payload[:lib_name]
+      library_name = payload['lib_name']
+
       process_library(library_name)
     end
 
