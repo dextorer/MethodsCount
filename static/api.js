@@ -152,20 +152,22 @@ function showResponse(result) {
    var response = result;
    $('#result-library-stats tr').has('td').remove();
    $('#result-lib-name').text(response.library_fqn);
-   $('#result-library-stats').append("<tr><td>" + response.library_methods + "</td><td>" + response.dependencies_count + "</td><td>" + Math.ceil(response.library_size / 1000) + "</td></tr>");
+   $('#result-library-stats').append("<tr><td>" + response.library_methods + "</td><td>" + response.dependencies_count + "</td><td>" + Math.ceil(response.library_size / 1000) + "</td><td>" + Math.ceil(response.library_dex_size / 1000) + "</td></tr>");
 
    $('#result-card-dep-list').empty();
    var dependencies = response.dependencies;
    var total_count = 0;
    var total_size = 0;
+   var total_dex_size = 0;
    if (dependencies.length > 0) {
       dependencies.forEach(function(dependency) {
-         $('#result-card-dep-list').append("<li><div><p>" + dependency.dependency_name + "</p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Library size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p></blockquote></div></div></li>");
+         $('#result-card-dep-list').append("<li><div><p>" + dependency.dependency_name + "</p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p><p>DEX size: " + Math.ceil(dependency.dependency_dex_size / 1000) + " KB</p></blockquote></div></div></li>");
          total_count += dependency.dependency_count;
          total_size += dependency.dependency_size;
+         total_dex_size += dependency.dependency_dex_size;
       });
       $('#result-dependency-summary tr').has('td').remove();
-      $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td></tr>");
+      $('#result-dependency-summary').append("<tr><td>" + total_count + "</td><td>" + Math.ceil(total_size / 1000) + "</td><td>" + Math.ceil(total_dex_size / 1000) + "</td></tr>");
       $('#result-card-dep-container').show();
       $('#result-dep-summary-container').show();
    } else {
