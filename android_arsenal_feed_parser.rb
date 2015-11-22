@@ -3,7 +3,7 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-require './library_methods_count'
+require_relative './library_methods_count'
 
 class AndroidArsenalParser 
 
