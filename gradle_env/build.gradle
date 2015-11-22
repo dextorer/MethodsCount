@@ -1,0 +1,56 @@
+apply plugin: 'groovy'
+
+repositories {
+    // local android maven repositories - ANDROID_HOME env variable should be set!!!
+    maven { url "file://${System.getenv("ANDROID_HOME")}/extras/android/m2repository" }
+    maven { url "file://${System.getenv("ANDROID_HOME")}/extras/google/m2repository" }
+
+    jcenter()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+String SEPARATOR = "|"
+String NEW_LINE = "\n"
+String INPUT_DEP = project.properties['inputDep']
+
+if (!INPUT_DEP) {
+    throw new GradleException("No input dependency specified :(")
+}
+project.dependencies.add("compile", INPUT_DEP)
+
+task deps << {
+    def mainDepWriter = new StringWriter()
+    def transitiveDepsWriter = new StringWriter()
+    def deps = project.configurations.compile.resolve()
+    if (deps.isEmpty()) {
+        throw new GradleException("Nothing resolved :(")
+    } else {
+        project.configurations.compile.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+            // group|name|version|file|size
+            def component = artifact.id.componentIdentifier
+            def isMainLibrary = project.configurations.compile.dependencies.find { it.group.equals(component.group) && it.name.equals(component.module) } != null ? "true" : "false"
+            def writer = isMainLibrary ? mainDepWriter : transitiveDepsWriter
+            writer.append(component.group).append(SEPARATOR)
+            writer.append(component.module).append(SEPARATOR)
+            writer.append(component.version).append(SEPARATOR)
+            writer.append(artifact.file.absolutePath).append(SEPARATOR)
+            writer.append(String.valueOf(artifact.file.size()))
+            writer.append(NEW_LINE)
+        }
+    }
+    printOutput(mainDepWriter)
+    printOutput(transitiveDepsWriter)
+}
+
+def printOutput(Writer writer) {
+    String output = project.properties['output']
+    if (output) {
+        File fileOut = new File(project.projectDir, output)
+        fileOut.delete()
+        fileOut.createNewFile()
+        fileOut.setText(writer.toString().trim())
+    } else {
+        println writer.toString().trim()
+    }
+}
