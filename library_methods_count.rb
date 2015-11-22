@@ -7,9 +7,6 @@ require 'timeout'
 require 'json'
 require 'dotenv'
 
-require_relative './utils'
-require_relative './compute_deps_name'
-require_relative './calculate_methods'
 require_relative './model'
 
 class Dep
