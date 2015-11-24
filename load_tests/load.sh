@@ -49,6 +49,6 @@ background_lib_check() {
 while read lib; do
 	echo $lib
 	enqueue_lib "$lib" && background_lib_check "$lib" & 
-	sleep 5
-done < lib_list.txt
+	sleep 10
+done < $1 
 
