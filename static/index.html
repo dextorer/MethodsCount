@@ -98,14 +98,6 @@
 		        			<th class="grey-text text-darken-1 result-card-header">Dependencies</th>
 		        			<th class="grey-text text-darken-1 result-card-header">Size (KB)</th>
 		        			<th class="grey-text text-darken-1 result-card-header">DEX size (KB)</th>
-		        			<tbody>
-			        			<tr>
-			        				<td>817</td>
-			        				<td>4</td>
-			        				<td>103622</td>
-			        				<td>105299</td>
-			        			</tr>
-		        			</tbody>
 		        		</table>
 		        	</div>
 		        	<div id="result-dep-summary-container">
@@ -114,11 +106,6 @@
 		        			<th class="grey-text text-darken-1 result-card-header">Dependencies methods count</th>
 		        			<th class="grey-text text-darken-1 result-card-header">Dependencies size (KB)</th>
 		        			<th class="grey-text text-darken-1 result-card-header">Dependencies DEX size (KB)</th>
-		        			<tbody>
-		        				<tr>
-		        					<td>123456</td>
-		        					<td>999999</td>
-		   						</tr>
 		        		</table>
 		        		<hr/>
 		        	</div>
@@ -128,18 +115,6 @@
 			        	</div>
 			        	<div class="indent-right">
 			        		<ul id="result-card-dep-list">
-			        			<li>
-				        			<div>
-				        				<p>com.android.support:leanback-v17:22.2.0</p>
-				        				<div class="indent-right">
-					        				<blockquote>
-					        					<p>Methods count: 5223</p>
-					        					<p>Library size: 64 KB</p>
-					        					<p>DEX size: 123 KB</p>
-					        				</blockquote>
-				        				</div>
-				        			</div>
-			        			</li>
 			        		</ul>
 			        	</div>
 		        	</div>
@@ -214,11 +189,10 @@
       				<p class="flow-text about-paragraph">We really need to thank some people, who helped me building this service and gave their invaluable opinion on several matters. Our respect goes to you.</p>
 
       				<ul class="flow-text about-paragraph collection">
-      					<!--<li class="collection-item"><a href="https://twitter.com/@sirnicolaz" target="_blank">Nicola Miotto</a> - Built the infrastructure that holds the service</li>-->
       					<li class="collection-item"><a href="https://twitter.com/@graphicure" target="_blank">Luca Burgio</a> - Gave me the design guidelines we needed</li>
       					<li class="collection-item"><a href="https://twitter.com/@ziby_bonny" target="_blank">Stefano Bonetta</a> and <a href="https://twitter.com/@mattiamaestrini" target="_blank">Mattia Maestrini</a> - Amazing colleagues and friends</li>
 						<li class="collection-item">The "Bonanza" - <a href="https://twitter.com/@_tiwiz" target="_blank">Roberto Orgiu</a>, <a href="https://twitter.com/@Mariuxtheone" target="_blank">Mario Viviani</a>, <a href="https://twitter.com/@seebrock3r" target="_blank">Sebastiano Poggi</a>, <a href="https://twitter.com/@frapontillo" target="_blank">Francesco Pontillo</a>, <a href="https://twitter.com/@mbonifazi" target="_blank">Matteo Bonifazi</a>, <a href="https://twitter.com/@danybony_" target="_blank">Daniele Bonaldo</a></li>
-						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a>, <a href="https://twitter.com/@dmarcato" target="_blank">Dario Marcato</a> - For the early feedback</li>
+						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a> - For the early feedback</li>
       				</ul>
       		</div>
       	</div>
@@ -257,23 +231,6 @@
         </div>
     </div>
 
-	<script>window.twttr = (function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0],
-	    t = window.twttr || {};
-	  if (d.getElementById(id)) return t;
-	  js = d.createElement(s);
-	  js.id = id;
-	  js.src = "https://platform.twitter.com/widgets.js";
-	  fjs.parentNode.insertBefore(js, fjs);
-	 
-	  t._e = [];
-	  t.ready = function(f) {
-	    t._e.push(f);
-	  };
-	 
-	  return t;
-	}(document, "script", "twitter-wjs"));</script>
-
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.min.js"></script> 
@@ -284,7 +241,7 @@
 	<script type="text/javascript" src="api.js"></script>
 </body>
 
-<footer class="page-footer blue darken-1">
+<footer class="blue darken-1">
 	<div class="footer-copyright">
     	<div class="container">
     		<div class="row">
@@ -295,23 +252,29 @@
     				<div>
 						<div id="copyright-row-people" class="copyright-row-container">
 							<div id="sebastiano-container">
-								<p id="sebastiano" class="copyright-row">Sebastiano Gottardo</p>
+								<p id="sebastiano" class="copyright-row white-text">Sebastiano Gottardo</p>
 								<a href="https://twitter.com/@rotxed" target="_blank"><img src="images/twitter.png" class="social" /></a>
 								<a href="https://plus.google.com/+SebastianoGottardo" target="_blank"><img src="images/plus.png" class="social" /></a>
 								<a href="https://it.linkedin.com/in/sebastianogottardo" target="_blank"><img src="images/linkedin.png" class="social" /></a>
 								<a href="https://github.com/dextorer" target="_blank"><img src="images/github.png" class="social" /></a>
 							</div>
 							<div id="nicola-container">
-								<p id="nicola" class="copyright-row">Nicola Miotto</p>
+								<p id="nicola" class="copyright-row white-text">Nicola Miotto</p>
 								<a href="https://twitter.com/@sirnicolaz" target="_blank"><img src="images/twitter.png" class="social" /></a>
 								<a href="https://de.linkedin.com/in/nicolamiotto" target="_blank"><img src="images/linkedin.png" class="social" /></a>
 								<a href="https://github.com/sirnicolaz" target="_blank"><img src="images/github.png" class="social" /></a>
+							</div>
+							<div id="dario-container">
+								<p id="dario" class="copyright-row white-text">Dario Marcato</p>
+								<a href="https://twitter.com/@dmarcato" target="_blank"><img src="images/twitter.png" class="social" /></a>
+								<a href="https://it.linkedin.com/in/dariomarcato" target="_blank"><img src="images/linkedin.png" class="social" /></a>
+								<a href="https://github.com/dmarcato" target="_blank"><img src="images/github.png" class="social" /></a>
 							</div>
 						</div>
 					</div>
     			</div>
     			<div class="col s6">
-    				<div id="copyright-row-year" class="copyright-row-container">
+    				<div id="copyright-row-year" class="copyright-row-container white-text">
     					<p class="copyright-row">&copy; 2015</p>
     				</div>
     			</div>

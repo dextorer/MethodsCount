@@ -185,6 +185,7 @@ main {
 #result-card-dep-list-title {
     margin-bottom: 0;
     margin-top: 10;
+    z-index: 0;
 }
 
 #shadow-container {
@@ -266,10 +267,14 @@ td {
 	margin-top: 0 !important;
 }
 
-.page-footer {
+footer {
 	position: fixed;
 	width: 100%;
 	bottom: 0px;
+}
+
+footer .row {
+	margin-bottom: 0;
 }
 
 #footer-social-buttons {
@@ -293,7 +298,7 @@ td {
 
 #copyright-row-year p {
 	text-align: right;
-	margin-top: 6px;
+	margin-top: 16px;
 }
 
 #copyright-row-people {
@@ -309,6 +314,11 @@ td {
 	margin-top: 4px;
 }
 
+#copyright-row-people #dario {
+	float: left;
+	margin-top: 4px;
+}
+
 #copyright-row-people .social {
 	margin-left: 6px;
 	margin-top: -3px;
@@ -317,6 +327,10 @@ td {
 }
 
 #copyright-row-people #nicola-container .social {
+	margin-top: 2px;
+}
+
+#copyright-row-people #dario-container .social {
 	margin-top: 2px;
 }
 
@@ -330,7 +344,7 @@ td {
 #gde-badge-container {
 	float: left;
 	margin-left: 7px;
-    margin-top: 6px;
+    margin-top: 16px;
 }
 
 #gde-badge {

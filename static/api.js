@@ -58,6 +58,7 @@ function submitLibraryRequest(libraryName) {
       });
    }
 
+   $('#tab-main').trigger('click');
    $('#search-box').trigger('blur');
 
    $('#progress-card-container').css('visibility','visible').hide().fadeIn();
