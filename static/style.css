@@ -9,12 +9,12 @@ main {
 }
 
 #input-block {
-	height: 10%;
+	overflow: hidden;
 }
 
 #navigation-container {
-	width: 18%;
 	float: right;
+	width: 150px;
 }
 
 #page-title {
@@ -56,7 +56,6 @@ main {
 #input-content {
 	padding-top: 7px;
 	padding-bottom: 5px;
-	position: relative;
 }
 
 #main-container {
@@ -224,9 +223,9 @@ td {
 }
 
 #search-box {
+	width: 100%;
 	line-height: normal;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
     margin-bottom: 0px;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -238,8 +237,6 @@ td {
 	right: 0;
 	top: 5px;
     font-size: 30px;
-    padding-top: 2px;
-    padding-bottom: 2px;
     margin-right: 8px;
 }
 
@@ -261,14 +258,18 @@ td {
     box-shadow: 0 0px 0 0 #000;
 }
 
+.easy-autocomplete {
+	width: 100% !important;
+}
+
+.hoverable {
+	margin-top: 0 !important;
+}
+
 .page-footer {
 	position: fixed;
 	width: 100%;
 	bottom: 0px;
-}
-
-.easy-autocomplete {
-	width: 100% !important;
 }
 
 #footer-social-buttons {
