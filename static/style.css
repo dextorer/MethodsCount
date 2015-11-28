@@ -227,6 +227,7 @@ td {
 	width: 100%;
 	line-height: normal;
     padding: 10px;
+    padding-right: 38px;
     margin-bottom: 0px;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
