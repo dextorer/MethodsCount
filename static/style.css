@@ -136,6 +136,10 @@ main {
 	display: table-cell;
 }
 
+th {
+	vertical-align: top;
+}
+
 .result-card-header-buttons-container {
 	float: right;
 }
