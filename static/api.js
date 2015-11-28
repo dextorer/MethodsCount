@@ -151,10 +151,7 @@ function mockRequest() {
 
 function showResponse(result) {
    var response = result;
-   $('#result-library-stats tr').has('td').remove();
-   $('#result-lib-name').text(response.library_fqn);
-   $('#result-library-stats').append("<tr><td>" + response.library_methods + "</td><td>" + response.dependencies_count + "</td><td>" + Math.ceil(response.library_size / 1000) + "</td><td>" + Math.ceil(response.library_dex_size / 1000) + "</td></tr>");
-
+   
    $('#result-card-dep-list').empty();
    var dependencies = response.dependencies;
    var total_count = 0;
@@ -175,6 +172,11 @@ function showResponse(result) {
       $('#result-card-dep-container').hide();
       $('#result-dep-summary-container').hide();
    }
+
+   $('#result-library-summary tr').has('td').remove();
+   $('#result-library-summary').append("<tr><td class=\"truncate\">" + response.library_fqn + "</td><td>" + (total_count + response.library_methods) + "</td></tr>");
+   $('#result-library-stats tr').has('td').remove();
+   $('#result-library-stats').append("<tr><td>" + response.library_methods + "</td><td>" + response.dependencies_count + "</td><td>" + Math.ceil(response.library_size / 1000) + "</td><td>" + Math.ceil(response.library_dex_size / 1000) + "</td></tr>");
 
    var currentUrl = window.location.href;
    var methodsBadge = ""

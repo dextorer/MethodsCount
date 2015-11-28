@@ -141,7 +141,9 @@ th {
 }
 
 .result-card-header-buttons-container {
-	float: right;
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
 .result-card-header-buttons-container p {
@@ -160,6 +162,12 @@ th {
 
 #show_badges_button {
 	margin-right: 7px;
+}
+
+#result-library-summary {
+	display: table;
+    width: 100%;
+    table-layout: fixed;
 }
 
 #result-library-stats {

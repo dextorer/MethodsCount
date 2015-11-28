@@ -75,9 +75,12 @@
 				<div id="result-card" class="card hoverable">
 		        	<div>
 		        		<div class="result-card-header-container">
-		        			<p class="grey-text text-darken-1 result-card-header">Library name</p>
+			        		<table id="result-library-summary">
+			        			<th class="grey-text text-darken-1 result-card-header">Library name</th>
+			        			<th class="grey-text text-darken-1 result-card-header">Total count</th>
+			        		</table>
 		        		</div>
-		        		<div class="result-card-header-buttons-container">
+		        		<div class="result-card-header-buttons-container hide-on-med-and-down">
 		        			<div id="result-card-header-badges" class="result-card-header-button" data-jq-dropdown="#badge-dropdown">
 		        				<p class="blue-text text-darken-1">BADGES</p>
 		        				<a id="show_badges_button" href="#" class="material-icons">face</a>
@@ -88,9 +91,9 @@
         					</div>
 		        		</div>
 		        	</div>
-		        	<div>
+		        	<!-- <div>
 		        		<p id="result-lib-name" class="indent-right">com.github.dextorer:sofa:1.0.0&nbsp;</p>
-		        	</div>
+		        	</div> -->
 		        	<hr/>
 		        	<div>
 		        		<table id="result-library-stats">
