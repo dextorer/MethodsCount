@@ -92,6 +92,15 @@ class LibraryMethodsCount
     end
 
     if not res_only
+      # make sure our jar actually contains .class files :)
+      `unzip -l #{item} | grep -x .*\.class$`
+      if $?.exitstatus != 0
+        res_only = true
+        @@logger.debug("#{@tag} [#{log_name}] Empty JAR file (no .class files found), consider as res-only")
+      end
+    end
+
+    if not res_only
       # build DEX file
       dx_path = ENV['DX_PATH']
       if dx_path.to_s.empty?
