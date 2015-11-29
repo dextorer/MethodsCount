@@ -126,10 +126,14 @@ class Sebastiano < Sinatra::Base
       if must_calculate && lib_status.status.to_s.empty?
         lib_status.status = "processing"
         lib_status.save!
-        
-        QueueService.enqeue(
-          {lib_name: library_name}
-        )
+
+        if ENV['RACK_ENV'] == 'development'
+          process_library(library_name)
+        else
+          QueueService.enqeue(
+            {lib_name: library_name}
+          )
+        end
       end
 
       {
