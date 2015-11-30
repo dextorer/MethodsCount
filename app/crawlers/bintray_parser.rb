@@ -2,8 +2,6 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-require_relative './library_methods_count'
-
 class BintrayParser 
 
 	def initialize(page_start, page_end)
@@ -89,11 +87,4 @@ class BintrayParser
 		return compile_statements
 	end
 
-end
-
-if __FILE__ == $0
-	parser = BintrayParser.new(0, 292)
-	compile_statements = parser.parse
-
-	File.open("bintray_list", 'w') { |file| file.write(compile_statements) }
 end

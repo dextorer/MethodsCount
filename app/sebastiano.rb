@@ -2,11 +2,6 @@ require 'sinatra/base'
 require 'json'
 require 'sinatra/namespace'
 require 'active_record'
-require_relative './model'
-require_relative './library_methods_count'
-require_relative './android_arsenal_feed_parser'
-require_relative './services/queue_service'
-require_relative './services/db_service'
 
 class Sebastiano < Sinatra::Base
 
@@ -19,6 +14,8 @@ class Sebastiano < Sinatra::Base
     env["rack.errors"] =  ERROR_LOG
   }
 
+
+  ### Base endpoints ###
   get '/' do
     File.read(File.join('static', 'index.html'))
   end
@@ -40,8 +37,11 @@ class Sebastiano < Sinatra::Base
     }.to_json)
   end
 
+
+  ### APIs ###
   namespace '/api' do
 
+    ## Frontend APIs ##
     get '/stats/:lib_name' do
       content_type :json
       library_name = params[:lib_name]
@@ -149,12 +149,12 @@ class Sebastiano < Sinatra::Base
         lib_status.status = "processing"
         lib_status.save!
 
-        if ENV['RACK_ENV'] == 'development'
-          process_library(library_name)
-        else
+        if ENV['RACK_ENV'] == 'production'
           QueueService.enqeue(
             {lib_name: library_name}
           )
+        else
+          process_library(library_name)
         end
       end
 
@@ -171,11 +171,11 @@ class Sebastiano < Sinatra::Base
       top.to_json
     end
 
-    # Workers api
+    ## Workers APIs ##
     post '/aa' do
       content_type :json
       Thread.new do
-        parser = AndroidArsenalParser.new(1, 63)
+        parser = AndroidArsenalFeedParser.new(1, 63)
         compile_statements = parser.process_feed
       end
     end
@@ -189,22 +189,23 @@ class Sebastiano < Sinatra::Base
 
       process_library(library_name)
     end
+  end
 
 
-    private
+  private
 
-    def process_library(library_name)
-      lib_status = LibraryStatus.where(library_name: library_name).first
-      begin
-        LibraryMethodsCount.new(library_name).compute_dependencies()
-        lib_status.status = "done"
-      rescue => e
-        LOGGER.error "Failure, error is: #{e}"
-        LOGGER.error "Backtrace: #{e.backtrace}"
-        lib_status.status = "error"
-      ensure
-        lib_status.save!
-      end
+  def process_library(library_name)
+    lib_status = LibraryStatus.where(library_name: library_name).first
+    begin
+      LibraryMethodsCount.new(library_name).compute_dependencies()
+      lib_status.status = "done"
+    rescue Exception => e
+      LOGGER.error "Failure, error is: #{e}"
+      LOGGER.error "Backtrace: #{e.backtrace}"
+      lib_status.status = "error"
+    ensure
+      asd
+      lib_status.save!
     end
   end
 end

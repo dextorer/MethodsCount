@@ -3,8 +3,6 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-require_relative './library_methods_count'
-
 class AndroidArsenalFeedParser
 
   def initialize(page_start, page_end)
@@ -43,7 +41,7 @@ class AndroidArsenalFeedParser
 
           match.sub(/^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+\-a-z]+)$/) { |powermatch|
             compile_statements.push(powermatch)
-            LOGGER.info "[aa] lib #{powermatch}"
+            LOGGER.info "[aa feed] lib #{powermatch}"
             begin
               LibraryMethodsCount.new(powermatch).compute_dependencies()
             rescue => e

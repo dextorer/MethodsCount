@@ -7,8 +7,6 @@ require 'timeout'
 require 'json'
 require 'dotenv'
 
-require_relative './model'
-
 class Dep
   attr_accessor :fqn
   attr_accessor :group_id
@@ -211,9 +209,4 @@ class LibraryMethodsCount
     return response
   end
 
-end
-
-if __FILE__ == $0
-  library_name = ARGV[0]
-  LibraryMethodsCount.new(library_name).compute_dependencies()
 end

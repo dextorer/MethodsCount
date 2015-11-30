@@ -2,8 +2,6 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-require_relative './library_methods_count'
-
 class AndroidArsenalParser
 
   def initialize(page_start, page_end)
@@ -14,7 +12,7 @@ class AndroidArsenalParser
     @page_end = page_end
   end
 
-  def parse
+  def process
     start_index = @page_start
     end_index = @page_end
 
