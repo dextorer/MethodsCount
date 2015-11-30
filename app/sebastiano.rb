@@ -8,7 +8,7 @@ class Sebastiano < Sinatra::Base
   register Sinatra::Namespace
 
   set :static, true
-  set :public_folder, File.dirname(__FILE__) + '/static'
+  set :public_folder, File.dirname(__FILE__) + '../static'
 
   before {
     env["rack.errors"] =  ERROR_LOG
