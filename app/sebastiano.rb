@@ -2,11 +2,6 @@ require 'sinatra/base'
 require 'json'
 require 'sinatra/namespace'
 require 'active_record'
-require_relative './model'
-require_relative './library_methods_count'
-require_relative './android_arsenal_feed_parser'
-require_relative './services/queue_service'
-require_relative './services/db_service'
 
 class Sebastiano < Sinatra::Base
 
@@ -15,6 +10,12 @@ class Sebastiano < Sinatra::Base
   set :static, true
   set :public_folder, File.dirname(__FILE__) + '/static'
 
+  before {
+    env["rack.errors"] =  ERROR_LOG
+  }
+
+
+  ### Base endpoints ###
   get '/' do
     File.read(File.join('static', 'index.html'))
   end
@@ -22,22 +23,25 @@ class Sebastiano < Sinatra::Base
   get '/health' do
     db_available = DBService.connected?
     queue_available = QueueService.connected?
-    
+
     # In rare cases the DB connection drops completely at runtime.
     # In that case, it's better to mark the instance as unhealthy.
     # Also in case of high db load, if the connection
     # timesout, the instance is removed. Maybe this should be fixed at
-    # some point, by using just the desired db error. 
+    # some point, by using just the desired db error.
     status (db_available ? 200 : 502)
-    
+
     body ({
             db_up: db_available,
             queue_up: queue_available
     }.to_json)
   end
 
+
+  ### APIs ###
   namespace '/api' do
 
+    ## Frontend APIs ##
     get '/stats/:lib_name' do
       content_type :json
       library_name = params[:lib_name]
@@ -48,13 +52,13 @@ class Sebastiano < Sinatra::Base
       # handle '+' libraries
       if library_name.end_with?("+")
         ends_with_plus = true
-        puts "[GET] ends with plus!"
+        LOGGER.info "[GET] ends with plus!"
         plus_lib = LibraryStatus.where(library_name: library_name).first
         if plus_lib and plus_lib.status == "processing"
-          puts "[GET] plus_lib status: processing"
+          LOGGER.info "[GET] plus_lib status: processing"
           status = plus_lib.status
         elsif plus_lib
-          puts "[GET] plus_lib status: #{plus_lib.status}"
+          LOGGER.info "[GET] plus_lib status: #{plus_lib.status}"
           parts = library_name.split(/:/)
           most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
           status = plus_lib.status
@@ -66,7 +70,7 @@ class Sebastiano < Sinatra::Base
           most_recent.update_column("last_updated", Time.now.to_i)
           most_recent.save!
         else
-          puts "[GET] cannot find status"
+          LOGGER.info "[GET] cannot find status"
         end
       end
 
@@ -123,18 +127,18 @@ class Sebastiano < Sinatra::Base
         most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
         time_limit = (Time.now.to_i - 7 * 24 * 60 * 60)
         if most_recent
-          puts "[POST] creation_time: #{most_recent.creation_time}"
-          puts "[POST] time limit: #{time_limit}"
+          LOGGER.info "[POST] creation_time: #{most_recent.creation_time}"
+          LOGGER.info "[POST] time limit: #{time_limit}"
         end
         if most_recent and most_recent.last_updated > time_limit
-          puts "[POST] inside time limit!"
+          LOGGER.info "[POST] inside time limit!"
           new_lib = LibraryStatus.new
           new_lib.library_name = library_name
           new_lib.status = "done"
           new_lib.save!
           must_calculate = false
         else
-          puts "[POST] empty or outside time frame, calculating.."
+          LOGGER.info "[POST] empty or outside time frame, calculating.."
           LibraryStatus.where(library_name: library_name).destroy_all
         end
       end
@@ -145,12 +149,12 @@ class Sebastiano < Sinatra::Base
         lib_status.status = "processing"
         lib_status.save!
 
-        if ENV['RACK_ENV'] == 'development'
-          process_library(library_name)
-        else
+        if ENV['RACK_ENV'] == 'production'
           QueueService.enqeue(
             {lib_name: library_name}
           )
+        else
+          process_library(library_name)
         end
       end
 
@@ -167,24 +171,12 @@ class Sebastiano < Sinatra::Base
       top.to_json
     end
 
-    # Workers api
+    ## Workers APIs ##
     post '/aa' do
       content_type :json
       Thread.new do
-        parser = AndroidArsenalParser.new(1, 63)
+        parser = AndroidArsenalFeedParser.new(1, 63)
         compile_statements = parser.process_feed
-
-        puts "[aa] calculated feed"
-        compile_statements.each do |lib|
-          puts "[aa] lib #{lib}"
-          begin
-            lmc = LibraryMethodsCount.new(lib)
-            lmc.compute_dependencies
-          rescue => e
-            puts "[aa] Failure, error is: #{e}"
-            puts "[aa] Backtrace: #{e.backtrace}"
-          end
-        end
       end
     end
 
@@ -197,22 +189,23 @@ class Sebastiano < Sinatra::Base
 
       process_library(library_name)
     end
+  end
 
 
-    private
+  private
 
-    def process_library(library_name)
-      lib_status = LibraryStatus.where(library_name: library_name).first
-      begin
-        LibraryMethodsCount.new(library_name).compute_dependencies()
-        lib_status.status = "done"
-      rescue => e
-        puts "Failure, error is: #{e}"
-        puts "Backtrace: #{e.backtrace}"
-        lib_status.status = "error"
-      ensure
-        lib_status.save!
-      end
+  def process_library(library_name)
+    lib_status = LibraryStatus.where(library_name: library_name).first
+    begin
+      LibraryMethodsCount.new(library_name).compute_dependencies()
+      lib_status.status = "done"
+    rescue Exception => e
+      LOGGER.error "Failure, error is: #{e}"
+      LOGGER.error "Backtrace: #{e.backtrace}"
+      lib_status.status = "error"
+    ensure
+      asd
+      lib_status.save!
     end
   end
 end

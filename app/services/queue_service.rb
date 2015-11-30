@@ -8,7 +8,7 @@ module QueueService
                                  queue_url: ENV['SQS_QUEUE_URL']
       })
     rescue Exception => e
-      puts e
+      LOGGER.error e.message
       return false
     end
 

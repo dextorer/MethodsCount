@@ -1,8 +1,2 @@
-require 'rubygems'
-require 'bundler'
-
-Bundler.require
-
-require './sebastiano'
-
+require_relative './config/boot'
 run Sebastiano

@@ -2,8 +2,6 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-require_relative './library_methods_count'
-
 class BintrayParser 
 
 	def initialize(page_start, page_end)
@@ -25,7 +23,7 @@ class BintrayParser
 		
 		while start_index < end_index do
 			begin
-				puts "Processing: #{start_index}"
+				LOGGER.info "Processing: #{start_index}"
 				begin
 					page = Nokogiri::HTML(open("#{@base_url}#{@rating_path}#{start_index}"))
 				rescue
@@ -41,7 +39,7 @@ class BintrayParser
 					begin
 						inner_page = Nokogiri::HTML(open(real_url))
 					rescue
-						puts "Inner page error"
+						LOGGER.error "Inner page error with " + real_url
 						next
 					end
 					website_links = inner_page.css("#about div.content.table div[data-id='vcs'] div.td.value a")
@@ -56,7 +54,7 @@ class BintrayParser
 					begin
 						lib_page = Nokogiri::HTML(open(lib_url))
 					rescue
-						puts "Error opening page"
+						LOGGER.error "Error opening page" + lib_url
 						next
 					end
 					lib_content = lib_page.css('pre')	
@@ -71,14 +69,14 @@ class BintrayParser
 								.gsub(/'/, '')
 							
 							match.sub(/^([a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+\-a-z]+)$/) { |powermatch|
-								puts powermatch
+								LOGGER.info powermatch
 								compile_statements.push(powermatch)
 							}
 						}
 					end
 				end
 			rescue
-				puts "General error"
+				LOGGER.error "General error"
 				next
 			ensure
 				start_index = start_index + @increment_factor
@@ -89,11 +87,4 @@ class BintrayParser
 		return compile_statements
 	end
 
-end
-
-if __FILE__ == $0
-	parser = BintrayParser.new(0, 292)
-	compile_statements = parser.parse
-
-	File.open("bintray_list", 'w') { |file| file.write(compile_statements) }
 end
