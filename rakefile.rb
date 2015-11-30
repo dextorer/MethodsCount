@@ -1,10 +1,10 @@
-require "sinatra/activerecord/rake"
+require './app/model'
+require 'sinatra/activerecord/rake'
 
 task :environment do
   ENV['RACK_ENV'] ||= 'development'
   require './config/boot.rb'
 end
-
 
 namespace :crawlers do
 
