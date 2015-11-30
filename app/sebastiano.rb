@@ -17,7 +17,7 @@ class Sebastiano < Sinatra::Base
 
   ### Base endpoints ###
   get '/' do
-    File.read(File.join('static', 'index.html'))
+    File.read(File.join(File.dirname(__FILE__) + '/../static', 'index.html'))
   end
 
   get '/health' do
