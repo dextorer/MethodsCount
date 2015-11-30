@@ -20,7 +20,7 @@ else
   ERROR_LOG = STDOUT
 end
 
-LOGGER.level = (env == 'production' ? Logger::ERROR : Logger::DEBUG)
+LOGGER.level = (env == :production ? Logger::ERROR : Logger::DEBUG)
 
 # App deps
 require_all 'app'
