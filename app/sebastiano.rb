@@ -204,7 +204,6 @@ class Sebastiano < Sinatra::Base
       LOGGER.error "Backtrace: #{e.backtrace}"
       lib_status.status = "error"
     ensure
-      asd
       lib_status.save!
     end
   end
