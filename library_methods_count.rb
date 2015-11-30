@@ -41,9 +41,6 @@ class LibraryMethodsCount
   attr_accessor :library
   attr_reader :library_with_version
 
-  @@logger = Logger.new(STDOUT)
-  @@logger.level = Logger::DEBUG
-
   # Warning: long taking blocking procedure
   def initialize(library_name="")
     return nil if library_name.blank?
@@ -79,7 +76,7 @@ class LibraryMethodsCount
     log_name = dep.artifact_id
     item = dep.file
     if item.end_with?(".aar")
-      @@logger.debug("#{@tag} [#{log_name}] Format: AAR")
+      LOGGER.debug("#{@tag} [#{log_name}] Format: AAR")
       # extract AAR's classes.jar
       system("unzip -q #{item} -d #{tmp_dir} classes.jar")
       if File.exists?("#{tmp_dir}/classes.jar")
@@ -88,7 +85,7 @@ class LibraryMethodsCount
         res_only = true
       end
     else
-      @@logger.debug("#{@tag} [#{log_name}] Format: JAR")
+      LOGGER.debug("#{@tag} [#{log_name}] Format: JAR")
     end
 
     if not res_only
@@ -96,7 +93,7 @@ class LibraryMethodsCount
       `unzip -l #{item} | grep -x .*\.class$`
       if $?.exitstatus != 0
         res_only = true
-        @@logger.debug("#{@tag} [#{log_name}] Empty JAR file (no .class files found), consider as res-only")
+        LOGGER.debug("#{@tag} [#{log_name}] Empty JAR file (no .class files found), consider as res-only")
       end
     end
 
@@ -110,13 +107,13 @@ class LibraryMethodsCount
       end
 
       if not File.exists?("#{item}")
-        @@logger.error("#{@tag} [#{log_name}] Target does not exist")
+        LOGGER.error("#{@tag} [#{log_name}] Target does not exist")
         raise "Target #{item} does not exist"
       end
 
       begin
         Timeout::timeout(2 * 60) { # 2 minutes
-          @@logger.debug("#{@tag} [#{log_name}] exec: #{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
+          LOGGER.debug("#{@tag} [#{log_name}] exec: #{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
           system("#{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
         }
       rescue Timeout::Error
@@ -125,9 +122,9 @@ class LibraryMethodsCount
       
       dx_result = $?.exitstatus
       if dx_result == 0
-        @@logger.debug("#{@tag} [#{log_name}] DXed successfully (result code: #{dx_result})")
+        LOGGER.debug("#{@tag} [#{log_name}] DXed successfully (result code: #{dx_result})")
       else
-        @@logger.error("Could not create DEX for #{item}")
+        LOGGER.error("Could not create DEX for #{item}")
         raise "Could not create DEX for #{item}"
       end
       
@@ -136,11 +133,11 @@ class LibraryMethodsCount
       dep.count = count.to_i()
       dep.dex_size = File.size("#{tmp_dir}/tmp.dex")
 
-      @@logger.debug("#{@tag} [#{log_name}] Count: #{count}")
+      LOGGER.debug("#{@tag} [#{log_name}] Count: #{count}")
     else
       dep.count = 0
-      @@logger.debug("#{@tag} [#{log_name}] Target: res-only")
-      @@logger.debug("#{@tag} [#{log_name}] Count: 0")
+      LOGGER.debug("#{@tag} [#{log_name}] Target: res-only")
+      LOGGER.debug("#{@tag} [#{log_name}] Count: 0")
     end
     if File.exist?("#{tmp_dir}/classes.jar")
       File.delete("#{tmp_dir}/classes.jar")
@@ -193,7 +190,7 @@ class LibraryMethodsCount
     end
 
     if inserted_id < 0
-      @@logger.error("DB insertion failed")
+      LOGGER.error("DB insertion failed")
       raise "DB insertion failed"
     end
   end
@@ -210,7 +207,7 @@ class LibraryMethodsCount
 
     response = {:library_fqn => lib.fqn, :library_methods => lib.count, :library_size => lib.size, :library_dex_size => lib.dex_size, :dependencies_count => deps.length, :dependencies => deps_array}
 
-    puts response.to_json
+    LOGGER.info response.to_json
     return response
   end
 
