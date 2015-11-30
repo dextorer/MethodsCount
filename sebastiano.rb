@@ -6,6 +6,7 @@ require_relative './model'
 require_relative './library_methods_count'
 require_relative './android_arsenal_feed_parser'
 require_relative './services/queue_service'
+require_relative './services/db_service'
 
 class Sebastiano < Sinatra::Base
 
@@ -16,6 +17,23 @@ class Sebastiano < Sinatra::Base
 
   get '/' do
     File.read(File.join('static', 'index.html'))
+  end
+
+  get '/health' do
+    db_available = DBService.connected?
+    queue_available = QueueService.connected?
+    
+    # In rare cases the DB connection drops completely at runtime.
+    # In that case, it's better to mark the instance as unhealthy.
+    # Also in case of high db load, if the connection
+    # timesout, the instance is removed. Maybe this should be fixed at
+    # some point, by using just the desired db error. 
+    status (db_available ? 200 : 502)
+    
+    body ({
+            db_up: db_available,
+            queue_up: queue_available
+    }.to_json)
   end
 
   namespace '/api' do

@@ -12,5 +12,9 @@ gem 'dotenv'
 gem 'aws-sdk', '~> 2'
 gem 'nokogiri'
 gem 'byebug'
-gem 'rspec-sinatra'
-gem 'rspec'
+
+group :development do
+	gem 'rerun'
+	gem 'rspec-sinatra'
+	gem 'rspec'
+end
