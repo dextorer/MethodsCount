@@ -34,7 +34,7 @@ end
 
 # Compute methods count for given lib name
 # ~$ rake compute <lib name>
-task :compute, :environment do
+task :compute => :environment do
   library_name = ARGV.last
   LibraryMethodsCount.new(library_name).compute_dependencies()
 end

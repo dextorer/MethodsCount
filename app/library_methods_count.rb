@@ -24,7 +24,7 @@ class Dep
 
   def self.from_gradle_output(output)
     deps = Array.new
-    output.split("\n").each do |line| 
+    output.split("\n").each do |line|
       if line
         deps.push(Dep.new(line))
       end
@@ -111,13 +111,13 @@ class LibraryMethodsCount
 
       begin
         Timeout::timeout(2 * 60) { # 2 minutes
-          LOGGER.debug("#{@tag} [#{log_name}] exec: #{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
-          system("#{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
-        }
+                                   LOGGER.debug("#{@tag} [#{log_name}] exec: #{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
+                                   system("#{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
+                                   }
       rescue Timeout::Error
         raise "'dx' operation timed out, invalidating current library"
       end
-      
+
       dx_result = $?.exitstatus
       if dx_result == 0
         LOGGER.debug("#{@tag} [#{log_name}] DXed successfully (result code: #{dx_result})")
@@ -125,7 +125,7 @@ class LibraryMethodsCount
         LOGGER.error("Could not create DEX for #{item}")
         raise "Could not create DEX for #{item}"
       end
-      
+
       # extract methods count, update counter
       count = `cat #{tmp_dir}/tmp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
       dep.count = count.to_i()
@@ -156,7 +156,7 @@ class LibraryMethodsCount
     deps = Dep.from_gradle_output(result)
 
     # filter already processed deps
-    filtered_deps = deps.reject do |dep| 
+    filtered_deps = deps.reject do |dep|
       lib = Libraries.find_by_fqn(dep.fqn)
       lib and lib.id > 0
     end
