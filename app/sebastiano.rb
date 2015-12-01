@@ -10,6 +10,8 @@ class Sebastiano < Sinatra::Base
   set :static, true
   set :public_folder, File.dirname(__FILE__) + '/../static'
 
+  FORMAT_SUFFIXES = ['@aa', '@jar']
+
   before {
     env["rack.errors"] =  ERROR_LOG
   }
@@ -86,11 +88,7 @@ class Sebastiano < Sinatra::Base
               parts = library_name.split(/:/)
               library_entry = Libraries.where(["group_id = ? and artifact_id = ? and version = ?", parts[0], parts[1], parts[2]]).first
             else
-              in_db = library_name
-              if library_name.end_with?("@aar") or library_name.end_with?("@jar")
-                in_db = library_name.sub(/@aar/, '').sub(/@jar/, '')
-              end
-              library_entry = Libraries.find_by_fqn(in_db)
+              library_entry = Libraries.find_by_fqn(library_name)
             end
             library_entry.increment("hit_count")
             library_entry.update_column("creation_time", Time.now.to_i)
@@ -117,7 +115,7 @@ class Sebastiano < Sinatra::Base
 
     post '/request/:lib_name' do |argument|
       content_type :json
-      library_name = params[:lib_name].gsub(/@aa$/, "")
+      library_name = params[:lib_name].gsub(/(#{FORMAT_SUFFIXES.join('|')})$/, '')
 
       must_calculate = true
 
