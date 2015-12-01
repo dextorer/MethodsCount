@@ -73,6 +73,7 @@ class LibraryMethodsCount
     res_only = false
     log_name = dep.artifact_id
     item = dep.file
+    LOGGER.debug("#{dep} #{tmp_dir} #{item}")
     if item.end_with?(".aar")
       LOGGER.debug("#{@tag} [#{log_name}] Format: AAR")
       # extract AAR's classes.jar
