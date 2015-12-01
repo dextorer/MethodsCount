@@ -179,9 +179,7 @@ class LibraryMethodsCount
       end
       if i == 0
         inserted_id = lib.id
-        if @library.end_with?("+")
-          @library_with_version = lib.fqn
-        end
+        @library_with_version = lib.fqn
       else
         Dependencies.create(library_id: inserted_id, dependency_id: lib.id)
       end
