@@ -117,7 +117,7 @@ class Sebastiano < Sinatra::Base
 
     post '/request/:lib_name' do |argument|
       content_type :json
-      library_name = params[:lib_name]
+      library_name = params[:lib_name].gsub(/@aa$/, "")
 
       must_calculate = true
 
