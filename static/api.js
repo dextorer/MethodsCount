@@ -41,8 +41,8 @@ function stopMessageCycling() {
 
 function submitLibraryRequest(libraryName) {
    // sanitize
-   libraryName = libraryName.replace(/(@aa|@jar)$/, "");
-
+   libraryName = libraryName.replace(/(@aar|@jar)$/, "");
+   console.log(libraryName);
    if ($('#welcome-card-container').css('visibility') == 'visible') {
       $('#welcome-card-container').fadeOut('fast', function() {
          $('#welcome-card-container').css('display', 'none');
