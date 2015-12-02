@@ -347,6 +347,18 @@ footer .row {
 	margin-top: 2px;
 }
 
+.copyright-row-small-screen {
+	float: left;
+}
+
+.footer-copyright .copyright-row-small-screen:nth-child(1) {
+	margin-right: 4px;
+}
+
+.footer-copyright .copyright-row-small-screen:nth-child(2) {
+	margin-right: 4px;
+}
+
 .copyright-row {
 	margin-top: 0;
 	margin-bottom: 0;
@@ -391,7 +403,7 @@ footer .row {
 #gde-badge-container {
 	float: left;
     margin-left: 7px;
-    margin-top: 3px;
+    margin-top: 5px;
     margin-bottom: 4px;
 }
 
