@@ -306,7 +306,7 @@ footer .row {
 
 #copyright-row-year {
 	width: 100%;
-	margin-top: 12px;
+	margin-top: 2px;
 }
 
 #copyright-row-year p {
@@ -315,7 +315,7 @@ footer .row {
 }
 
 #copyright-row-people {
-	margin-left: 10px;
+	margin-left: -10px;
 }
 
 #copyright-row-people #sebastiano {
@@ -354,10 +354,45 @@ footer .row {
 	line-height: 14px;
 }
 
+.footer-table {
+	float: left;
+	width: inherit !important;
+	border-right: 1px solid white;
+    border-collapse: separate;
+    border-spacing: 25px 0px;
+}
+
+.footer-table tr {
+	padding: 0 !important;
+}
+
+.footer-table td {
+	padding: 0 !important;
+	padding-bottom: 2px;
+}
+
+.footer-table .extra-margin {
+	margin-left: 0px;
+}
+
+#copyright-row-people table:nth-child(3) {
+	border-right: 0px !important;
+}
+
+#copyright-row-people table tr:nth-child(1) p {
+	font-weight: 300;
+    letter-spacing: 1;
+}
+
+#copyright-row-people table tr:nth-child(2) p {
+	-webkit-font-smoothing: antialiased;
+}
+
 #gde-badge-container {
 	float: left;
-	margin-left: 7px;
-    margin-top: 16px;
+    margin-left: 7px;
+    margin-top: 3px;
+    margin-bottom: 4px;
 }
 
 #gde-badge {
