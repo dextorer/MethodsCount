@@ -14,7 +14,7 @@ main {
 
 #navigation-container {
 	float: right;
-	width: 150px;
+	width: 200px;
 }
 
 #page-title {
@@ -62,6 +62,15 @@ main {
 	margin-top: 20px;
 	display: block;
 	position: relative;
+}
+
+#plugin-container {
+	display: none;
+	margin-top: 20px;
+}
+
+#plugin-card {
+	padding: 30px;
 }
 
 #about-container {
@@ -256,6 +265,10 @@ td {
 
 #output-block {
 	margin-top: 10px;
+}
+
+.plugin-paragraph {
+	font-size: 17px;
 }
 
 .about-paragraph {

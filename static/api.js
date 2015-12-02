@@ -266,23 +266,54 @@ $.validate({
 });
 
 var mainContainer = $('#main-container');
+var pluginContainer = $('#plugin-container');
 var aboutContainer = $('#about-container');
 
 $('#tab-main').click(function() {
    if (mainContainer.css('visibility') == 'hidden' || mainContainer.css('display') == 'none') {
-      aboutContainer.fadeOut('fast', function() {
-         aboutContainer.css('display', 'none');
-         mainContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
-      });
+      if (pluginContainer.css('display') == 'block') {
+         pluginContainer.fadeOut('fast', function() {
+            pluginContainer.css('display', 'none');
+            mainContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+         });
+      } else {
+         aboutContainer.fadeOut('fast', function() {
+            aboutContainer.css('display', 'none');
+            mainContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+         });
+      }
+   }
+});
+
+$('#tab-plugin').click(function() {
+   if (pluginContainer.css('visibility') == 'hidden' || pluginContainer.css('display') == 'none') {
+      if (mainContainer.css('display') == 'block') {
+         mainContainer.fadeOut('fast', function() {
+            mainContainer.css('display', 'none');
+            pluginContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+         });
+      } else {
+         aboutContainer.fadeOut('fast', function() {
+            aboutContainer.css('display', 'none');
+            pluginContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+         });
+      }
    }
 });
 
 $('#tab-about').click(function() {
    if (aboutContainer.css('visibility') == 'hidden' || aboutContainer.css('display') == 'none') {
-      mainContainer.fadeOut('fast', function() {
-         mainContainer.css('display', 'none');
-         aboutContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
-      });
+      if (pluginContainer.css('display') == 'block') {
+         pluginContainer.fadeOut('fast', function() {
+            pluginContainer.css('display', 'none');
+            aboutContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+         });
+      } else {
+         mainContainer.fadeOut('fast', function() {
+            mainContainer.css('display', 'none');
+            aboutContainer.css('visibility','visible').hide().fadeIn('fast', function() {});
+         });
+      }
    }
 });
 
