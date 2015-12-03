@@ -98,7 +98,6 @@ class Sebastiano < Sinatra::Base
             status = library_status.status
           elsif library_status.status == "error"
             status = library_status.status
-            LibraryStatus.where(library_name: library_name).destroy_all
           end
         else
           status = "undefined"
