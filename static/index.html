@@ -18,8 +18,9 @@
 					<div class="row">
     					<div class="col s12">
 							<ul class="tabs">
-								<li id="tab-main" class="tab col s6 active"><a href="">Main</a></li>
-								<li id="tab-about" class="tab col s6"><a href="">About</a></li>
+								<li id="tab-main" class="tab col s4 active"><a href="">Main</a></li>
+								<li id="tab-plugin" class="tab col s4"><a href="">Plugin</a></li>
+								<li id="tab-about" class="tab col s4"><a href="">About</a></li>
 							</ul>
 						</div>
 					</div>
@@ -135,6 +136,31 @@
 	      	</div>
       	</div>
 
+      	<div id="plugin-container" class="container card-container">
+      		<div id="plugin-card" class="card">
+      			<h5>Android Methods Count</h5>
+      				<p class="flow-text plugin-paragraph">A simple Studio/IntelliJ plugin that parses your Android library dependencies and shows the methods count as an handy hint.</p>
+					<img class="" width="532" src="images/methods-count-plugin-1.png" />
+
+      				<p class="flow-text plugin-paragraph">For more information, you can simply tap on the blue circle to the left and you will land on the appropriate library page of this website.</p>
+      				
+  				 	<img class="" width="530" src="images/methods-count-plugin-2.png" />
+
+				<br/>
+				<h5>Installation</h5>
+				 	<ol>
+				 		<li>Open Android Studio / IntelliJ IDEA preferences</li>
+				 		<li>Select 'Plugins'</li>
+				 		<li>Select 'Browse repositories...'</li>
+				 		<li>Select 'Android Methods Count' (or type some keywords in the search box)</li>
+				 		<li>Press install and restart the IDE once the installation completes</li>
+			 		</ol>
+
+			 		<p class="flow-text plugin-paragraph">Alternatively, you can download the plugin archive from <a href="https://plugins.jetbrains.com/plugin/8076?pr=" target="_blank">here</a>.</p>
+
+      		</div>
+      	</div>
+
       	<div id="about-container" class="container card-container">
       		<div id="about-card" class="card">
       			<h5>On Android and DEX</h5>
@@ -184,6 +210,15 @@
       			<h5>What's next?</h5>
       				<p class="flow-text about-paragraph">This is the initial version of the service, and is therefore barely functional. First of all, we will try to make it as stable and responsive as possible. A thing that we have planned for the near future is adding a chart for each library, that shows <b>the trend on the methods count and the size</b>. We believe it's going to be extremely interesting, and it will perhaps instill some awareness to developers that recklessly include huge libraries without seeking for alternatives first.</p>
 
+					<p class="flow-text about-paragraph">Roughly, this is what the current roadmap looks like:</p>
+
+					<ul class="flow-text about-paragraph collection">
+      					<li class="collection-item">Stability and reliability</li>
+      					<li class="collection-item">Comparisons</li>
+      					<li class="collection-item">Process multiple entries at once</li>
+      					<li class="collection-item">Charts</li>
+      				</ul>
+
   				<br/>
       			<h5>Can I help?</h5>
       				<p class="flow-text about-paragraph">Sure! We are extremely open to suggestions and improvements. Be sure to contact us via the social channels that you find at the bottom of this page. And in the meantime, thank you! :-)</p>
@@ -196,7 +231,7 @@
       					<li class="collection-item"><a href="https://twitter.com/@graphicure" target="_blank">Luca Burgio</a> - Gave me the design guidelines we needed</li>
       					<li class="collection-item"><a href="https://twitter.com/@ziby_bonny" target="_blank">Stefano Bonetta</a> and <a href="https://twitter.com/@mattiamaestrini" target="_blank">Mattia Maestrini</a> - Amazing colleagues and friends</li>
 						<li class="collection-item">The "Bonanza" - <a href="https://twitter.com/@_tiwiz" target="_blank">Roberto Orgiu</a>, <a href="https://twitter.com/@Mariuxtheone" target="_blank">Mario Viviani</a>, <a href="https://twitter.com/@seebrock3r" target="_blank">Sebastiano Poggi</a>, <a href="https://twitter.com/@frapontillo" target="_blank">Francesco Pontillo</a>, <a href="https://twitter.com/@mbonifazi" target="_blank">Matteo Bonifazi</a>, <a href="https://twitter.com/@danybony_" target="_blank">Daniele Bonaldo</a></li>
-						<li class="collection-item"><a href="https://twitter.com/@danlew42" target="_blank">Dan Lew</a> - For the early feedback</li>
+						<li class="collection-item">Dan Lew, Jake Wharton and the other Android GDEs - For the early feedback</li>
       				</ul>
       		</div>
       	</div>
@@ -253,26 +288,76 @@
     				<div id="gde-badge-container" class="hide-on-med-and-down">
     					<a href="https://developers.google.com/experts/people/sebastiano-gottardo" target="_blank"><img id="gde-badge" src="images/gde-android-badge.png" /></a>
 					</div>
-    				<div>
-						<div id="copyright-row-people" class="copyright-row-container">
-							<div id="sebastiano-container">
-								<p id="sebastiano" class="copyright-row white-text">Sebastiano Gottardo</p>
-								<a href="https://twitter.com/@rotxed" target="_blank"><img src="images/twitter.png" class="social" /></a>
-								<a href="https://plus.google.com/+SebastianoGottardo" target="_blank" class="hide-on-med-and-down"><img src="images/plus.png" class="social" /></a>
-								<a href="https://it.linkedin.com/in/sebastianogottardo" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
-								<a href="https://github.com/dextorer" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+    				<div style="overflow:hidden;">
+						<div id="copyright-row-people" class="copyright-row-container hide-on-med-and-down">
+							<table class="footer-table">
+								<tr>
+									<td>
+										<p class="copyright-row white-text">Sebastiano</p>
+									</td>
+									<td>
+										<a href="https://twitter.com/@rotxed" target="_blank"><img src="images/twitter.png" class="social" /></a>
+										<a href="https://plus.google.com/+SebastianoGottardo" target="_blank" class="hide-on-med-and-down"><img src="images/plus.png" class="social" /></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class="copyright-row white-text extra-margin">Gottardo</p>
+									</td>
+									<td>
+										<a href="https://it.linkedin.com/in/sebastianogottardo" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
+										<a href="https://github.com/dextorer" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+									</td>
+								</tr>
+							</table>
+							<table class="footer-table">
+								<tr>
+									<td>
+										<p class="copyright-row white-text">Nicola</p>
+									</td>
+									<td>
+										<a href="https://twitter.com/@sirnicolaz" target="_blank"><img src="images/twitter.png" class="social" /></a>
+										<a href="https://de.linkedin.com/in/nicolamiotto" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class="copyright-row white-text extra-margin">Miotto</p>
+									</td>
+									<td>
+										<a href="https://github.com/sirnicolaz" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+									</td>
+								</tr>
+							</table>
+							<table class="footer-table">
+								<tr>
+									<td>
+										<p class="copyright-row white-text">Dario</p>
+									</td>
+									<td>
+										<a href="https://twitter.com/@dmarcato" target="_blank"><img src="images/twitter.png" class="social" /></a>
+										<a href="https://it.linkedin.com/in/dariomarcato" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<p class="copyright-row white-text extra-margin">Marcato</p>
+									</td>
+									<td>
+										<a href="https://github.com/dmarcato" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class="hide-on-med-and-up">
+							<div class="copyright-row-small-screen">
+								<a href="https://twitter.com/rotxed" target="_blank"><p class="white-text">Sebastiano |</p></a>
 							</div>
-							<div id="nicola-container">
-								<p id="nicola" class="copyright-row white-text">Nicola Miotto</p>
-								<a href="https://twitter.com/@sirnicolaz" target="_blank"><img src="images/twitter.png" class="social" /></a>
-								<a href="https://de.linkedin.com/in/nicolamiotto" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
-								<a href="https://github.com/sirnicolaz" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+							<div class="copyright-row-small-screen">
+								<a href="https://twitter.com/sirnicolaz" target="_blank"><p class="white-text">Nicola |</p></a>
 							</div>
-							<div id="dario-container">
-								<p id="dario" class="copyright-row white-text">Dario Marcato</p>
-								<a href="https://twitter.com/@dmarcato" target="_blank"><img src="images/twitter.png" class="social" /></a>
-								<a href="https://it.linkedin.com/in/dariomarcato" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
-								<a href="https://github.com/dmarcato" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+							<div class="copyright-row-small-screen">
+								<a href="https://twitter.com/dmarcato" target="_blank"><p class="white-text">Dario</p></a>
 							</div>
 						</div>
 					</div>
