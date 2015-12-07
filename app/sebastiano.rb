@@ -129,8 +129,7 @@ class Sebastiano < Sinatra::Base
         end
         if most_recent and most_recent.last_updated > time_limit
           LOGGER.info "[POST] inside time limit!"
-          new_lib = LibraryStatus.new
-          new_lib.library_name = library_name
+          new_lib = LibraryStatus.where(library_name: library_name).first_or_create
           new_lib.status = "done"
           new_lib.save!
           must_calculate = false
