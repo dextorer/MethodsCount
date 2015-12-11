@@ -7,32 +7,6 @@ require 'timeout'
 require 'json'
 require 'dotenv'
 
-class Dep
-  attr_accessor :fqn
-  attr_accessor :group_id
-  attr_accessor :artifact_id
-  attr_accessor :version
-  attr_accessor :file
-  attr_accessor :size
-  attr_accessor :count
-  attr_accessor :dex_size
-
-  def initialize(line)
-    @group_id, @artifact_id, @version, @file, @size = line.split("|")
-    @fqn = "#{group_id}:#{artifact_id}:#{version}"
-  end
-
-  def self.from_gradle_output(output)
-    deps = Array.new
-    output.split("\n").each do |line|
-      if line
-        deps.push(Dep.new(line))
-      end
-    end
-    return deps
-  end
-
-end
 
 class LibraryMethodsCount
 
@@ -44,7 +18,6 @@ class LibraryMethodsCount
     return nil if library_name.blank?
 
     @tag = "[LibraryMethodsCount]"
-    @gradle_env_dir = "gradle_env"
     Dotenv.load
     @library = library_name
     @library_with_version = @library.end_with?("+") ? nil : @library
@@ -138,23 +111,16 @@ class LibraryMethodsCount
       LOGGER.debug("#{@tag} [#{log_name}] Target: res-only")
       LOGGER.debug("#{@tag} [#{log_name}] Count: 0")
     end
-    if File.exist?("#{tmp_dir}/classes.jar")
-      File.delete("#{tmp_dir}/classes.jar")
-    end
-    if File.exist?("#{tmp_dir}/tmp.dex")
-      File.delete("#{tmp_dir}/tmp.dex")
-    end
+
+    [
+      "#{tmp_dir}/classes.jar",
+      "#{tmp_dir}/tmp.dex"
+    ].map { |f| File.delete(f) if File.exists?(f) }
   end
 
   def process_library
-    # calculate dependencies with gradle
-    result = `#{@gradle_env_dir}/gradlew -p #{@gradle_env_dir} -q deps -PinputDep=#{@library}`
-    if $?.exitstatus != 0
-      raise "Error while calculating dependencies with Gradle"
-    end
-
-    # generate Dep classes from gradle output
-    deps = Dep.from_gradle_output(result)
+    # generate Dep classes from gradle
+    deps = GradleService.get_deps(@library)
 
     # filter already processed deps
     filtered_deps = deps.reject { |d| Libraries.exists?(d.fqn) }
@@ -178,7 +144,7 @@ class LibraryMethodsCount
     ).first_or_create
     lib.hit_count += 1
     lib.save!
-    
+
     @library_with_version = lib.fqn
 
     # Can it really happen?
