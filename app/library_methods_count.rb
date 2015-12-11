@@ -157,10 +157,7 @@ class LibraryMethodsCount
     deps = Dep.from_gradle_output(result)
 
     # filter already processed deps
-    filtered_deps = deps.reject do |dep|
-      lib = Libraries.find_by_fqn(dep.fqn)
-      lib and lib.id > 0
-    end
+    filtered_deps = deps.reject { |d| Libraries.exists?(d.fqn) }
 
     # calculate methods count for new dependencies
     rand = Random::DEFAULT.rand().to_s
@@ -169,23 +166,22 @@ class LibraryMethodsCount
     filtered_deps.each { |dep| count_methods(dep, tmp_dir) }
     Dir.delete(tmp_dir)
 
-    # insert all dependencies into DB (first dep is always the requested one)
-    inserted_id = -1
-    deps.each_with_index do |dep, i|
-      lib = nil
-      if filtered_deps.index(dep) == nil
-        lib = Libraries.find_by_fqn(dep.fqn)
-      else
-        lib = Libraries.create(fqn: dep.fqn, group_id: dep.group_id, artifact_id: dep.artifact_id, version: dep.version, count: dep.count, size: dep.size, dex_size: dep.dex_size, hit_count: 1, creation_time: Time.now.to_i, last_updated: Time.now.to_i)
-      end
-      if i == 0
-        inserted_id = lib.id
-        @library_with_version = lib.fqn
-      else
-        Dependencies.create(library_id: inserted_id, dependency_id: lib.id)
-      end
+    current_lib = deps.first
+    actual_deps = deps[1..-1]
+    actual_deps.each do |dep|
+      Dependencies.create(library_name: current_lib.fqn, dependency_name: dep.fqn)
     end
 
+    lib = Libraries.where(
+      fqn: current_lib.fqn, group_id: current_lib.group_id, artifact_id: current_lib.artifact_id,
+      version: current_lib.version, count: current_lib.count, size: current_lib.size, dex_size: current_lib.dex_size,
+    ).first_or_create
+    lib.hit_count += 1
+    lib.save!
+    
+    @library_with_version = lib.fqn
+
+    # Can it really happen?
     if inserted_id < 0
       LOGGER.error("DB insertion failed")
       raise "DB insertion failed"
@@ -194,11 +190,11 @@ class LibraryMethodsCount
 
   def generate_response
     lib = Libraries.where(:fqn => @library_with_version).first
-    deps = Dependencies.where(library_id: lib.id).all
+    deps = Dependencies.where(library_name: lib.fqn).all
     deps_array = Array.new
     deps.each do |dep|
-      dep_id = dep.dependency_id
-      dep_lib = Libraries.find(dep_id.to_i)
+      dep_name = dep.dependency_name
+      dep_lib = Libraries.find_by_fqn(dep_name)
       deps_array.push({ :dependency_name => dep_lib.fqn, :dependency_count => dep_lib.count, :dependency_size => dep_lib.size, :dependency_dex_size => dep_lib.dex_size })
     end
 
@@ -207,5 +203,4 @@ class LibraryMethodsCount
     LOGGER.info response.to_json
     return response
   end
-
 end

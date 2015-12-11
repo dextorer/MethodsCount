@@ -66,10 +66,6 @@ class Sebastiano < Sinatra::Base
           status = plus_lib.status
           result = LibraryMethodsCount.new(most_recent.fqn).compute_dependencies()
           most_recent.increment("hit_count")
-          if most_recent.creation_time == 0
-            library_entry.update_column("creation_time", Time.now.to_i)
-          end
-          most_recent.update_column("last_updated", Time.now.to_i)
           most_recent.save!
         else
           LOGGER.info "[GET] cannot find status"
@@ -91,8 +87,6 @@ class Sebastiano < Sinatra::Base
               library_entry = Libraries.find_by_fqn(library_name)
             end
             library_entry.increment("hit_count")
-            library_entry.update_column("creation_time", Time.now.to_i)
-            library_entry.update_column("last_updated", Time.now.to_i)
             library_entry.save!
           elsif library_status.status == "processing"
             status = library_status.status
@@ -124,10 +118,10 @@ class Sebastiano < Sinatra::Base
         most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
         time_limit = (Time.now.to_i - 7 * 24 * 60 * 60)
         if most_recent
-          LOGGER.info "[POST] creation_time: #{most_recent.creation_time}"
+          LOGGER.info "[POST] creation_time: #{most_recent.created_at}"
           LOGGER.info "[POST] time limit: #{time_limit}"
         end
-        if most_recent and most_recent.last_updated > time_limit
+        if most_recent and most_recent.updated_at < 1.week.ago
           LOGGER.info "[POST] inside time limit!"
           new_lib = LibraryStatus.where(library_name: library_name).first_or_create
           new_lib.status = "done"
