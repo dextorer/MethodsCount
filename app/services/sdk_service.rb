@@ -4,7 +4,7 @@ class SdkService
   
   LOGGER_TAG = "[LibraryMethodsCount]"
 
-  def initialize(artifact_id)
+  def initialize(artifact_id, workspace)
     @artifact_id = artifact_id
     @workspace = workspace
 
