@@ -72,8 +72,8 @@ class SdkService
     if is_aar
       # extract AAR's classes.jar
       system("unzip -q #{file_path} -d #{@workspace} classes.jar")
-      if File.exists?("#{path(classes.jar)}")
-        jar_path = "classes.jar"
+      if File.exists?(path('classes.jar'))
+        jar_path = path('classes.jar')
       end
     end
 
