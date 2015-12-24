@@ -44,7 +44,7 @@ class LibraryMethodsCount
 
       if !jar.nil?
         dep.count, dep.dex_size = service.dex(jar)
-        LOGGER.debug("#{@tag} [#{dep.artifact_id}] Count: #{count}")
+        LOGGER.debug("#{@tag} [#{dep.artifact_id}] Count: #{dep.count}")
       else
         dep.count = 0
         LOGGER.debug("#{@tag} [#{dep.artifact_id}] Target: res-only")
