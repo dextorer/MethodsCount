@@ -25,112 +25,44 @@ class LibraryMethodsCount
 
 
   def cached?
+    # the FQN may contain a '+', meaning that we need to obtain the version and then
+    # check the DB again
     (@library_with_version != nil) && Libraries.find_by_fqn(@library_with_version)
   end
 
 
   def compute_dependencies
-    if not cached?
-      # the FQN may contain a '+', meaning that we need to obtain the version and then
-      # check the DB again
-      process_library()
-    end
+    process_library() unless cached?
 
     generate_response()
   end
+  
 
+  def count_methods(dep, service)
+    SdkService.with_workspace(dep.artifact_id) do |service|
+      jar = service.get_jar(dep.file)
 
-  private
-
-  def count_methods(dep, tmp_dir)
-    res_only = false
-    log_name = dep.artifact_id
-    item = dep.file
-    LOGGER.debug("#{dep} #{tmp_dir} #{item}")
-    if item.end_with?(".aar")
-      LOGGER.debug("#{@tag} [#{log_name}] Format: AAR")
-      # extract AAR's classes.jar
-      system("unzip -q #{item} -d #{tmp_dir} classes.jar")
-      if File.exists?("#{tmp_dir}/classes.jar")
-        item = "#{tmp_dir}/classes.jar"
+      if !jar.nil?
+        dep.count, dep.dex_size = service.dex(jar)
+        LOGGER.debug("#{@tag} [#{dep.artifact_id}] Count: #{count}")
       else
-        res_only = true
-      end
-    else
-      LOGGER.debug("#{@tag} [#{log_name}] Format: JAR")
-    end
-
-    if not res_only
-      # make sure our jar actually contains .class files :)
-      `unzip -l #{item} | grep -x .*\.class$`
-      if $?.exitstatus != 0
-        res_only = true
-        LOGGER.debug("#{@tag} [#{log_name}] Empty JAR file (no .class files found), consider as res-only")
+        dep.count = 0
+        LOGGER.debug("#{@tag} [#{dep.artifact_id}] Target: res-only")
+        LOGGER.debug("#{@tag} [#{dep.artifact_id}] Count: 0")
       end
     end
-
-    if not res_only
-      # build DEX file
-      dx_path = ENV['DX_PATH']
-      if dx_path.to_s.empty?
-        dx_path = "dx"
-      else
-        dx_path = dx_path + "/dx"
-      end
-
-      if not File.exists?("#{item}")
-        LOGGER.error("#{@tag} [#{log_name}] Target does not exist")
-        raise "Target #{item} does not exist"
-      end
-
-      begin
-        Timeout::timeout(2 * 60) { # 2 minutes
-                                   LOGGER.debug("#{@tag} [#{log_name}] exec: #{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
-                                   system("#{dx_path} --dex --output=#{tmp_dir}/tmp.dex #{item}")
-                                   }
-      rescue Timeout::Error
-        raise "'dx' operation timed out, invalidating current library"
-      end
-
-      dx_result = $?.exitstatus
-      if dx_result == 0
-        LOGGER.debug("#{@tag} [#{log_name}] DXed successfully (result code: #{dx_result})")
-      else
-        LOGGER.error("Could not create DEX for #{item}")
-        raise "Could not create DEX for #{item}"
-      end
-
-      # extract methods count, update counter
-      count = `cat #{tmp_dir}/tmp.dex | head -c 92 | tail -c 4 | hexdump -e '1/4 "%d\n"'`
-      dep.count = count.to_i()
-      dep.dex_size = File.size("#{tmp_dir}/tmp.dex")
-
-      LOGGER.debug("#{@tag} [#{log_name}] Count: #{count}")
-    else
-      dep.count = 0
-      LOGGER.debug("#{@tag} [#{log_name}] Target: res-only")
-      LOGGER.debug("#{@tag} [#{log_name}] Count: 0")
-    end
-
-    [
-      "#{tmp_dir}/classes.jar",
-      "#{tmp_dir}/tmp.dex"
-    ].map { |f| File.delete(f) if File.exists?(f) }
   end
+
 
   def process_library
     # generate Dep classes from gradle
     deps = GradleService.get_deps(@library)
 
     # filter already processed deps
-    filtered_deps = deps.reject { |d| Libraries.exists?(d.fqn) }
+    filtered_deps = deps.reject { |dep| Libraries.exists?(dep.fqn) }
 
     # calculate methods count for new dependencies
-    rand = Random::DEFAULT.rand().to_s
-    Dir.mkdir(rand)
-    tmp_dir = File.absolute_path(rand)
-    filtered_deps.each { |dep| count_methods(dep, tmp_dir) }
-    Dir.delete(tmp_dir)
+    filtered_deps.each { |dep| count_methods(dep) }
 
     current_lib = deps.first
     actual_deps = deps[1..-1]
@@ -153,6 +85,7 @@ class LibraryMethodsCount
       raise "DB insertion failed"
     end
   end
+
 
   def generate_response
     lib = Libraries.where(:fqn => @library_with_version).first
