@@ -98,7 +98,7 @@ function poll(libraryName) {
                stopMessageCycling();
                $('#result-card-container').css('visibility','visible').hide().fadeIn();
                showResponse(obj.result);
-            } else if (obj["status"] == "error" || obj["status"] == "undefined") {
+            } else if (obj["status"] == "error" || obj["status"] == "undefined") {
                console.log("Error");
                console.log(obj)
                $('#progress-card-container').fadeOut('fast', function() {
