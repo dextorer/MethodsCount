@@ -38,7 +38,7 @@ class LibraryMethodsCount
   end
   
 
-  def count_methods(dep, service)
+  def count_methods(dep)
     SdkService.with_workspace(dep.artifact_id) do |service|
       jar = service.get_jar(dep.file)
 
