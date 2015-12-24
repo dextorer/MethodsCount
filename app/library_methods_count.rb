@@ -39,7 +39,7 @@ class LibraryMethodsCount
   
 
   def count_methods(dep)
-    SdkService.with_workspace(dep.artifact_id) do |service|
+    SdkService.open_workspace(dep.artifact_id) do |service|
       jar = service.get_jar(dep.file)
 
       if !jar.nil?
