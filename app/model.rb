@@ -23,9 +23,9 @@ class Libraries < ActiveRecord::Base
       artifact_id: dep.artifact_id,
       version: dep.version
     ).first_or_create
-    lib.count = dep.count
-    lib.size = dep.size
-    lib.dex_size = dep.dex_size
+    lib.count = dep.count unless dep.count.nil?
+    lib.size = dep.size unless dep.size.nil?
+    lib.dex_size = dep.dex_size unless dep.dex_size.nil?
     lib.hit_count += 1
     lib.save!
 
