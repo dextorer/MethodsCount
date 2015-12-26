@@ -10,7 +10,7 @@ class Sebastiano < Sinatra::Base
   set :static, true
   set :public_folder, File.dirname(__FILE__) + '/../static'
 
-  FORMAT_SUFFIXES = ['@aa', '@jar']
+  FORMAT_SUFFIXES = ['@aar', '@jar']
 
   before {
     env["rack.errors"] =  ERROR_LOG
