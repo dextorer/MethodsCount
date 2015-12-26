@@ -3,8 +3,7 @@ module GradleService
 
   def get_deps(library_name)
   	gradle_env_dir = "gradle_env"
-    Dotenv.load
-    
+
     result = `#{gradle_env_dir}/gradlew -p #{gradle_env_dir} -q deps -PinputDep=#{library_name}`
 
     if $?.exitstatus != 0
