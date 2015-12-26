@@ -27,12 +27,12 @@ class LibraryMethodsCount
   def cached?
     # the FQN may contain a '+', meaning that we need to obtain the version and then
     # check the DB again
-    (@library_with_version != nil) && Libraries.find_by_fqn(@library_with_version)
+    (@library_with_version != nil) && Libraries.exists?(fqn: @library_with_version)
   end
 
 
   def compute_dependencies
-    process_library() unless cached?
+    process_library()
 
     generate_response()
   end
@@ -55,25 +55,22 @@ class LibraryMethodsCount
 
 
   def process_library
+    
+    return if cached?
+
     # generate Dep classes from gradle
     deps = GradleService.get_deps(@library)
-
-    # filter already processed deps
-    filtered_deps = deps.reject { |dep| Libraries.exists?(fqn: dep.fqn) }
-
-    # calculate methods count for new dependencies
-    filtered_deps.each { |dep| count_methods(dep) }
 
     current_lib_dep = deps.first
     actual_deps = deps[1..-1]
     actual_deps.each do |dep|
       dep_count = LibraryMethodsCount.new(dep.fqn)
-      dep_count.process_library unless dep_count.cached?
+      dep_count.process_library
       Dependencies.where(library_name: current_lib_dep.fqn, dependency_name: dep.fqn).first_or_create
     end
 
+    count_methods(current_lib_dep)
     lib = Libraries.create_from_dep(current_lib_dep)
-
     @library_with_version = lib.fqn
   end
 
