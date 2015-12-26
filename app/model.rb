@@ -28,6 +28,8 @@ class Libraries < ActiveRecord::Base
     lib.dex_size = dep.dex_size
     lib.hit_count += 1
     lib.save!
+
+    lib
   end
 end
 
