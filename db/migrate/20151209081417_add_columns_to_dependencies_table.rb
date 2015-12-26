@@ -6,7 +6,7 @@ class AddColumnsToDependenciesTable < ActiveRecord::Migration
   end
 
   def data
-    Dependencies.all.each do |dep|
+    Dependencies.find_each do |dep|
       dep.library_name = Libraries.find(dep.library_id).fqn
       dep.dependency_name = Libraries.find(dep.dependency_id).fqn
       dep.save!
