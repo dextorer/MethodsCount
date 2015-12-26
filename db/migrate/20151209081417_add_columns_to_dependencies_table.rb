@@ -7,9 +7,13 @@ class AddColumnsToDependenciesTable < ActiveRecord::Migration
 
   def data
     Dependencies.find_each do |dep|
-      dep.library_name = Libraries.find(dep.library_id).fqn
-      dep.dependency_name = Libraries.find(dep.dependency_id).fqn
-      dep.save!
+      begin
+        dep.library_name = Libraries.find(dep.library_id).fqn
+        dep.dependency_name = Libraries.find(dep.dependency_id).fqn
+        dep.save!
+      rescue ActiveRecord::RecordNotFound
+        LOGGER.error("Dependency #{dep.id} refers to non existing libraries")
+      end
     end
   end
 end
