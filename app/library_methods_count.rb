@@ -64,18 +64,14 @@ class LibraryMethodsCount
     # calculate methods count for new dependencies
     filtered_deps.each { |dep| count_methods(dep) }
 
-    current_lib = deps.first
+    current_lib_dep = deps.first
     actual_deps = deps[1..-1]
     actual_deps.each do |dep|
-      Dependencies.create(library_name: current_lib.fqn, dependency_name: dep.fqn)
+      Libraries.create_from_dep(dep)
+      Dependencies.create(library_name: current_lib_dep.fqn, dependency_name: dep.fqn)
     end
 
-    lib = Libraries.where(
-      fqn: current_lib.fqn, group_id: current_lib.group_id, artifact_id: current_lib.artifact_id,
-      version: current_lib.version, count: current_lib.count, size: current_lib.size, dex_size: current_lib.dex_size,
-    ).first_or_create
-    lib.hit_count += 1
-    lib.save!
+    lib = Libraries.create_from_dep(current_lib_dep)
 
     @library_with_version = lib.fqn
   end
