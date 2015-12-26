@@ -3,8 +3,8 @@ class AddColumnsToDependenciesTable < ActiveRecord::Migration
     add_column :dependencies, :library_name, :string
     add_column :dependencies, :dependency_name, :string
     # In order to avoid problems with the new logic
-    change_column_null :dependencies, :library_name, true
-    change_column_null :dependencies, :dependency_name, true
+    change_column_null :dependencies, :library_id, true
+    change_column_null :dependencies, :dependency_id, true
     add_index :dependencies, :library_name
   end
 
