@@ -78,12 +78,6 @@ class LibraryMethodsCount
     lib.save!
 
     @library_with_version = lib.fqn
-
-    # Can it really happen?
-    if inserted_id < 0
-      LOGGER.error("DB insertion failed")
-      raise "DB insertion failed"
-    end
   end
 
 
