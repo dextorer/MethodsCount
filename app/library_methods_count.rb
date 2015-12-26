@@ -67,8 +67,9 @@ class LibraryMethodsCount
     current_lib_dep = deps.first
     actual_deps = deps[1..-1]
     actual_deps.each do |dep|
-      Libraries.create_from_dep(dep)
-      Dependencies.create(library_name: current_lib_dep.fqn, dependency_name: dep.fqn)
+      dep_count = LibraryMethodsCount.new(dep.fqn)
+      dep_count.process_library unless dep_count.cached?
+      Dependencies.where(library_name: current_lib_dep.fqn, dependency_name: dep.fqn).first_or_create
     end
 
     lib = Libraries.create_from_dep(current_lib_dep)
