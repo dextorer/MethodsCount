@@ -134,17 +134,19 @@ class Sebastiano < Sinatra::Base
       end
 
       # handle libraries with version
-      lib_status = LibraryStatus.where(library_name: library_name).first_or_create
-      if must_calculate && lib_status.status.to_s.empty?
-        lib_status.status = "processing"
-        lib_status.save!
+      if must_calculate
+        lib_status = LibraryStatus.where(library_name: library_name).first_or_create
+        if lib_status.status.to_s.empty?
+          lib_status.status = "processing"
+          lib_status.save!
 
-        if ENV['RACK_ENV'] == 'production'
-          QueueService.enqeue(
-            {lib_name: library_name}
-          )
-        else
-          process_library(library_name)
+          if ENV['RACK_ENV'] == 'production'
+            QueueService.enqeue(
+              {lib_name: library_name}
+            )
+          else
+            process_library(library_name)
+          end
         end
       end
 
