@@ -42,7 +42,7 @@ class LibraryMethodsCount
     SdkService.open_workspace(dep.artifact_id) do |service|
       jar = service.get_jar(dep.file)
 
-      if !jar.nil?
+      if jar
         dep.count, dep.dex_size = service.dex(jar)
         LOGGER.debug("#{@tag} [#{dep.artifact_id}] Count: #{dep.count}")
       else
@@ -59,7 +59,7 @@ class LibraryMethodsCount
     deps = GradleService.get_deps(@library)
 
     # filter already processed deps
-    filtered_deps = deps.reject { |dep| Libraries.exists?(dep.fqn) }
+    filtered_deps = deps.reject { |dep| Libraries.exists?(fqn: dep.fqn) }
 
     # calculate methods count for new dependencies
     filtered_deps.each { |dep| count_methods(dep) }
