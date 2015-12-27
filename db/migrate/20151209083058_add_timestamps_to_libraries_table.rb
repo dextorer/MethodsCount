@@ -7,8 +7,9 @@ class AddTimestampsToLibrariesTable < ActiveRecord::Migration
   def data
     ActiveRecord::Base.record_timestamps = false
   	Libraries.find_each do |lib|
-  		lib.update_attribute(:created_at, Time.at(lib.creation_time))
-  		lib.update_attribute(:updated_at, Time.at(lib.last_updated)) 
+  		lib.created_at ||= Time.at(lib.creation_time)
+  		lib.updated_at ||= Time.at(lib.last_updated)
+      lib.save!
   	end
     ActiveRecord::Base.record_timestamps = true
   end
