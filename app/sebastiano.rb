@@ -56,18 +56,16 @@ class Sebastiano < Sinatra::Base
         ends_with_plus = true
         LOGGER.info "[GET] ends with plus!"
         plus_lib = LibraryStatus.where(library_name: library_name).first
-        if plus_lib and plus_lib.status == "processing"
-          LOGGER.info "[GET] plus_lib status: processing"
-          status = plus_lib.status
-        elsif plus_lib
-          LOGGER.info "[GET] plus_lib status: #{plus_lib.status}"
+        status = plus_lib ? plus_lib.status : 'undefined'
+        LOGGER.info "[GET] plus_lib status: #{status}"
+
+        if plus_lib and plus_lib.status == "done"
           parts = library_name.split(/:/)
           most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
-          status = plus_lib.status
           result = LibraryMethodsCount.new(most_recent.fqn).compute_dependencies()
           most_recent.increment("hit_count")
           most_recent.save!
-        else
+        elsif plus_lib.nil?
           LOGGER.info "[GET] cannot find status"
         end
       end
