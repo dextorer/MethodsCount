@@ -13,6 +13,7 @@ gem 'dotenv'
 gem 'aws-sdk', '~> 2'
 gem 'nokogiri'
 gem 'byebug'
+gem 'migration_data'
 
 group :development do
 	gem 'rerun'
