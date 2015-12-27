@@ -110,43 +110,21 @@ class Sebastiano < Sinatra::Base
       content_type :json
       library_name = params[:lib_name].gsub(/(#{FORMAT_SUFFIXES.join('|')})$/, '')
 
-      must_calculate = true
+      library_status = LibraryStatus.where(library_name: library_name).first_or_create
 
-      # handle '+' libraries
-      if library_name.end_with?("+")
-        parts = library_name.split(/:/)
-        most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
-        time_limit = (Time.now.to_i - 7 * 24 * 60 * 60)
-        if most_recent
-          LOGGER.info "[POST] creation_time: #{most_recent.created_at}"
-          LOGGER.info "[POST] time limit: #{time_limit}"
-        end
-        if most_recent and most_recent.updated_at < 1.week.ago
-          LOGGER.info "[POST] inside time limit!"
-          new_lib = LibraryStatus.where(library_name: library_name).first_or_create
-          new_lib.status = "done"
-          new_lib.save!
-          must_calculate = false
+      if (library_name.end_with?("+") and library_status.updated_at < 1.week.ago) or
+        library_status.status.to_s.empty?
+
+        LOGGER.info "[POST] empty or outside time frame, calculating.."
+        library_status.status = "processing"
+        library_status.save!
+
+        if ENV['RACK_ENV'] == 'production'
+          QueueService.enqeue(
+            {lib_name: library_name}
+          )
         else
-          LOGGER.info "[POST] empty or outside time frame, calculating.."
-          LibraryStatus.where(library_name: library_name).destroy_all
-        end
-      end
-
-      # handle libraries with version
-      if must_calculate
-        lib_status = LibraryStatus.where(library_name: library_name).first_or_create
-        if lib_status.status.to_s.empty?
-          lib_status.status = "processing"
-          lib_status.save!
-
-          if ENV['RACK_ENV'] == 'production'
-            QueueService.enqeue(
-              {lib_name: library_name}
-            )
-          else
-            process_library(library_name)
-          end
+          process_library(library_name)
         end
       end
 
