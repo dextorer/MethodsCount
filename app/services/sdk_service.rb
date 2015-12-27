@@ -22,9 +22,11 @@ class SdkService
     workspace = File.absolute_path(rand)
     service = SdkService.new(artifact_id, workspace)
     
-    yield service
-
-    FileUtils.rm_r(workspace)
+    begin
+      yield service
+    ensure
+      FileUtils.rm_r(workspace)
+    end
   end
 
 
