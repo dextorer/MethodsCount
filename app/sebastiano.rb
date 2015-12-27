@@ -48,58 +48,28 @@ class Sebastiano < Sinatra::Base
       content_type :json
       library_name = params[:lib_name]
 
-      result = {}
-      status = ""
-
-      # handle '+' libraries
-      if library_name.end_with?("+")
-        ends_with_plus = true
-        LOGGER.info "[GET] ends with plus!"
-        plus_lib = LibraryStatus.where(library_name: library_name).first
-        status = plus_lib ? plus_lib.status : 'undefined'
-        LOGGER.info "[GET] plus_lib status: #{status}"
-
-        if plus_lib and plus_lib.status == "done"
-          parts = library_name.split(/:/)
-          most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
-          result = LibraryMethodsCount.new(most_recent.fqn).compute_dependencies()
-          most_recent.increment("hit_count")
-          most_recent.save!
-        elsif plus_lib.nil?
-          LOGGER.info "[GET] cannot find status"
-        end
-      end
-
       library_status = LibraryStatus.where(library_name: library_name).first
+      status = library_status ? library_status.status : 'undefined'
+      LOGGER.info "[GET] lib status: #{status}"
 
-      # handle libraries with version
-      if not ends_with_plus
-        if library_status
-          if library_status.status == "done"
-            result = LibraryMethodsCount.new(library_name).compute_dependencies()
-            status = library_status.status
-            if library_name.end_with?("+")
-              parts = library_name.split(/:/)
-              library_entry = Libraries.where(["group_id = ? and artifact_id = ? and version = ?", parts[0], parts[1], parts[2]]).first
-            else
-              library_entry = Libraries.find_by_fqn(library_name)
-            end
-            library_entry.increment("hit_count")
-            library_entry.save!
-          elsif library_status.status == "processing"
-            status = library_status.status
-          elsif library_status.status == "error"
-            status = library_status.status
-          end
+      if status == 'done'
+        if library_name.end_with?("+")
+          LOGGER.info "[GET] ends with plus!"
+          parts = library_name.split(/:/)
+          library = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
         else
-          status = "undefined"
+          library = Libraries.find_by_fqn(library_name)
         end
+
+        result = LibraryMethodsCount.new(library.fqn).compute_dependencies()
+        library.increment("hit_count")
+        library.save!
       end
 
       {
         :status => status,
         :lib_name => library_name,
-        :result => result
+        :result => result || {}
       }.to_json
     end
 
