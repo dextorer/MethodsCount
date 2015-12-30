@@ -1,0 +1,14 @@
+{
+  "name": "MethodsCount",
+  "description": "Display the number of methods for any Android library",
+  "version": "1.0",
+  "permissions": [
+  	"contextMenus",
+  	"tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "icons": {"128": "icon.png"},
+  "manifest_version": 2
+}
