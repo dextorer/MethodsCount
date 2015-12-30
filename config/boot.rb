@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler'
+require 'active_support'
 
 env = ENV['RACK_ENV'].to_sym
 

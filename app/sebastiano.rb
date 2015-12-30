@@ -10,7 +10,7 @@ class Sebastiano < Sinatra::Base
   set :static, true
   set :public_folder, File.dirname(__FILE__) + '/../static'
 
-  FORMAT_SUFFIXES = ['@aa', '@jar']
+  FORMAT_SUFFIXES = ['@aar', '@jar']
 
   before {
     env["rack.errors"] =  ERROR_LOG
@@ -56,22 +56,16 @@ class Sebastiano < Sinatra::Base
         ends_with_plus = true
         LOGGER.info "[GET] ends with plus!"
         plus_lib = LibraryStatus.where(library_name: library_name).first
-        if plus_lib and plus_lib.status == "processing"
-          LOGGER.info "[GET] plus_lib status: processing"
-          status = plus_lib.status
-        elsif plus_lib
-          LOGGER.info "[GET] plus_lib status: #{plus_lib.status}"
+        status = plus_lib ? plus_lib.status : 'undefined'
+        LOGGER.info "[GET] plus_lib status: #{status}"
+
+        if plus_lib and plus_lib.status == "done"
           parts = library_name.split(/:/)
           most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
-          status = plus_lib.status
           result = LibraryMethodsCount.new(most_recent.fqn).compute_dependencies()
           most_recent.increment("hit_count")
-          if most_recent.creation_time == 0
-            library_entry.update_column("creation_time", Time.now.to_i)
-          end
-          most_recent.update_column("last_updated", Time.now.to_i)
           most_recent.save!
-        else
+        elsif plus_lib.nil?
           LOGGER.info "[GET] cannot find status"
         end
       end
@@ -91,8 +85,6 @@ class Sebastiano < Sinatra::Base
               library_entry = Libraries.find_by_fqn(library_name)
             end
             library_entry.increment("hit_count")
-            library_entry.update_column("creation_time", Time.now.to_i)
-            library_entry.update_column("last_updated", Time.now.to_i)
             library_entry.save!
           elsif library_status.status == "processing"
             status = library_status.status
@@ -116,34 +108,14 @@ class Sebastiano < Sinatra::Base
       content_type :json
       library_name = params[:lib_name].gsub(/(#{FORMAT_SUFFIXES.join('|')})$/, '')
 
-      must_calculate = true
+      library_status = LibraryStatus.where(library_name: library_name).first_or_create
 
-      # handle '+' libraries
-      if library_name.end_with?("+")
-        parts = library_name.split(/:/)
-        most_recent = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).first
-        time_limit = (Time.now.to_i - 7 * 24 * 60 * 60)
-        if most_recent
-          LOGGER.info "[POST] creation_time: #{most_recent.creation_time}"
-          LOGGER.info "[POST] time limit: #{time_limit}"
-        end
-        if most_recent and most_recent.last_updated > time_limit
-          LOGGER.info "[POST] inside time limit!"
-          new_lib = LibraryStatus.where(library_name: library_name).first_or_create
-          new_lib.status = "done"
-          new_lib.save!
-          must_calculate = false
-        else
-          LOGGER.info "[POST] empty or outside time frame, calculating.."
-          LibraryStatus.where(library_name: library_name).destroy_all
-        end
-      end
+      if (library_name.end_with?("+") and library_status.updated_at < 1.week.ago) or
+        library_status.status.to_s.empty?
 
-      # handle libraries with version
-      lib_status = LibraryStatus.where(library_name: library_name).first_or_create
-      if must_calculate && lib_status.status.to_s.empty?
-        lib_status.status = "processing"
-        lib_status.save!
+        LOGGER.info "[POST] empty or outside time frame, calculating.."
+        library_status.status = "processing"
+        library_status.save!
 
         if ENV['RACK_ENV'] == 'production'
           QueueService.enqeue(

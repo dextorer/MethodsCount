@@ -1,5 +1,6 @@
 require './app/model'
 require 'sinatra/activerecord/rake'
+require 'migration_data'
 
 task :environment do
   ENV['RACK_ENV'] ||= 'development'
