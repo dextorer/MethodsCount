@@ -253,6 +253,10 @@ $('#try-now').click(function() {
    $('#search-button').trigger('click');
 });
 
+$('#supported-libs-link').click(function() {
+   $('#myselector').click();
+});
+
 $.validate({
    showHelpOnFocus: false,
    addSuggestions: false,
