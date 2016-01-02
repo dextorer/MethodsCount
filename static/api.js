@@ -255,6 +255,9 @@ $('#try-now').click(function() {
 
 $('#supported-libs-link').click(function() {
    $('#tab-about').click();
+   setTimeout(function(){
+            $(window).scrollTop($('#supported-libs').offset().top);;
+        },1000);
 });
 
 $.validate({
