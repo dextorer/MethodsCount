@@ -254,7 +254,7 @@ $('#try-now').click(function() {
 });
 
 $('#supported-libs-link').click(function() {
-   $('#myselector').click();
+   $('#tab-about').click();
 });
 
 $.validate({
