@@ -14,6 +14,7 @@ gem 'aws-sdk', '~> 2'
 gem 'nokogiri'
 gem 'byebug'
 gem 'migration_data'
+gem 'xml-sitemap'
 
 group :development do
 	gem 'rerun'
