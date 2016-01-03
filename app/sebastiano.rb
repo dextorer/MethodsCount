@@ -42,7 +42,7 @@ class Sebastiano < Sinatra::Base
   get '/sitemap.xml' do
     content_type :xml
     map = XmlSitemap::Map.new('www.methodscount.com') do |m|
-      Libraries.find_each do |lib|
+     Libraries.top(200) do |lib|
         m.add "/index.html?lib=#{lib.fqn}", :updated => lib.updated_at, :period => :never
       end
     end
@@ -115,8 +115,7 @@ class Sebastiano < Sinatra::Base
 
     get '/top/' do
       content_type :json
-      top = Libraries.order(hit_count: :desc).distinct(true).take(100)
-      top.to_json
+      Libraries.top(100).to_json
     end
 
     ## Workers APIs ##
