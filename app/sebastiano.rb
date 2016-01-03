@@ -42,7 +42,7 @@ class Sebastiano < Sinatra::Base
   get '/sitemap.xml' do
     content_type :xml
     map = XmlSitemap::Map.new('www.methodscount.com') do |m|
-      Libraries.find_each do 'lib'
+      Libraries.find_each do |lib|
         m.add "/index.html?lib=#{lib.fqn}", :updated => lib.updated_at, :period => :never
       end
     end
