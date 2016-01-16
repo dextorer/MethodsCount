@@ -249,7 +249,7 @@ $('#search-button').click(function() {
 });
 
 $('#try-now').click(function() {
-   $('#search-box').val("com.google.code.gson:gson:2.4");
+   $('#search-box').val("com.github.dextorer:sofa:1.0.0");
    $('#search-button').trigger('click');
 });
 
@@ -355,6 +355,12 @@ $(document).ready(function() {
       $('#search-button').trigger("click");
    }
 });
+
+ $(document).ready(function() {
+   $('.modal-trigger').leanModal({
+      ready: function() { $('#donate-gif').click(function() { $('#bitcoin-donate-button').trigger('click'); }) }
+   });
+  });
 
 hljs.initHighlightingOnLoad();
 
