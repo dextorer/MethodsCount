@@ -13,13 +13,13 @@ class AnalyticsService
         cid: 42,
         t: 'pageview',
         uip: ip,
-        ua: user_agent
+        ua: user_agent,
+        dp: '/api/request'
       }
     }
 
     begin
       response = post('/collect', options)
-
       if response.code / 100 == 5
         LOGGER.error "GA exception: #{response}"
       end
