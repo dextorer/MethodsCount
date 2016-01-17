@@ -95,7 +95,7 @@ class Sebastiano < Sinatra::Base
         end
       end
 
-      track(request)
+      track(request, '/api/request')
 
       {
         :enqueued => true,
@@ -133,11 +133,11 @@ class Sebastiano < Sinatra::Base
 
   private
 
-  def track(request)
+  def track(request, path)
     ip = request.ip
     user_agent = request.user_agent
-    
-    AnalyticsService.hit(ip, user_agent)
+
+    AnalyticsService.hit(ip, user_agent, path)
   end
 
   def process_library(library_name)

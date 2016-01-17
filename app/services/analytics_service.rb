@@ -5,7 +5,7 @@ class AnalyticsService
   TRACKING_ID='UA-72547706-1'
   CLIENT_ID=42
 
-  def self.hit(ip, user_agent)
+  def self.hit(ip, user_agent, path)
     options = {
       body: {
         v: 1,
@@ -14,7 +14,7 @@ class AnalyticsService
         t: 'pageview',
         uip: ip,
         ua: user_agent,
-        dp: '/api/request'
+        dp: path
       }
     }
 
