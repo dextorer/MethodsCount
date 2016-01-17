@@ -14,9 +14,12 @@ gem 'aws-sdk', '~> 2'
 gem 'nokogiri'
 gem 'byebug'
 gem 'migration_data'
+gem 'httparty'
 
-group :development do
+group :development, :test do
 	gem 'rerun'
 	gem 'rspec-sinatra'
 	gem 'rspec'
+	gem 'webmock'
+	gem 'capybara'
 end
