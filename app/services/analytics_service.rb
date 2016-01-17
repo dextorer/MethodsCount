@@ -17,6 +17,14 @@ class AnalyticsService
       }
     }
 
-    post('/collect', options)
+    begin
+      response = post('/collect', options)
+
+      if response.code / 100 == 5
+        LOGGER.error "GA exception: #{response}"
+      end
+    rescue => e
+      LOGGER.error "An error occurred while submitting data to GA: #{e.message}"
+    end
   end
 end

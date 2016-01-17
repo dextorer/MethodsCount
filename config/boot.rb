@@ -21,6 +21,7 @@ else
   ERROR_LOG = STDOUT
 end
 
+# TODO: when we reach Papertrail quota for the month, dicrease the log level for prod
 LOGGER.level = (env == :production ? Logger::DEBUG : Logger::DEBUG)
 
 # App deps
