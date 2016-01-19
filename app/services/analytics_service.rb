@@ -1,16 +1,19 @@
+require 'open-uri'
+require 'digest'
+
 class AnalyticsService
   include HTTParty
   base_uri 'www.google-analytics.com'
 
   TRACKING_ID='UA-72547706-1'
-  CLIENT_ID=42
 
   def self.hit(ip, user_agent, path)
+    client_id = Digest::MD5.new.update(ip)
     options = {
       body: {
         v: 1,
         tid: TRACKING_ID,
-        cid: 42,
+        cid: client_id,
         t: 'pageview',
         uip: ip,
         ua: user_agent,

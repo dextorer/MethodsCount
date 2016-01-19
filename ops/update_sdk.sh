@@ -17,4 +17,8 @@ do
 done
 
 echo "Instance is running"
-aws ssm send-command --document-name AWS-RunShellScript --parameters '{"commands":["echo y | android-sdk-linux/tools/android update sdk --no-ui"],"workingDirectory":["/var/android"]}' --instance-ids $INSTANCE_ID --output-s3-bucket-name ami-provisioning-log
+echo "Updating sdk"
+RESPONSE=aws ssm send-command --document-name AWS-RunShellScript --parameters '{"commands":["echo y | android-sdk-linux/tools/android update sdk --no-ui"],"workingDirectory":["/var/android"]}' --instance-ids $INSTANCE_ID --output-s3-bucket-name ami-provisioning-log
+COMMAND_ID=$(echo $RESPONSE | sed -e 's/.*CommandId": "\(.*\)", "Requ.*/\1/g')
+until SUCCESS=$(aws ssm list-command-invocations | sed -e 's/.*CommandId": "\(.*\)", "Requ.*/\1/g'
+

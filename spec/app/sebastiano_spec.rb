@@ -18,8 +18,8 @@ describe Sebastiano do
 
     it "sends ip and user agent to GA" do
       stub_analytics_request.
-        with(:body => "v=1&tid=UA-72547706-1&cid=42&t=pageview&uip=127.0.0.1&ua=TestRunner&dp=%2Fapi%2Frequest",
-             :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
+        with(:body => "v=1&tid=UA-72547706-1&cid=f528764d624db129b32c21fbca0cb8d6&t=pageview&uip=127.0.0.1&ua=TestRunner&dp=%2Fapi%2Frequest",
+              :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => "", :headers => {})
 
       post "/api/request/test_lib", {}, {'HTTP_USER_AGENT' => 'TestRunner'}
