@@ -356,11 +356,18 @@ $(document).ready(function() {
    }
 });
 
- $(document).ready(function() {
+$(document).ready(function() {
    $('.modal-trigger').leanModal({
-      ready: function() { $('#donate-gif').click(function() { $('#bitcoin-donate-button').trigger('click'); }) }
+      ready: function() { 
+         $('#donate-gif').click(function() { $('#bitcoin-donate-button').trigger('click'); }); 
+         var btcAddresses = ["188HuCKxwwkJyeubke2CELBZKhj7B4cqeY", "15WUrFsBLSBwDXt3dDJ8oAizMNftCdY2Rd"];
+         var maximum = 1;
+         var minimum = 0;
+         var randomIndex = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+         $('#bitcoin-donate-button').attr("data-address", btcAddresses[randomIndex]);
+      }
    });
-  });
+});
 
 hljs.initHighlightingOnLoad();
 
