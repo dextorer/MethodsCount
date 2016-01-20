@@ -77,7 +77,6 @@ class Sebastiano < Sinatra::Base
     post '/request/:lib_name' do |argument|
       content_type :json
       library_name = params[:lib_name].gsub(/(#{FORMAT_SUFFIXES.join('|')})$/, '')
-
       library_status = LibraryStatus.where(library_name: library_name).first_or_create
 
       if (library_name.end_with?("+") and library_status.updated_at < 1.week.ago) or
@@ -95,6 +94,8 @@ class Sebastiano < Sinatra::Base
           process_library(library_name)
         end
       end
+
+      track(request, '/api/request')
 
       {
         :enqueued => true,
@@ -131,6 +132,13 @@ class Sebastiano < Sinatra::Base
 
 
   private
+
+  def track(request, path)
+    ip = request.ip
+    user_agent = request.user_agent
+
+    AnalyticsService.hit(ip, user_agent, path)
+  end
 
   def process_library(library_name)
     lib_status = LibraryStatus.where(library_name: library_name).first
