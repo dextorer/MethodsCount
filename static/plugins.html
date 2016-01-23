@@ -35,141 +35,33 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="blue darken-1">
-			<div id="input-content" class="container">
-				<form id="search-form" action="" onsubmit="return false;" method="POST">
-					<div class="input-field hoverable">
-						<input id="search-box" class="white validate" autocomplete="off"
-						placeholder="Insert the library 'compile' statement (e.g., com.google.code.gson:gson:2.4)" 
-						data-position="bottom" data-validation="custom" 
-						data-validation-error-msg="This looks invalid! Please stick to group_id:artifact_id:version ('+' is supported)" 
-						data-validation-error-msg-container="#fuck" data-validation-regexp="^(\s*[a-zA-Z\d\.\-]+:[a-zA-Z\d\.\-]+:[\d\.@\+\-a-z]+\s*)$" />
-						<a id="search-button" href="#" class="material-icons">search</a>
-					</div>
-				</form>
-			</div>
-		</div>
 		<div id="shadow-container" class="blue darken-1 z-depth-1"></div>
 
-		<div id="main-container" class="container">
-			<div id="welcome-card-container" class="card-container">
-				<div id="welcome-card" class="card hoverable">
-		        	<div class="card-content">
-		          		<span class="card-title grey-text text-darken-3">Library methods count</span>
-		          			<p>Android libraries are great, but they come at a cost. Use this tool to avoid the dreaded 65K method limit of the DEX file format!</p>
-		        	</div>
-		        	<div class="card-action">
-		          		<a id="try-now" class="pink-text text-darken-1" href="#">Try now</a>
-		        	</div>
-		      	</div>
-	      	</div>
+      	<div id="plugin-container" class="container card-container">
+      		<div id="plugin-card" class="card">
+      			<h5>Android Methods Count</h5>
+      				<p class="flow-text plugin-paragraph">A simple Studio/IntelliJ plugin that parses your Android library dependencies and shows the methods count as an handy hint.</p>
+					<img class="" width="532" src="images/methods-count-plugin-1.png" />
 
-	      	<div id="progress-card-container" class="container">
-	      		<div>
-	      			<p id="progress-message"></p>
-	      		</div>
-		      	<div id="progress" class="progress">
-		      		<div class="indeterminate"></div>
-		  		</div>
-	  		</div>
+      				<p class="flow-text plugin-paragraph">For more information, you can simply tap on the blue circle to the left and you will land on the appropriate library page of this website.</p>
+      				
+  				 	<img class="" width="530" src="images/methods-count-plugin-2.png" />
 
-			<div id="result-card-container" class="card-container">
-				<div id="result-card" class="card hoverable">
-		        	<div>
-		        		<div class="result-card-header-container">
-			        		<table id="result-library-summary">
-			        			<th class="grey-text text-darken-1 result-card-header">Library name</th>
-			        			<th class="grey-text text-darken-1 result-card-header">Total count</th>
-			        		</table>
-		        		</div>
-		        		<div class="result-card-header-buttons-container hide-on-med-and-down">
-		        			<div id="result-card-header-badges" class="result-card-header-button" data-jq-dropdown="#badge-dropdown">
-		        				<p class="blue-text text-darken-1">BADGES</p>
-		        				<a id="show_badges_button" href="#" class="material-icons">face</a>
-	        				</div>
-	        				<div id="result-card-header-share" class="result-card-header-button" data-jq-dropdown="#share-dropdown">
-	        					<p class="blue-text text-darken-1">SHARE</p>
-		        				<a id="share_button" href="#" class="material-icons">share</a>
-        					</div>
-		        		</div>
-		        	</div>
-		        	<hr/>
-		        	<div>
-		        		<table id="result-library-stats">
-		        			<th class="grey-text text-darken-1 result-card-header">Methods count</th>
-		        			<th class="grey-text text-darken-1 result-card-header truncate">Dependencies</th>
-		        			<th class="grey-text text-darken-1 result-card-header">JAR Size (KB)</th>
-		        			<th class="grey-text text-darken-1 result-card-header">DEX size (KB)</th>
-		        		</table>
-		        	</div>
-		        	<div id="result-dep-summary-container">
-		        		<hr/>
-		        		<table id="result-dependency-summary">
-		        			<th class="grey-text text-darken-1 result-card-header">Dependencies methods count</th>
-		        			<th class="grey-text text-darken-1 result-card-header">Dependencies JAR size (KB)</th>
-		        			<th class="grey-text text-darken-1 result-card-header">Dependencies DEX size (KB)</th>
-		        		</table>
-		        		<hr/>
-		        	</div>
-		        	<div id="result-card-dep-container">
-			        	<div>
-			        		<p id="result-card-dep-list-title" class="waves-effect waves-light btn blue darken-1 white-text result-card-header">Dependency list</i></p>
-			        	</div>
-			        	<div class="indent-right">
-			        		<ul id="result-card-dep-list">
-			        		</ul>
-			        	</div>
-		        	</div>
-		      	</div>
-	      	</div>
+				<br/>
+				<h5>Installation</h5>
+				 	<ol>
+				 		<li>Open Android Studio / IntelliJ IDEA preferences</li>
+				 		<li>Select 'Plugins'</li>
+				 		<li>Select 'Browse repositories...'</li>
+				 		<li>Select 'Android Methods Count' (or type some keywords in the search box)</li>
+				 		<li>Press install and restart the IDE once the installation completes</li>
+			 		</ol>
 
-	      	<div id="error-card-container" class="card-container">
-				<div id="error-card" class="card hoverable">
-		        	<div class="card-content">
-		          		<span class="card-title grey-text text-darken-3">Wait, what?</span>
-		          			<p>It's possible that the library you requested cannot be processed. Make sure <a id="supported-libs-link" href="#supported-libraries">it is among the supported ones</a>.<br /> 
-		          				If it's a problem on our side, please ping us <a href="https://twitter.com/rotxed">@rotxed</a>, use any of the social links at the bottom or write an email at <img src="http://safemail.justlikeed.net/e/435abc18467bb1dc2cf9ba0bd02463d7.png" border="0" align="absbottom" title="Email image created with safemail.justlikeed.net"></img>.
-		          			</p>
-		        	</div>
-		      	</div>
-	      	</div>
+			 		<p class="flow-text plugin-paragraph">Alternatively, you can download the plugin archive from <a href="https://plugins.jetbrains.com/plugin/8076?pr=" target="_blank">here</a>.</p>
+
+      		</div>
       	</div>
 	</main>
-
-	<div id="badge-dropdown" class="jq-dropdown jq-dropdown-tip jq-dropdown-anchor-right">
-	    <div class="jq-dropdown-panel">
-	        <div>
-	        	<p id="badge-dropdown-title">Are you the author of this library?</p>
-	        	<p id="badge-dropdown-message">Place this code in your library page and let everyone know that you care about methods!</p>
-	        	<div id="badge-methods-preview"></div>
-	        	<pre><code id="badge-methods-code" class="html"></code></pre>
-	        	<div id="badge-size-preview"></div>
-	        	<pre><code id="badge-size-code" class="html"></code></pre>
-	        	<div id="badge-all-preview"></div>
-	        	<pre><code id="badge-all-code" class="html"></code></pre>
-	        </div>
-	    </div>
-	</div>
-
-	<div id="share-dropdown" class="jq-dropdown jq-dropdown-tip jq-dropdown-anchor-right">
-	    <div class="jq-dropdown-panel">
-	        <div>
-	        	<div>
-		        	<div id="share-dropdown-twitter">
-	        			<a target="_blank"><img src="images/share-twitter.png"></a>
-	        		</div>
-	        		<div id="share-dropdown-gplus">
-		        		<a target="_blank"><img src="images/share-plus.png"></a>
-	        		</div>
-        		</div>
-        		<div id="share-dropdown-link">
-        			<pre><code id="share-dropdown-link-code" class="html"></code></pre>
-        		</div>
-	        </div>
-        </div>
-    </div>
-
 
 	<div id="modal-donate" class="modal">
 	    <div class="modal-content">
