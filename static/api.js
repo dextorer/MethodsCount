@@ -162,7 +162,7 @@ function showResponse(result) {
    var total_dex_size = 0;
    if (dependencies.length > 0) {
       dependencies.forEach(function(dependency) {
-         $('#result-card-dep-list').append("<li><div><p>" + dependency.dependency_name + "</p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p><p>DEX size: " + Math.ceil(dependency.dependency_dex_size / 1000) + " KB</p></blockquote></div></div></li>");
+         $('#result-card-dep-list').append("<li><div><p><a href=\"/?lib=" + encodeURIComponent(dependency.dependency_name) + "\">" + dependency.dependency_name + "</a></p><div class=\"indent-right\"><blockquote><p>Methods count: " + dependency.dependency_count + "</p><p>Size: " + Math.ceil(dependency.dependency_size / 1000) + " KB</p><p>DEX size: " + Math.ceil(dependency.dependency_dex_size / 1000) + " KB</p></blockquote></div></div></li>");
          total_count += dependency.dependency_count;
          total_size += dependency.dependency_size;
          total_dex_size += dependency.dependency_dex_size;
