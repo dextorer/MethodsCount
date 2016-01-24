@@ -15,9 +15,12 @@ gem 'nokogiri'
 gem 'byebug'
 gem 'migration_data'
 gem 'xml-sitemap'
+gem 'httparty'
 
-group :development do
+group :development, :test do
 	gem 'rerun'
 	gem 'rspec-sinatra'
 	gem 'rspec'
+	gem 'webmock'
+	gem 'capybara'
 end

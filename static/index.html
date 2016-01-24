@@ -94,9 +94,6 @@
         					</div>
 		        		</div>
 		        	</div>
-		        	<!-- <div>
-		        		<p id="result-lib-name" class="indent-right">com.github.dextorer:sofa:1.0.0&nbsp;</p>
-		        	</div> -->
 		        	<hr/>
 		        	<div>
 		        		<table id="result-library-stats">
@@ -273,6 +270,21 @@
         </div>
     </div>
 
+
+	<div id="modal-donate" class="modal">
+	    <div class="modal-content">
+	      	<h5 class="pink-text text-darken-1">Care to buy us a beer? And keep this service running?</h4>
+	      	<blockquote><i>We solemnly promise that we will use your money for a couple of beers. And then use what's left to pay for the servers.</i></blockquote>
+	      	<p>Please donate whatever amount you are willing to give, and thank you!</p>
+			<img id="donate-gif" src="https://media.giphy.com/media/137qcedBZRpVTy/giphy.gif" width="250px" />
+			<br/>
+			<div><button id="bitcoin-donate-button" class="bitcoinate" data-size="30" data-address="">bitcoinate</button></div>
+	    </div>
+	    <div class="modal-footer">
+	      <a href="#!" class=" modal-action modal-close btn-flat pink-text text-darken-1">Close</a>
+	    </div>
+	</div>
+
 	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.min.js"></script> 
@@ -281,6 +293,7 @@
 	<script type="text/javascript" src="bower_components/jquery-dropdown/jquery.dropdown.min.js"></script>
 	<script type="text/javascript" src="bower_components/highlightjs/highlight.pack.min.js"></script>
 	<script type="text/javascript" src="api.js"></script>
+	<script src="//gitcdn.org/libs/bitcoinate/0.2.1/index.min.js"></script>
 </body>
 <footer class="blue darken-1">
 	<div class="footer-copyright">
@@ -364,10 +377,13 @@
 						</div>
 					</div>
     			</div>
-    			<div class="col s3">
-    				<div id="copyright-row-year" class="copyright-row-container white-text hide-on-med-and-down">
+    			<div class="col s3 hide-on-med-and-down">
+    				<div id="copyright-row-year" class="copyright-row-container white-text">
     					<p class="copyright-row">&copy; 2015</p>
     				</div>
+    				<div id="donate-button-container">
+						<a class="waves-effect waves-light btn pink darken-1 modal-trigger" href="#modal-donate"><i class="material-icons right">assessment</i>donate</a>
+					</div>
     			</div>
 			</div>
     	</div>
