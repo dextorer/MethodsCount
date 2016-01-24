@@ -5,10 +5,17 @@ TMP_DIR=tmp
 mkdir -p $TMP_DIR
 
 echo "Fetching image id..."
-AMI=$(aws ec2 describe-images --filters Name=name,Values=ami-factory | grep ImageId | sed -e 's/.*: "\(.*\)".*/\1/g')
-echo "Launching "$AMI
+AMI=$(aws ec2 describe-images --filters "Name=tag:Version,Values=current" "Name=tag:App,Values=lmc" | grep ImageId | sed -e 's/.*: "\(.*\)".*/\1/g')
 
-BLOCK_DEVICE_MAPPING='{"VirtualName":"Root","DeviceName":"/dev/xvda","Ebs":{"SnapshotId":"snap-1cd7a135","VolumeSize":30,"DeleteOnTermination":true,"VolumeType":"gp2"}}'
+if [ -z "$AMI" ]; then
+	echo "Valid ami doesn't exist"
+	exit 1
+fi
+
+echo "Launching "$AMI
+echo $AMI > $TMP_DIR/ami
+
+BLOCK_DEVICE_MAPPING='{"VirtualName":"Root","DeviceName":"/dev/xvda","Ebs":{"VolumeSize":30,"DeleteOnTermination":true,"VolumeType":"gp2"}}'
 IAM_INSTANCE_PROFILE='{"Name":"ec2-ssm-managed"}'
 
 if [ ! -f $TMP_DIR/image_launch.checkpoint ]; then
@@ -18,7 +25,7 @@ if [ ! -f $TMP_DIR/image_launch.checkpoint ]; then
 fi
 
 if [ ! -f $TMP_DIR/command.checkpoint ]; then
-	RESPONSE=$(cat image_launch.response)
+	RESPONSE=$(cat $TMP_DIR/image_launch.response)
 	INSTANCE_ID=$(echo $RESPONSE | sed -e 's/.*InstanceId": "\(.*\)", "ImageId.*/\1/g')
 	echo $INSTANCE_ID > $TMP_DIR/instance_id
 	echo "Waiting for instance ${INSTANCE_ID} to be available..."
@@ -53,13 +60,19 @@ fi
 
 RESPONSE=$(cat $TMP_DIR/create_image.response)
 AMI_ID=$(echo $RESPONSE | sed -e 's/.*Id": "\(.*\)".*/\1/g')
-echo "Waiting for ami id ${AMI_ID} to be created..."
-until AVAILABLE=$(aws ec2 describe-images --image-ids $AMI_ID | grep State | sed -e 's/.*: "\(.*\)".*/\1/g' | grep available)
-do
-	sleep 5
-done
+if [ ! -f $TMP_DIR/image_created.checkpoint ]; then
+	echo "Waiting for ami id ${AMI_ID} to be created..."
+	until AVAILABLE=$(aws ec2 describe-images --image-ids $AMI_ID | grep State | sed -e 's/.*: "\(.*\)".*/\1/g' | grep available)
+	do
+		sleep 5
+	done
 
-echo "Image created"
+	echo "Image created"
+	OLD_AMI=$(cat $TMP_DIR/ami)
+	aws ec2 delete-tags --resources $OLD_AMI --tags "Key=Version,Value=current"
+	aws ec2 create-tags --resources $AMI_ID --tags "Key=Version,Value=current" "Key=App,Value=lmc"
+	touch $TMP_DIR/create_image.checkpoint
+fi
 
 if [ ! -f $TMP_DIR/instance_terminated.checkpoint ]; then
 	INSTANCE_ID=$(cat $TMP_DIR/instance_id)
@@ -70,11 +83,13 @@ fi
 function update_config {
         if [ ! -f $TMP_DIR/create_config.$1.checkpoint ]; then
         	echo "Creating new configuration for ${1} with new ami-id ${2}"
-		RESPONSE=$(eb config save $1 --cfg $TMP_DIR/$1-$(date +%s))
+		RESPONSE=$(eb config save $1 --cfg $1-$(date +%s))
+		echo $RESPONSE
 		CONFIG_PATH=$(echo $RESPONSE | sed -e '/^\s*$/d' -e 's/.*: \(.*\)/\1/g')
+		sleep 1
 		NEW_CONFIG_NAME=$1-$(date +%s)
-		cat $CONFIG_PATH | sed -e "s/ImageId: .*/ImageId: ${2}/g" > $TMP_DIR/$NEW_CONFIG_NAME
-		eb config put $TMP_DIR/$NEW_CONFIG_NAME
+		cat $CONFIG_PATH | sed -e "s/ImageId: .*/ImageId: ${2}/g" > $NEW_CONFIG_NAME
+		eb config put $NEW_CONFIG_NAME
 		echo $NEW_CONFIG_NAME > $TMP_DIR/config_name.$1
 		touch $TMP_DIR/create_config.$1.checkpoint
 	fi
@@ -92,7 +107,7 @@ function update_config {
 }
 
 update_config 'lmc-workers-production' $AMI_ID
-rm -rf $TMP_DIR
+# rm -rf $TMP_DIR
 # not needed for now
 #update_config 'lmc-production' $AMI_ID
 
