@@ -272,34 +272,6 @@ $.validate({
    }
 });
 
-var mainContainer = $('#main-container');
-var pluginContainer = $('#plugin-container');
-var aboutContainer = $('#about-container');
-/*
-$('#tab-main').click(function() {
-   var sPath = window.location.pathname;
-   var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
-   if (sPage != "" && sPage != "") {
-      window.location.replace("/");
-   }
-});
-
-$('#tab-plugins').click(function() {
-   var sPath = window.location.pathname;
-   var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
-   if (sPage != "plugins") {
-      window.location.replace("/plugins");
-   }
-});
-
-$('#tab-about').click(function() {
-   var sPath = window.location.pathname;
-   var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
-   if (sPage != "about") {
-      window.location.replace("/about");
-   }
-});
-*/
 var loadingMessages = [
    "This may take a while... Grab a coffee, perhaps?",
    "Gradle and DX require some time to do their magic.",
@@ -331,18 +303,6 @@ $(document).ready(function() {
       $('#search-button').trigger("click");
    }
 });
-
-/* $(document).ready(function() {
-   var sPath = window.location.pathname;
-   var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
-   if (sPage == "plugins.html") {
-      $('#tab-plugins a').trigger('click');
-   } else if (sPage  == "about.html") {
-      $('#tab-about a').trigger('click');
-   } else {
-      $('#tab-main a').trigger('click');
-   }
-}); */
 
 $(document).ready(function() {
    $('.modal-trigger').leanModal({
