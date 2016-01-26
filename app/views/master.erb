@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="bower_components/Materialize/dist/css/materialize.min.css" media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
+	<link type="text/css" rel="stylesheet" href="bower_components/EasyAutocomplete/dist/easy-autocomplete.min.css"/>
+	<link type="text/css" rel="stylesheet" href="bower_components/jquery-dropdown/jquery.dropdown.min.css" />
+	<link type="text/css" rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
+	<link rel="icon" type="image/png" href="favicon.png">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Methods Count - Your solution for a perfectly fit APK</title>
+</head>
+<body>
+	<main>
+	<div class="blue darken-1">
+		<div id="input-block" class="nav-wrapper container">
+			<div id="navigation-container">
+				<div class="row">
+					<div class="col s12">
+						<ul class="tabs-custom">
+							<li id="tab-main" class="tab-custom col s4 <%= 'active' if @active == :index %>"><a href="/">Main</a></li>
+							<li id="tab-plugins" class="tab-custom col s4 <%= 'active' if @active == :plugins %>"><a href="/plugins">Plugins</a></li>
+							<li id="tab-about" class="tab-custom col s4 <%= 'active' if @active == :about %>"><a href="/about">About</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="page-title" class="hide-on-med-and-down">
+				<a href="/">
+					<p id="title" class="white-text">METHODS COUNT</p>
+					<p id="subtitle" class="white-text"><i>Your solution for a perfectly fit APK</i></p>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+	<%= yield %>
+
+	</main>
+	<div id="modal-donate" class="modal">
+		<div class="modal-content">
+			<h5 class="pink-text text-darken-1">Care to buy us a beer? And keep this service running?</h4>
+		<blockquote><i>We solemnly promise that we will use your money for a couple of beers. And then use what's left to pay for the servers.</i></blockquote>
+		<p>Please donate whatever amount you are willing to give, and thank you!</p>
+		<img id="donate-gif" src="https://media.giphy.com/media/137qcedBZRpVTy/giphy.gif" width="250px" />
+		<br/>
+		<div><button id="bitcoin-donate-button" class="bitcoinate" data-size="30" data-address="">bitcoinate</button></div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class=" modal-action modal-close btn-flat pink-text text-darken-1">Close</a>
+	</div>
+</div>
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.min.js"></script>
+<script type="text/javascript" src="bower_components/Materialize/dist/js/materialize.min.js"></script>
+<script type="text/javascript" src="bower_components/jquery-form-validator/form-validator/jquery.form-validator.min.js"></script>
+<script type="text/javascript" src="bower_components/jquery-dropdown/jquery.dropdown.min.js"></script>
+<script type="text/javascript" src="bower_components/highlightjs/highlight.pack.min.js"></script>
+<script type="text/javascript" src="api.js"></script>
+<script src="//gitcdn.org/libs/bitcoinate/0.2.1/index.min.js"></script>
+</body>
+<footer class="blue darken-1">
+<div class="footer-copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col s9">
+				<div id="gde-badge-container" class="hide-on-med-and-down">
+					<a href="https://developers.google.com/experts/people/sebastiano-gottardo" target="_blank"><img id="gde-badge" src="images/gde-android-badge.png" /></a>
+				</div>
+				<div style="overflow:hidden;">
+					<div id="copyright-row-people" class="copyright-row-container hide-on-med-and-down">
+						<table class="footer-table">
+							<tr>
+								<td>
+									<p class="copyright-row white-text">Sebastiano</p>
+								</td>
+								<td>
+									<a href="https://twitter.com/@rotxed" target="_blank"><img src="images/twitter.png" class="social" /></a>
+									<a href="https://plus.google.com/+SebastianoGottardo" target="_blank" class="hide-on-med-and-down"><img src="images/plus.png" class="social" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p class="copyright-row white-text extra-margin">Gottardo</p>
+								</td>
+								<td>
+									<a href="https://it.linkedin.com/in/sebastianogottardo" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
+									<a href="https://github.com/dextorer" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+								</td>
+							</tr>
+						</table>
+						<table class="footer-table">
+							<tr>
+								<td>
+									<p class="copyright-row white-text">Nicola</p>
+								</td>
+								<td>
+									<a href="https://twitter.com/@sirnicolaz" target="_blank"><img src="images/twitter.png" class="social" /></a>
+									<a href="https://de.linkedin.com/in/nicolamiotto" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p class="copyright-row white-text extra-margin">Miotto</p>
+								</td>
+								<td>
+									<a href="https://github.com/sirnicolaz" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+								</td>
+							</tr>
+						</table>
+						<table class="footer-table">
+							<tr>
+								<td>
+									<p class="copyright-row white-text">Dario</p>
+								</td>
+								<td>
+									<a href="https://twitter.com/@dmarcato" target="_blank"><img src="images/twitter.png" class="social" /></a>
+									<a href="https://it.linkedin.com/in/dariomarcato" target="_blank" class="hide-on-med-and-down"><img src="images/linkedin.png" class="social" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p class="copyright-row white-text extra-margin">Marcato</p>
+								</td>
+								<td>
+									<a href="https://github.com/dmarcato" target="_blank" class="hide-on-med-and-down"><img src="images/github.png" class="social" /></a>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="hide-on-med-and-up">
+						<div class="copyright-row-small-screen">
+							<a href="https://twitter.com/rotxed" target="_blank"><p class="white-text">Sebastiano |</p></a>
+						</div>
+						<div class="copyright-row-small-screen">
+							<a href="https://twitter.com/sirnicolaz" target="_blank"><p class="white-text">Nicola |</p></a>
+						</div>
+						<div class="copyright-row-small-screen">
+							<a href="https://twitter.com/dmarcato" target="_blank"><p class="white-text">Dario</p></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col s3 hide-on-med-and-down">
+				<div id="copyright-row-year" class="copyright-row-container white-text">
+					<p class="copyright-row">&copy; 2015</p>
+				</div>
+				<div id="donate-button-container">
+					<a class="waves-effect waves-light btn pink darken-1 modal-trigger" href="#modal-donate"><i class="material-icons right">assessment</i>donate</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</footer>

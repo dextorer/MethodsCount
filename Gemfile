@@ -23,4 +23,5 @@ group :development, :test do
 	gem 'rspec'
 	gem 'webmock'
 	gem 'capybara'
+	gem 'shotgun'
 end

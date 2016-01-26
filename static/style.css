@@ -23,24 +23,58 @@
 	opacity: 0.6;
 }
 
-.tabs {
-	background-color: transparent;
-}
-
-.tabs .tab {
-	
-}
-
-.tabs .tab a:hover {
-    color: #f9f9f9; 
-}
-
-.tabs .tab a {
-    color: #fff;
-}
-
-.tabs .indicator {
+.tabs-custom .indicator {
 	background-color: #fff;
+}
+
+.tabs-custom {
+  display: flex;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 48px;
+  background-color: transparent;
+  margin: 0 auto;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.tabs-custom .tab-custom {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    display: block;
+    float: left;
+    text-align: center;
+    line-height: 48px;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    letter-spacing: .8px;
+    width: 15%;
+    min-width: 80px;
+}
+
+.tabs-custom .tab-custom a {
+      color: #fff;
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      transition: color .28s ease;
+}
+
+.tabs-custom .tab-custom a:hover {
+   color: #f9f9f9;
+}
+
+.tabs-custom .tab-custom.active {
+	border-bottom: 3px solid white;
 }
 
 #input-content {
@@ -55,7 +89,7 @@
 }
 
 #plugin-container {
-	display: none;
+	display: block;
 	margin-top: 20px;
 }
 
@@ -64,7 +98,7 @@
 }
 
 #about-container {
-	display: none;
+	display: block;
 	margin-top: 20px;
 }
 
