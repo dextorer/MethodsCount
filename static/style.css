@@ -23,22 +23,6 @@
 	opacity: 0.6;
 }
 
-.tabs-custom {
-	background-color: transparent;
-}
-
-.tabs-custom .tab-custom {
-	
-}
-
-.tabs-custom .tab-custom a:hover {
-    color: #f9f9f9; 
-}
-
-.tabs-custom .tab-custom a {
-    color: #fff;
-}
-
 .tabs-custom .indicator {
 	background-color: #fff;
 }

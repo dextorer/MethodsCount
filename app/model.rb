@@ -16,6 +16,8 @@ end
 class Libraries < ActiveRecord::Base
   self.table_name = "libraries"
 
+  scope :top, ->(count) { Libraries.order(hit_count: :desc).distinct(true).take(count) }
+
   def self.create_from_dep(dep)
     lib = Libraries.where(
       fqn: dep.fqn,
