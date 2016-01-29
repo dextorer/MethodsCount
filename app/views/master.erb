@@ -45,12 +45,21 @@
 		<p>Please donate whatever amount you are willing to give, and thank you!</p>
 		<img id="donate-gif" src="https://media.giphy.com/media/137qcedBZRpVTy/giphy.gif" width="250px" />
 		<br/>
-		<div><button id="bitcoin-donate-button" class="bitcoinate" data-size="30" data-address="">bitcoinate</button></div>
+		<div class="horizontal-container">
+			<div class="horizontal-container-item"> 
+				<a target="_blank" href="https://www.paypal.me/miotto" id="paypal-donate-button" class="paypal-donate">
+					<img src="/images/paypal-button.jpg" width="133px"></img>
+				</a>
+			</div>
+			<div class="horizontal-container-item">
+				<button id="bitcoin-donate-button" class="bitcoinate" data-size="30" data-address="">bitcoinate</button>
+			</div>
+		</div>
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class=" modal-action modal-close btn-flat pink-text text-darken-1">Close</a>
+		</div>
 	</div>
-	<div class="modal-footer">
-		<a href="#!" class=" modal-action modal-close btn-flat pink-text text-darken-1">Close</a>
-	</div>
-</div>
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.min.js"></script>
