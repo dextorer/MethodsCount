@@ -464,6 +464,11 @@ footer .row {
 	margin-right: 8px;
 }
 
+#result-card-dep-list-title-container {
+	float: left;
+	margin-right: 10px;
+}
+
 .modal-content img {
 	margin: 0 auto !important;
 	display: block;
