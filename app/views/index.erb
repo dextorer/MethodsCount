@@ -72,11 +72,16 @@
         			<th class="grey-text text-darken-1 result-card-header">Dependencies JAR size (KB)</th>
         			<th class="grey-text text-darken-1 result-card-header">Dependencies DEX size (KB)</th>
         		</table>
-        		<hr/>
         	</div>
+          <hr/>
         	<div id="result-card-dep-container">
 	        	<div>
-	        		<p id="result-card-dep-list-title" class="waves-effect waves-light btn blue darken-1 white-text result-card-header">Dependency list</i></p>
+              <div id="result-card-dep-list-title-container">
+	        		  <p id="result-card-dep-list-title" class="waves-effect waves-light btn blue darken-1 white-text result-card-header">Dependency list</i></p>
+              </div>
+              <div>
+                <a id="result-card-other-versions" class='dropdown-button btn blue darken-1 white-text result-card-header' href='#' data-activates='other-versions-dropdown'>Computed versions</a>
+              </div>
 	        	</div>
 	        	<div class="indent-right">
 	        		<ul id="result-card-dep-list">
@@ -130,3 +135,6 @@
         </div>
     </div>
 </div>
+
+<ul id='other-versions-dropdown' class='dropdown-content'>
+</ul>

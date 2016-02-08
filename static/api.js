@@ -157,6 +157,7 @@ function showResponse(result) {
    
    $('#result-card-dep-list').empty();
    var dependencies = response.dependencies;
+   var versions = response.versions;
    var total_count = 0;
    var total_size = 0;
    var total_dex_size = 0;
@@ -172,7 +173,7 @@ function showResponse(result) {
       $('#result-card-dep-container').show();
       $('#result-dep-summary-container').show();
    } else {
-      $('#result-card-dep-container').hide();
+      $('#result-card-dep-list-title-container').hide();
       $('#result-dep-summary-container').hide();
    }
 
@@ -205,6 +206,24 @@ function showResponse(result) {
 
    $('#share-dropdown-twitter a').attr('href', 'https://twitter.com/intent/tweet?hashtags=MethodsCount&url=' + encodeURIComponent(currentUrl) + '&via=rotxed');
    $('#share-dropdown-gplus a').attr('href', 'https://plus.google.com/share?url=' + encodeURIComponent(currentUrl));
+
+   var versionsCode = "";
+   var baseURI = response.library_fqn.split(":")
+   versions.forEach(function(version) {
+      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version + "\">" + version + "</a></li>"
+   });
+   $('#other-versions-dropdown').html(versionsCode);
+   $('#result-card-other-versions').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrain_width: true, // Does not change width of dropdown to that of the activator
+      hover: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: false, // Displays dropdown below the button
+      alignment: 'left' // Displays dropdown with edge aligned to the left of button
+    }
+  );
+
 }
 
 $('#search-box').on('keydown', function(e) {
