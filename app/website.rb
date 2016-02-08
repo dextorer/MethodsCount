@@ -11,6 +11,11 @@ module Sebastiano
         erb :index, layout: :master
       end
 
+      get '/index.html' do
+        params = ('?' + request.query_string) unless request.query_string.empty?
+        redirect '/' + params.to_s, 301
+      end
+
       get '/about' do
         @active = :about
         erb :about, layout: :master
