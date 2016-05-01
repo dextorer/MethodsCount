@@ -227,6 +227,16 @@ th {
 	display: none;
 }
 
+#charts-container {
+	display: none;
+	margin-top: 10px;
+}
+
+#methods-chart {
+	float: left;
+	margin-right: 30px;
+}
+
 #result-card-dep-list-title {
     margin-bottom: 0;
     margin-top: 10;
@@ -469,6 +479,11 @@ footer .row {
 	margin-right: 10px;
 }
 
+#result-card-other-versions {
+	float: left;
+	margin-right: 10px;
+}
+
 .modal-content img {
 	margin: 0 auto !important;
 	display: block;
@@ -486,6 +501,11 @@ footer .row {
 .horizontal-container-item {
 	display: inline-block;
 	vertical-align: middle;
+}
+
+.ct-series-a .ct-line,
+.ct-series-a .ct-point {
+  stroke: #d81b60;
 }
 
 .material-icons.md-18 { font-size: 18px; }
