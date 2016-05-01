@@ -21,7 +21,10 @@
     "jquery-dropdown": "~2.0.2",
     "jquery-form-validator": ">=2.2.8",
     "jquery-ui": "~1.11.4",
-    "Materialize": "materialize#~0.97.5"
+    "Materialize": "materialize#~0.97.5",
+    "chartist": "^0.9.7",
+    "chartist-plugin-tooltip": "^0.0.12",
+    "chartist-plugin-axistitle": "^0.1.0"
   },
   "resolutions": {
     "jquery": "2.1.4"

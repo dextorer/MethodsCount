@@ -42,7 +42,6 @@ function stopMessageCycling() {
 function submitLibraryRequest(libraryName) {
    // sanitize
    libraryName = libraryName.replace(/(@aar|@jar)$/, "");
-   console.log(libraryName);
    if ($('#welcome-card-container').css('visibility') == 'visible') {
       $('#welcome-card-container').fadeOut('fast', function() {
          $('#welcome-card-container').css('display', 'none');
@@ -156,8 +155,9 @@ function showResponse(result) {
    var response = result;
    
    $('#result-card-dep-list').empty();
+   //$('#charts-container').empty();
    var dependencies = response.dependencies;
-   var versions = response.versions;
+   var versions = response.previous_versions;
    var total_count = 0;
    var total_size = 0;
    var total_dex_size = 0;
@@ -175,6 +175,8 @@ function showResponse(result) {
    } else {
       $('#result-card-dep-list-title-container').hide();
       $('#result-dep-summary-container').hide();
+      $('#result-card-dep-charts-button').hide();
+      //$('#charts-container').hide();
    }
 
    $('#result-library-summary tr').has('td').remove();
@@ -190,9 +192,9 @@ function showResponse(result) {
       methodsBadge = response.library_methods
    }
 
-   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-e91e63.svg\"></img></a>";
-   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"></img></a>";
-   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"></img></a>";
+   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-e91e63.svg\"/></a>";
+   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"/></a>";
+   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"/></a>";
 
    $('#badge-methods-code').text(methodsCode);
    $('#badge-size-code').text(sizeCode);
@@ -210,7 +212,7 @@ function showResponse(result) {
    var versionsCode = "";
    var baseURI = response.library_fqn.split(":")
    versions.forEach(function(version) {
-      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version + "\">" + version + "</a></li>"
+      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version[1] + "\">" + version[1] + "</a></li>"
    });
    $('#other-versions-dropdown').html(versionsCode);
    $('#result-card-other-versions').dropdown({
@@ -221,10 +223,105 @@ function showResponse(result) {
       gutter: 0, // Spacing from edge
       belowOrigin: false, // Displays dropdown below the button
       alignment: 'left' // Displays dropdown with edge aligned to the left of button
-    }
-  );
+   });
 
+   var labels = [];
+   var methodsSeries = [];
+   var sizeSerie = [];
+   versions.forEach(function(version) {
+      labels.push(version[1]);
+      methodsSeries.push(version[2]);
+      sizeSerie.push(version[3] / 1000);
+   });
+
+   var chartWidth = 400;
+   var chartHeight = 300;
+   var chartPadding = 20;
+
+   var methodsOptions = {
+      width: chartWidth,
+      height: chartHeight,
+      chartPadding: {
+         top: chartPadding,
+         right: 0,
+         bottom: chartPadding,
+         left: chartPadding
+      },
+      plugins: [
+         Chartist.plugins.ctAxisTitle({
+            axisX: {
+               axisTitle: 'Version',
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: 0,
+                  y: 40
+                },
+               textAnchor: 'middle'
+            },
+            axisY: {
+               axisTitle: 'Methods count',
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: -50,
+                  y: 0
+               },
+               flipTitle: false
+            }
+        })
+      ]
+   }
+
+   var sizeOptions = {
+      width: chartWidth,
+      height: chartHeight,
+      chartPadding: {
+         top: chartPadding,
+         right: 0,
+         bottom: chartPadding,
+         left: chartPadding
+      },
+      plugins: [
+         Chartist.plugins.ctAxisTitle({
+            axisX: {
+               axisTitle: 'Version',
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: 0,
+                  y: 40
+                },
+               textAnchor: 'middle'
+            },
+            axisY: {
+               axisTitle: 'DEX size (KB)',
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: -50,
+                  y: 0
+               },
+               flipTitle: false
+            }
+        })
+      ]
+   }
+
+   var methodsData = {
+      labels: labels,
+      series: [
+         methodsSeries
+      ]
+   };
+   var sizeData = {
+      labels: labels,
+      series: [
+         sizeSerie
+      ]
+   };
+
+   new Chartist.Line('#methods-chart', methodsData, methodsOptions);
+   new Chartist.Line('#size-chart', sizeData, sizeOptions);
 }
+
+//document.querySelector('.ct-chart').__chartist__.update();
 
 $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
@@ -261,6 +358,12 @@ $('#search-box').easyAutocomplete(options);
 
 $('#result-card-dep-list-title').click(function() {
     $('#result-card-dep-list').slideToggle('slow');
+});
+
+$('#result-card-dep-charts-button').click(function() {
+    $('#charts-container').slideToggle('slow', function() {
+      //document.querySelector('.ct-chart').__chartist__.update();
+    });
 });
 
 $('#search-button').click(function() {
@@ -337,5 +440,4 @@ $(document).ready(function() {
 });
 
 hljs.initHighlightingOnLoad();
-
 
