@@ -227,82 +227,21 @@ function showResponse(result) {
 
    var labels = [];
    var methodsSeries = [];
-   var sizeSerie = [];
+   var sizeSeries = [];
    versions.forEach(function(version) {
       labels.push(version[1]);
       methodsSeries.push(version[2]);
-      sizeSerie.push(version[3] / 1000);
+      sizeSeries.push(parseInt(version[3] / 1000));
    });
 
-   var chartWidth = 400;
-   var chartHeight = 300;
+   var containerWidth = $('#result-card').width();
+
+   var chartWidth = containerWidth / 2 - 60;
+   var chartHeight = chartWidth;
    var chartPadding = 20;
 
-   var methodsOptions = {
-      width: chartWidth,
-      height: chartHeight,
-      chartPadding: {
-         top: chartPadding,
-         right: 0,
-         bottom: chartPadding,
-         left: chartPadding
-      },
-      plugins: [
-         Chartist.plugins.ctAxisTitle({
-            axisX: {
-               axisTitle: 'Version',
-               axisClass: 'ct-axis-title',
-               offset: {
-                  x: 0,
-                  y: 40
-                },
-               textAnchor: 'middle'
-            },
-            axisY: {
-               axisTitle: 'Methods count',
-               axisClass: 'ct-axis-title',
-               offset: {
-                  x: -50,
-                  y: 0
-               },
-               flipTitle: false
-            }
-        })
-      ]
-   }
-
-   var sizeOptions = {
-      width: chartWidth,
-      height: chartHeight,
-      chartPadding: {
-         top: chartPadding,
-         right: 0,
-         bottom: chartPadding,
-         left: chartPadding
-      },
-      plugins: [
-         Chartist.plugins.ctAxisTitle({
-            axisX: {
-               axisTitle: 'Version',
-               axisClass: 'ct-axis-title',
-               offset: {
-                  x: 0,
-                  y: 40
-                },
-               textAnchor: 'middle'
-            },
-            axisY: {
-               axisTitle: 'DEX size (KB)',
-               axisClass: 'ct-axis-title',
-               offset: {
-                  x: -50,
-                  y: 0
-               },
-               flipTitle: false
-            }
-        })
-      ]
-   }
+   var methodsOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'Methods count');
+   var sizeOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'DEX size (KB)');
 
    var methodsData = {
       labels: labels,
@@ -313,15 +252,74 @@ function showResponse(result) {
    var sizeData = {
       labels: labels,
       series: [
-         sizeSerie
+         sizeSeries
       ]
    };
 
-   new Chartist.Line('#methods-chart', methodsData, methodsOptions);
-   new Chartist.Line('#size-chart', sizeData, sizeOptions);
+   new Chartist.Line('#methods-chart', methodsData, methodsOptions, getChartResponsiveOptions());
+   new Chartist.Line('#size-chart', sizeData, sizeOptions, getChartResponsiveOptions());
 }
 
-//document.querySelector('.ct-chart').__chartist__.update();
+function getChartOptions(chartWidth, chartHeight, chartPadding, xAxisLabel, yAxisLabel) {
+   //force chart update --> document.querySelector('.ct-chart').__chartist__.update();
+   return {
+      width: chartWidth,
+      height: chartHeight,
+      chartPadding: {
+         top: chartPadding,
+         right: 0,
+         bottom: chartPadding,
+         left: chartPadding
+      },
+      plugins: [
+         Chartist.plugins.ctAxisTitle({
+            axisX: {
+               axisTitle: xAxisLabel,
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: 0,
+                  y: 40
+                },
+               textAnchor: 'middle'
+            },
+            axisY: {
+               axisTitle: yAxisLabel,
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: -50,
+                  y: 0
+               },
+               flipTitle: false
+            }
+        })
+      ]
+   }
+}
+
+function getChartResponsiveOptions() {
+   return [
+     ['screen and (min-width: 641px)', {
+       seriesBarDistance: 10,
+       axisX: {
+         labelInterpolationFnc: function (value) {
+           return value[0] + value[1];
+         }
+       }
+     }],
+     ['screen and (max-width: 640px)', {
+       seriesBarDistance: 5,
+       axisX: {
+         labelInterpolationFnc: function (value) {
+           return value[0];
+         }
+       }
+     }]
+   ]
+}
+
+$('#result-card-dep-charts-button').click(function() {
+    $('#charts-container').slideToggle('slow');
+});
 
 $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
@@ -358,12 +356,6 @@ $('#search-box').easyAutocomplete(options);
 
 $('#result-card-dep-list-title').click(function() {
     $('#result-card-dep-list').slideToggle('slow');
-});
-
-$('#result-card-dep-charts-button').click(function() {
-    $('#charts-container').slideToggle('slow', function() {
-      //document.querySelector('.ct-chart').__chartist__.update();
-    });
 });
 
 $('#search-button').click(function() {

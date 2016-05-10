@@ -237,6 +237,11 @@ th {
 	margin-right: 30px;
 }
 
+#size-chart {
+	float: right;
+	margin-right: 30px;
+}
+
 #result-card-dep-list-title {
     margin-bottom: 0;
     margin-top: 10;
@@ -506,6 +511,10 @@ footer .row {
 .ct-series-a .ct-line,
 .ct-series-a .ct-point {
   stroke: #d81b60;
+}
+
+.ct-patch {
+	clear: both;
 }
 
 .material-icons.md-18 { font-size: 18px; }
