@@ -42,18 +42,7 @@ module Sebastiano
               queue_up: queue_available
       }.to_json)
     end
-
-    get '/sitemap.xml' do
-      content_type :xml
-      map = XmlSitemap::Map.new('www.methodscount.com') do |m|
-        Libraries.top(200).each do |lib|
-          m.add "/index.html?lib=#{lib.fqn}", :updated => lib.updated_at, :period => :never
-        end
-      end
-
-      map.render
-    end
-
+    
     use Routes::Website
     use Routes::API
   end

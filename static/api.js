@@ -155,9 +155,7 @@ function showResponse(result) {
    var response = result;
    
    $('#result-card-dep-list').empty();
-   //$('#charts-container').empty();
    var dependencies = response.dependencies;
-   var versions = response.previous_versions;
    var total_count = 0;
    var total_size = 0;
    var total_dex_size = 0;
@@ -176,7 +174,6 @@ function showResponse(result) {
       $('#result-card-dep-list-title-container').hide();
       $('#result-dep-summary-container').hide();
       $('#result-card-dep-charts-button').hide();
-      //$('#charts-container').hide();
    }
 
    $('#result-library-summary tr').has('td').remove();
@@ -211,8 +208,9 @@ function showResponse(result) {
 
    var versionsCode = "";
    var baseURI = response.library_fqn.split(":")
+   var versions = response.previous_versions;
    versions.forEach(function(version) {
-      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version[1] + "\">" + version[1] + "</a></li>"
+      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version.version + "\">" + version.version + "</a></li>"
    });
    $('#other-versions-dropdown').html(versionsCode);
    $('#result-card-other-versions').dropdown({
@@ -229,9 +227,9 @@ function showResponse(result) {
    var methodsSeries = [];
    var sizeSeries = [];
    versions.forEach(function(version) {
-      labels.push(version[1]);
-      methodsSeries.push(version[2]);
-      sizeSeries.push(parseInt(version[3] / 1000));
+      labels.push(version.version);
+      methodsSeries.push(version.count);
+      sizeSeries.push(parseInt(version.dex_size / 1000));
    });
 
    var containerWidth = $('#result-card').width();
@@ -325,8 +323,7 @@ $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
       e.preventDefault();
       $('#search-form').submit();
-      //mockRequest();
-      }
+   }
 });
 
 var cache = [];
@@ -345,10 +342,6 @@ var options = {
       maxNumberOfElements: 10,
       onClickEvent: function() {
          submitLibraryRequest($('#search-box').val());
-      },
-      onLoadEvent: function() {
-         //$('#result-card-container').fadeOut();
-         //$('#welcome-card-container').fadeOut();      
       }
    }
 };

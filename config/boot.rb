@@ -22,7 +22,7 @@ else
 end
 
 # TODO: when we reach Papertrail quota for the month, dicrease the log level for prod
-LOGGER.level = (env == :production ? Logger::DEBUG : Logger::DEBUG)
+LOGGER.level = (env == :production ? Logger::WARN : Logger::DEBUG)
 
 # App deps
 require_all 'app'
