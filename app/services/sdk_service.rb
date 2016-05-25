@@ -45,6 +45,13 @@ class SdkService
         dx_command = "#{@dx_path} --dex --output=#{tmp_dex_path} #{file_path}" 
         log('debug', "exec: #{dx_command}")
         system(dx_command)
+        dx_result = $?.exitstatus
+        if dx_result != 0
+          # some libraries require the --core-library flag, try again
+          dx_command = "#{@dx_path} --dex --core-library --output=#{tmp_dex_path} #{file_path}" 
+          log('debug', "[fallback] exec: #{dx_command}")
+          system(dx_command)
+        end
       end
     rescue Timeout::Error
       raise "'dx' operation timed out, invalidating current library"
