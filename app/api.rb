@@ -26,7 +26,7 @@ module Sebastiano
             # retrieve other versions
             parts = library_name.split(/:/)
             previous_libraries = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]])
-                                          .order(version: :asc)
+                                          .order(version: :desc)
                                           .select("fqn, version, count, dex_size, id")
 
             result = LibraryMethodsCount.new(library.fqn).compute_dependencies()

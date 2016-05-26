@@ -171,9 +171,8 @@ function showResponse(result) {
       $('#result-card-dep-container').show();
       $('#result-dep-summary-container').show();
    } else {
-      $('#result-card-dep-list-title-container').hide();
+      $('#result-card-dep-list-title').hide();
       $('#result-dep-summary-container').hide();
-      $('#result-card-dep-charts-button').hide();
    }
 
    $('#result-library-summary tr').has('td').remove();
@@ -223,39 +222,45 @@ function showResponse(result) {
       alignment: 'left' // Displays dropdown with edge aligned to the left of button
    });
 
-   var labels = [];
-   var methodsSeries = [];
-   var sizeSeries = [];
-   versions.forEach(function(version) {
-      labels.push(version.version);
-      methodsSeries.push(version.count);
-      sizeSeries.push(parseInt(version.dex_size / 1000));
-   });
+   if (versions.length > 1) {
+      versions = versions.reverse();
+      var labels = [];
+      var methodsSeries = [];
+      var sizeSeries = [];
+      versions.forEach(function(version) {
+         labels.push(version.version);
+         methodsSeries.push(version.count);
+         sizeSeries.push(parseInt(version.dex_size / 1000));
+      });
 
-   var containerWidth = $('#result-card').width();
+      var containerWidth = $('#result-card').width();
 
-   var chartWidth = containerWidth / 2 - 60;
-   var chartHeight = chartWidth;
-   var chartPadding = 20;
+      var chartWidth = containerWidth / 2 - 60;
+      var chartHeight = chartWidth;
+      var chartPadding = 20;
 
-   var methodsOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'Methods count');
-   var sizeOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'DEX size (KB)');
+      var methodsOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'Methods count');
+      var sizeOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'DEX size (KB)');
 
-   var methodsData = {
-      labels: labels,
-      series: [
-         methodsSeries
-      ]
-   };
-   var sizeData = {
-      labels: labels,
-      series: [
-         sizeSeries
-      ]
-   };
+      var methodsData = {
+         labels: labels,
+         series: [
+            methodsSeries
+         ]
+      };
+      var sizeData = {
+         labels: labels,
+         series: [
+            sizeSeries
+         ]
+      };
 
-   new Chartist.Line('#methods-chart', methodsData, methodsOptions, getChartResponsiveOptions());
-   new Chartist.Line('#size-chart', sizeData, sizeOptions, getChartResponsiveOptions());
+      new Chartist.Line('#methods-chart', methodsData, methodsOptions, getChartResponsiveOptions());
+      new Chartist.Line('#size-chart', sizeData, sizeOptions, getChartResponsiveOptions());
+   } else {
+      $('#charts-container').css('display', 'none');
+      $('#result-card-dep-charts-button').css('display', 'none');
+   }
 }
 
 function getChartOptions(chartWidth, chartHeight, chartPadding, xAxisLabel, yAxisLabel) {
