@@ -223,6 +223,10 @@ th {
 	font-size: medium;
 }
 
+#result-card-dep-container {
+	overflow: hidden;
+}
+
 #result-card-dep-list {
 	display: none;
 }
