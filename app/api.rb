@@ -25,10 +25,12 @@ module Sebastiano
 
             # retrieve other versions
             parts = library_name.split(/:/)
-            versions = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]]).order(version: :desc).pluck("version")
+            previous_libraries = Libraries.where(["group_id = ? and artifact_id = ?", parts[0], parts[1]])
+                                          .order(version: :desc)
+                                          .select("fqn, version, count, dex_size, id")
 
             result = LibraryMethodsCount.new(library.fqn).compute_dependencies()
-            result.store(:versions, versions)
+            result.store(:previous_versions, previous_libraries)
             library.increment("hit_count")
             library.save!
           end

@@ -42,7 +42,6 @@ function stopMessageCycling() {
 function submitLibraryRequest(libraryName) {
    // sanitize
    libraryName = libraryName.replace(/(@aar|@jar)$/, "");
-   console.log(libraryName);
    if ($('#welcome-card-container').css('visibility') == 'visible') {
       $('#welcome-card-container').fadeOut('fast', function() {
          $('#welcome-card-container').css('display', 'none');
@@ -157,7 +156,6 @@ function showResponse(result) {
    
    $('#result-card-dep-list').empty();
    var dependencies = response.dependencies;
-   var versions = response.versions;
    var total_count = 0;
    var total_size = 0;
    var total_dex_size = 0;
@@ -173,7 +171,7 @@ function showResponse(result) {
       $('#result-card-dep-container').show();
       $('#result-dep-summary-container').show();
    } else {
-      $('#result-card-dep-list-title-container').hide();
+      $('#result-card-dep-list-title').hide();
       $('#result-dep-summary-container').hide();
    }
 
@@ -190,9 +188,9 @@ function showResponse(result) {
       methodsBadge = response.library_methods
    }
 
-   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-e91e63.svg\"></img></a>";
-   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"></img></a>";
-   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"></img></a>";
+   var methodsCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods count-" + methodsBadge + "-e91e63.svg\"/></a>";
+   var sizeCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Size-" + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"/></a>";
+   var allCode = "<a href=\"" + currentUrl + "\"><img src=\"https://img.shields.io/badge/Methods and size-" + methodsBadge + " | " + Math.ceil(response.library_size / 1000) + " KB-e91e63.svg\"/></a>";
 
    $('#badge-methods-code').text(methodsCode);
    $('#badge-size-code').text(sizeCode);
@@ -209,8 +207,9 @@ function showResponse(result) {
 
    var versionsCode = "";
    var baseURI = response.library_fqn.split(":")
+   var versions = response.previous_versions;
    versions.forEach(function(version) {
-      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version + "\">" + version + "</a></li>"
+      versionsCode = versionsCode + "<li><a href=\"/?lib=" + baseURI[0] + ":" + baseURI[1] + ":" + version.version + "\">" + version.version + "</a></li>"
    });
    $('#other-versions-dropdown').html(versionsCode);
    $('#result-card-other-versions').dropdown({
@@ -221,17 +220,115 @@ function showResponse(result) {
       gutter: 0, // Spacing from edge
       belowOrigin: false, // Displays dropdown below the button
       alignment: 'left' // Displays dropdown with edge aligned to the left of button
-    }
-  );
+   });
 
+   if (versions.length > 1) {
+      versions = versions.reverse();
+      var labels = [];
+      var methodsSeries = [];
+      var sizeSeries = [];
+      versions.forEach(function(version) {
+         labels.push(version.version);
+         methodsSeries.push(version.count);
+         sizeSeries.push(parseInt(version.dex_size / 1000));
+      });
+
+      var containerWidth = $('#result-card').width();
+
+      var chartWidth = containerWidth / 2 - 60;
+      var chartHeight = chartWidth;
+      var chartPadding = 20;
+
+      var methodsOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'Methods count');
+      var sizeOptions = getChartOptions(chartWidth, chartHeight, chartPadding, 'Version', 'DEX size (KB)');
+
+      var methodsData = {
+         labels: labels,
+         series: [
+            methodsSeries
+         ]
+      };
+      var sizeData = {
+         labels: labels,
+         series: [
+            sizeSeries
+         ]
+      };
+
+      new Chartist.Line('#methods-chart', methodsData, methodsOptions, getChartResponsiveOptions());
+      new Chartist.Line('#size-chart', sizeData, sizeOptions, getChartResponsiveOptions());
+   } else {
+      $('#charts-container').css('display', 'none');
+      $('#result-card-dep-charts-button').css('display', 'none');
+   }
 }
+
+function getChartOptions(chartWidth, chartHeight, chartPadding, xAxisLabel, yAxisLabel) {
+   //force chart update --> document.querySelector('.ct-chart').__chartist__.update();
+   return {
+      width: chartWidth,
+      height: chartHeight,
+      chartPadding: {
+         top: chartPadding,
+         right: 0,
+         bottom: chartPadding,
+         left: chartPadding
+      },
+      plugins: [
+         Chartist.plugins.ctAxisTitle({
+            axisX: {
+               axisTitle: xAxisLabel,
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: 0,
+                  y: 40
+                },
+               textAnchor: 'middle'
+            },
+            axisY: {
+               axisTitle: yAxisLabel,
+               axisClass: 'ct-axis-title',
+               offset: {
+                  x: -50,
+                  y: 0
+               },
+               flipTitle: false
+            }
+        })
+      ]
+   }
+}
+
+function getChartResponsiveOptions() {
+   return [
+     ['screen and (min-width: 641px)', {
+       seriesBarDistance: 10,
+       axisX: {
+         labelInterpolationFnc: function (value) {
+           return value[0] + value[1];
+         }
+       }
+     }],
+     ['screen and (max-width: 640px)', {
+       seriesBarDistance: 5,
+       axisX: {
+         labelInterpolationFnc: function (value) {
+           return value[0];
+         }
+       }
+     }]
+   ]
+}
+
+$('#result-card-dep-charts-button').click(function() {
+    $('#charts-container').slideToggle('slow');
+});
 
 $('#search-box').on('keydown', function(e) {
    if (e.which == 13) {
       e.preventDefault();
       $('#search-form').submit();
-      //mockRequest();
-      }
+   }
 });
 
 var cache = [];
@@ -250,10 +347,6 @@ var options = {
       maxNumberOfElements: 10,
       onClickEvent: function() {
          submitLibraryRequest($('#search-box').val());
-      },
-      onLoadEvent: function() {
-         //$('#result-card-container').fadeOut();
-         //$('#welcome-card-container').fadeOut();      
       }
    }
 };
@@ -337,5 +430,4 @@ $(document).ready(function() {
 });
 
 hljs.initHighlightingOnLoad();
-
 

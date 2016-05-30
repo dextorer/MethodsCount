@@ -8,15 +8,14 @@
     "jquery": ">=1.8.0"
   },
   "homepage": "https://github.com/claviska/jquery-dropdown",
-  "version": "2.0.2",
-  "_release": "2.0.2",
+  "version": "2.0.3",
+  "_release": "2.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "2.0.2",
-    "commit": "30336d1f36f05c374e90f5d5fce821908b7d8198"
+    "tag": "2.0.3",
+    "commit": "2c6c3d0b2ace7bdd93d53abc34372607dd300561"
   },
-  "_source": "git://github.com/claviska/jquery-dropdown.git",
+  "_source": "https://github.com/claviska/jquery-dropdown.git",
   "_target": "~2.0.2",
-  "_originalSource": "jquery-dropdown",
-  "_direct": true
+  "_originalSource": "jquery-dropdown"
 }

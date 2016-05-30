@@ -3,6 +3,8 @@
 log
 gradle_mock_project/local.properties
 .env
+static/bower_components/*
+
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

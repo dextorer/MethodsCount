@@ -223,8 +223,27 @@ th {
 	font-size: medium;
 }
 
+#result-card-dep-container {
+	overflow: hidden;
+}
+
 #result-card-dep-list {
 	display: none;
+}
+
+#charts-container {
+	display: none;
+	margin-top: 10px;
+}
+
+#methods-chart {
+	float: left;
+	margin-right: 30px;
+}
+
+#size-chart {
+	float: right;
+	margin-right: 30px;
 }
 
 #result-card-dep-list-title {
@@ -469,6 +488,11 @@ footer .row {
 	margin-right: 10px;
 }
 
+#result-card-other-versions {
+	float: left;
+	margin-right: 10px;
+}
+
 .modal-content img {
 	margin: 0 auto !important;
 	display: block;
@@ -486,6 +510,15 @@ footer .row {
 .horizontal-container-item {
 	display: inline-block;
 	vertical-align: middle;
+}
+
+.ct-series-a .ct-line,
+.ct-series-a .ct-point {
+  stroke: #d81b60;
+}
+
+.ct-patch {
+	clear: both;
 }
 
 .material-icons.md-18 { font-size: 18px; }
