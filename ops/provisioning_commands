@@ -1,0 +1,2 @@
+# Add ELB health check to workers autoscaling group
+aws autoscaling update-auto-scaling-group --auto-scaling-group-name awseb-e-t3ufrftffe-stack-AWSEBAutoScalingGroup-B7QQ8ZX55884 --health-check-type ELB --health-check-grace-period 60 
