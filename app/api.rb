@@ -46,28 +46,29 @@ module Sebastiano
         post '/request/:lib_name' do |argument|
           content_type :json
           library_name = params[:lib_name].gsub(/(#{FORMAT_SUFFIXES.join('|')})$/, '')
-          library_status = LibraryStatus.where(library_name: library_name).first_or_create
+          
+          #library_status = LibraryStatus.where(library_name: library_name).first_or_create
+          ## Since the website is now in read-only mode, we don't support queueing the request any longer
+          # if (library_name.end_with?("+") and library_status.updated_at < 1.week.ago) or
+          #   library_status.status.to_s.empty?
 
-          if (library_name.end_with?("+") and library_status.updated_at < 1.week.ago) or
-            library_status.status.to_s.empty?
+          #   LOGGER.info "[POST] empty or outside time frame, calculating.."
+          #   library_status.status = "processing"
+          #   library_status.save!
 
-            LOGGER.info "[POST] empty or outside time frame, calculating.."
-            library_status.status = "processing"
-            library_status.save!
-
-            if ENV['RACK_ENV'] == 'production'
-              QueueService.enqeue(
-                {lib_name: library_name}
-              )
-            else
-              process_library(library_name)
-            end
-          end
+          #   if ENV['RACK_ENV'] == 'production'
+          #     QueueService.enqeue(
+          #       {lib_name: library_name}
+          #     )
+          #   else
+          #     process_library(library_name)
+          #   end
+          # end
 
           track(request, '/api/request')
 
           {
-            :enqueued => true,
+            :enqueued => false,
             :lib_name => library_name
           }.to_json
         end
