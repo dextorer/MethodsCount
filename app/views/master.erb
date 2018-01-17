@@ -19,7 +19,8 @@
 			<div id="navigation-container">
 				<div class="row">
 					<div class="col s12">
-						<ul class="tabs-custom">
+						<ul class="tabs-custom">							
+							<li id="tab-important-notice" class="blink_me tab-custom col s12 <%= 'active' if @active == :important_notice %>"><a href="/important_notice"><span style="color: red; font-weight: bold;">Important Notice!</span></a></li>
 							<li id="tab-main" class="tab-custom col s4 <%= 'active' if @active == :index %>"><a href="/">Main</a></li>
 							<li id="tab-plugins" class="tab-custom col s4 <%= 'active' if @active == :plugins %>"><a href="/plugins">Plugins</a></li>
 							<li id="tab-about" class="tab-custom col s4 <%= 'active' if @active == :about %>"><a href="/about">About</a></li>

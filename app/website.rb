@@ -16,6 +16,11 @@ module Sebastiano
         redirect '/' + params.to_s, 301
       end
 
+      get '/important_notice' do
+        @active = :important_notice
+        erb :important_notice, layout: :master
+      end
+
       get '/about' do
         @active = :about
         erb :about, layout: :master

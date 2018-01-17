@@ -97,6 +97,23 @@
 	padding: 30px;
 }
 
+.blink_me {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {  
+  50% { opacity: 0; }
+}
+
+#important-notice-container {
+    display: block;
+    margin-top: 20px;
+}
+
+#important-notice-card {
+    padding: 30px;
+}
+
 #about-container {
 	display: block;
 	margin-top: 20px;
