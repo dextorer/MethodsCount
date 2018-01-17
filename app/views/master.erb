@@ -40,33 +40,6 @@
 	<%= yield %>
 
 	</main>
-	<div id="modal-donate" class="modal">
-		<div class="modal-content">
-			<h5 class="pink-text text-darken-1">Care to buy us a beer? And keep this service running?</h4>
-		<blockquote><i>We solemnly promise that we will use your money for a couple of beers. And then use what's left to pay for the servers.</i></blockquote>
-		<p>Please donate whatever amount you are willing to give, and thank you!</p>
-		<img id="donate-gif" src="https://media.giphy.com/media/137qcedBZRpVTy/giphy.gif" width="250px" />
-		<br/>
-		<div class="horizontal-container">
-			<div class="horizontal-container-item"> 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="height: 30px !important;">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-">
-<input type="image" src="http://www.methodscount.com/images/paypal.jpg" border="0" width="120px" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-			</div>
-			<div class="horizontal-container-item">
-				<button id="bitcoin-donate-button" class="bitcoinate" data-size="30" data-address="">bitcoinate</button>
-			</div>
-		</div>
-		</div>
-		<div class="modal-footer">
-			<a href="#!" class=" modal-action modal-close btn-flat pink-text text-darken-1">Close</a>
-		</div>
-	</div>
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="bower_components/EasyAutocomplete/dist/jquery.easy-autocomplete.min.js"></script>
