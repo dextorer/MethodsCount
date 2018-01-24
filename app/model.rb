@@ -4,7 +4,7 @@ ActiveRecord::Base.establish_connection(
   adapter: "mysql2",
   host: ENV['RDS_HOSTNAME'] || "localhost",
   username: ENV['RDS_USERNAME'] || "lmc",
-  password: ENV['RDS_PASSWORD'] || "***REMOVED***",
+  password: ENV['RDS_PASSWORD'] || "trolololol",
   port: ENV['RDS_PORT'] || "3306",
   database: ENV['RDS_DB_NAME'] || "methods_count"
 )

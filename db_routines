@@ -1,5 +1,5 @@
-SET PASSWORD = PASSWORD('***REMOVED***');
-CREATE USER 'lmc'@'localhost' IDENTIFIED BY '***REMOVED***';
+SET PASSWORD = PASSWORD('trolololol');
+CREATE USER 'lmc'@'localhost' IDENTIFIED BY 'trolololol';
 CREATE DATABASE methods_count;
 GRANT ALL PRIVILEGES ON methods_count.* TO 'lmc'@'localhost';
 CREATE TABLE libraries (id INTEGER NOT NULL AUTO_INCREMENT, fqn VARCHAR(255) NOT NULL, group_id VARCHAR(255) NOT NULL, artifact_id VARCHAR(255) NOT NULL, version VARCHAR(255) NOT NULL, count INTEGER DEFAULT 0, size INTEGER DEFAULT 0, PRIMARY KEY (id));
