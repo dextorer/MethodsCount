@@ -1,10 +1,10 @@
 require "spec_helper"
 
-describe Sebastiano do
+describe MethodsCount do
   include Rack::Test::Methods  #<---- you really need this mixin
 
   def app
-    Sebastiano
+    MethodsCount
   end
 
   def stub_analytics_request

@@ -1,2 +1,2 @@
 require_relative './config/boot'
-run Sebastiano::App
+run MethodsCount::App

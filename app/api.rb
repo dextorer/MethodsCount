@@ -1,4 +1,4 @@
-module Sebastiano
+module MethodsCount
   module Routes
     class API < Sinatra::Application
       register Sinatra::Namespace

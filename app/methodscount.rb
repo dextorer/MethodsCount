@@ -3,7 +3,7 @@ require 'json'
 require 'sinatra/namespace'
 require 'active_record'
 
-module Sebastiano
+module MethodsCount
   class App < Sinatra::Base
 
     set :root, App.root
